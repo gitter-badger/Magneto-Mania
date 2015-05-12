@@ -5,7 +5,6 @@ import android.content.pm.ActivityInfo;
 import android.graphics.Point;
 import android.os.Bundle;
 import android.view.Display;
-import android.view.SurfaceView;
 import android.view.Window;
 import android.view.WindowManager;
 

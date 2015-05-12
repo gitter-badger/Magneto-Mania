@@ -4,15 +4,16 @@ package com.example.root.magnetomania;
 import android.graphics.Canvas;
 
 public class GameThread extends Thread {
-    static final long FPS = 30;
+    static final long FPS = 40;
     private boolean running=false;
 
-    public Canvas mGameCanvas;
+    private Canvas mGameCanvas;
     private GameView mGameView;
 
     public GameThread(GameView mGameView)
     {
         this.mGameView = mGameView;
+        this.mGameCanvas = null;
     }
 
     public void setRunning(boolean running)
