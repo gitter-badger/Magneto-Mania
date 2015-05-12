@@ -21,17 +21,33 @@ public class MonsterBall {
 
         this.monsterY = random.nextInt(GameActivity.mScreenSize.y + 1);
         this.monsterX = random.nextInt(2);
-        this.monsterVelocity = 10;
+        this.monsterVelocity = random.nextInt(10) + 10;
 
         if(this.monsterX == 1)
             this.monsterX = GameActivity.mScreenSize.x;
 
+
         monsterPaint.setColor(Color.parseColor("#FFFFFF"));
     }
 
-    public void followFinger(int fingerX, int fingerY)
-    {
-            monsterX -= (monsterX - fingerX) * monsterVelocity / 100;
-            monsterY -= (monsterY - fingerY) * monsterVelocity / 100;
+
+    public void attackFingerPosition(int attackAtX, int attackAtY, int initialX, int initialY, int moveStyle) {
+        int distance = (int) Math.sqrt((attackAtX - initialX) * (attackAtX - initialX) + (attackAtY - initialY) * (attackAtY - initialY));
+        int monsterVelocityX = monsterVelocity * Math.abs(attackAtX - initialX) / distance;
+        int monsterVelocityY = monsterVelocity * Math.abs(attackAtY - initialY) / distance;
+
+        if (moveStyle == 1) {
+            monsterX += monsterVelocityX;
+            monsterY += monsterVelocityY;
+        } else if (moveStyle == 2) {
+            monsterX += monsterVelocityX;
+            monsterY -= monsterVelocityY;
+        } else if (moveStyle == 3) {
+            monsterX -= monsterVelocityX;
+            monsterY -= monsterVelocityY;
+        } else if (moveStyle == 4) {
+            monsterX -= monsterVelocityX;
+            monsterY += monsterVelocityY;
+        }
     }
 }

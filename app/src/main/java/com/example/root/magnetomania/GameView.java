@@ -2,13 +2,14 @@ package com.example.root.magnetomania;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
-import android.content.Intent;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
 import android.view.MotionEvent;
 import android.view.SurfaceHolder;
 import android.view.SurfaceView;
+
+import java.util.Random;
 
 
 public class GameView extends SurfaceView {
@@ -19,9 +20,20 @@ public class GameView extends SurfaceView {
     private int mScreenWidth;
     private int mScreenHeight;
 
-    private boolean is_game_started;
-    private boolean is_game_paused;
+    public boolean is_game_started;
+    public boolean is_game_over;
+    public boolean is_game_paused;
     private MonsterBall mBall = new MonsterBall();
+
+    private int fingerX;
+    private int fingerY;
+    private int attackAtX;
+    private int attackAtY;
+    private int initialX;
+    private int initialY;
+    private int moveStyle;
+
+    private Random random = new Random();
 
     public GameView(Context context){
         super(context);
@@ -32,6 +44,8 @@ public class GameView extends SurfaceView {
         this.mThread = new GameThread(this);
         this.mHolder = this.getHolder();
         this.is_game_paused = false;
+        this.is_game_over = false;
+
 
         this.mHolder.addCallback(new SurfaceHolder.Callback() {
 
@@ -65,7 +79,34 @@ public class GameView extends SurfaceView {
 
     public void update()
     {
-        //Do something here.
+
+        if(is_game_started) {
+            if (mBall.monsterX >= mScreenWidth || mBall.monsterY >= mScreenHeight || mBall.monsterX <= 0 || mBall.monsterY <= 0) {
+                this.attackAtX = this.fingerX;
+                this.attackAtY = this.fingerY;
+                this.initialX = this.mBall.monsterX;
+                this.initialY = this.mBall.monsterY;
+
+                if(mBall.monsterX < attackAtX && mBall.monsterY < attackAtY)
+                    moveStyle = 1;
+                else if(mBall.monsterX < attackAtX && mBall.monsterY > attackAtY)
+                    moveStyle = 2;
+                else if(mBall.monsterX > attackAtX && mBall.monsterY > attackAtY)
+                    moveStyle = 3;
+                else if(mBall.monsterX > attackAtX && mBall.monsterY < attackAtY)
+                    moveStyle = 4;
+
+                this.mBall.monsterVelocity = random.nextInt(10) + 10;
+
+            }
+
+            mBall.attackFingerPosition(attackAtX, attackAtY, initialX, initialY, moveStyle);
+        }
+
+        if(is_game_over)
+        {
+            is_game_over = false;
+        }
 
     }
 
@@ -78,24 +119,23 @@ public class GameView extends SurfaceView {
     @SuppressLint("ClickableViewAccessibility")
     @Override
     public boolean onTouchEvent(MotionEvent event) {
-        is_game_started = true;
 
         if(!is_game_paused)
         {
             switch(event.getAction()){
                 case MotionEvent.ACTION_DOWN:
                     //Do Something here.
-                    mBall.followFinger((int)event.getX(),(int)event.getY());
+                    is_game_started = true;
                     break;
 
                 case MotionEvent.ACTION_UP:
                     //Do Something here.
-                    mBall.followFinger((int)event.getX(),(int)event.getY());
+                    is_game_over = true;
                     break;
 
                 case MotionEvent.ACTION_MOVE:
-                    //Do Something here.
-                    mBall.followFinger((int)event.getX(),(int)event.getY());
+                    this.fingerX = (int)event.getX();
+                    this.fingerY = (int)event.getY();
                     break;
             }
         }
