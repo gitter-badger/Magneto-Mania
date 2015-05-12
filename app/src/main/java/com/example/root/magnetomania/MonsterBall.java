@@ -14,6 +14,7 @@ public class MonsterBall {
 
     protected Paint monsterPaint = new Paint();
     protected final int monsterRadius = 100;
+    protected int monsterSleepTime;
 
     public MonsterBall()
     {
@@ -22,6 +23,7 @@ public class MonsterBall {
         this.monsterY = random.nextInt(GameActivity.mScreenSize.y + 1);
         this.monsterX = random.nextInt(2);
         this.monsterVelocity = random.nextInt(10) + 10;
+        this.monsterSleepTime = 0;
 
         if(this.monsterX == 1)
             this.monsterX = GameActivity.mScreenSize.x;

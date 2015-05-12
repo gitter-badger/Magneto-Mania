@@ -32,6 +32,7 @@ public class GameView extends SurfaceView {
     private int initialX;
     private int initialY;
     private int moveStyle;
+    private int monsterSleepCount;
 
     private Random random = new Random();
 
@@ -81,26 +82,36 @@ public class GameView extends SurfaceView {
     {
 
         if(is_game_started) {
-            if (mBall.monsterX >= mScreenWidth || mBall.monsterY >= mScreenHeight || mBall.monsterX <= 0 || mBall.monsterY <= 0) {
-                this.attackAtX = this.fingerX;
-                this.attackAtY = this.fingerY;
-                this.initialX = this.mBall.monsterX;
-                this.initialY = this.mBall.monsterY;
-
-                if(mBall.monsterX < attackAtX && mBall.monsterY < attackAtY)
-                    moveStyle = 1;
-                else if(mBall.monsterX < attackAtX && mBall.monsterY > attackAtY)
-                    moveStyle = 2;
-                else if(mBall.monsterX > attackAtX && mBall.monsterY > attackAtY)
-                    moveStyle = 3;
-                else if(mBall.monsterX > attackAtX && mBall.monsterY < attackAtY)
-                    moveStyle = 4;
-
-                this.mBall.monsterVelocity = random.nextInt(10) + 10;
-
+            if(monsterSleepCount < this.mBall.monsterSleepTime)
+            {
+                monsterSleepCount++;
             }
+            else {
+                monsterSleepCount = 0;
+                this.mBall.monsterSleepTime = 0;
 
-            mBall.attackFingerPosition(attackAtX, attackAtY, initialX, initialY, moveStyle);
+                if (mBall.monsterX >= mScreenWidth || mBall.monsterY >= mScreenHeight || mBall.monsterX <= 0 || mBall.monsterY <= 0) {
+                    this.attackAtX = this.fingerX;
+                    this.attackAtY = this.fingerY;
+                    this.initialX = this.mBall.monsterX;
+                    this.initialY = this.mBall.monsterY;
+
+                    if (mBall.monsterX < attackAtX && mBall.monsterY < attackAtY)
+                        moveStyle = 1;
+                    else if (mBall.monsterX < attackAtX && mBall.monsterY > attackAtY)
+                        moveStyle = 2;
+                    else if (mBall.monsterX > attackAtX && mBall.monsterY > attackAtY)
+                        moveStyle = 3;
+                    else if (mBall.monsterX > attackAtX && mBall.monsterY < attackAtY)
+                        moveStyle = 4;
+
+                    this.mBall.monsterVelocity = random.nextInt(20) + 10;
+                    this.mBall.monsterSleepTime = random.nextInt(20) + 1;
+
+                }
+
+                mBall.attackFingerPosition(attackAtX, attackAtY, initialX, initialY, moveStyle);
+            }
         }
 
         if(is_game_over)
