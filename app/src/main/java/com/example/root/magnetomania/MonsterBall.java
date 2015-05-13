@@ -16,6 +16,8 @@ public class MonsterBall {
     protected final int monsterRadius = 100;
     protected int monsterSleepTime;
 
+    protected int monsterAttackTrick;
+
     public MonsterBall()
     {
         Random random = new Random();
@@ -23,12 +25,13 @@ public class MonsterBall {
         this.monsterY = random.nextInt(GameActivity.mScreenSize.y + 1);
         this.monsterX = random.nextInt(2);
         this.monsterVelocity = random.nextInt(10) + 10;
-        this.monsterSleepTime = 0;
+        this.monsterSleepTime = random.nextInt(15) + 5;
+
 
         if(this.monsterX == 1)
             this.monsterX = GameActivity.mScreenSize.x;
 
-
+        this.monsterAttackTrick = 0;
         monsterPaint.setColor(Color.parseColor("#FFFFFF"));
     }
 
@@ -52,4 +55,5 @@ public class MonsterBall {
             monsterY += monsterVelocityY;
         }
     }
+
 }

@@ -23,7 +23,10 @@ public class GameView extends SurfaceView {
     public boolean is_game_started;
     public boolean is_game_over;
     public boolean is_game_paused;
+
+
     private MonsterBall mBall = new MonsterBall();
+    private MagnetRocket mRocket = new MagnetRocket();
 
     private int fingerX;
     private int fingerY;
@@ -32,7 +35,10 @@ public class GameView extends SurfaceView {
     private int initialX;
     private int initialY;
     private int moveStyle;
+
     private int monsterSleepCount;
+    private int rocketXhaustCount;
+
 
     private Random random = new Random();
 
@@ -47,6 +53,8 @@ public class GameView extends SurfaceView {
         this.is_game_paused = false;
         this.is_game_over = false;
 
+        this.monsterSleepCount = 1;
+        this.rocketXhaustCount = 1;
 
         this.mHolder.addCallback(new SurfaceHolder.Callback() {
 
@@ -82,13 +90,41 @@ public class GameView extends SurfaceView {
     {
 
         if(is_game_started) {
-            if(monsterSleepCount < this.mBall.monsterSleepTime)
+            if(monsterSleepCount <= this.mBall.monsterSleepTime)
             {
                 monsterSleepCount++;
+
+                if(monsterSleepCount == this.mBall.monsterSleepTime)
+                {
+                    randomizeTrajectory();
+                    monsterSleepCount++;
+                    this.mBall.monsterSleepTime = 0;
+                }
             }
-            else {
-                monsterSleepCount = 0;
-                this.mBall.monsterSleepTime = 0;
+            else if(this.mBall.monsterAttackTrick == 1)
+            {
+                monsterSleepCount = 1;
+
+                if(rocketXhaustCount <= this.mRocket.rocketXhaustTime)
+                {
+                    this.mRocket.rocketTrackFinger(this.fingerX, this.fingerY);
+                    rocketXhaustCount++;
+                }
+                else
+                {
+                    rocketXhaustCount = 1;
+                    this.mRocket.rocketX = this.mScreenWidth + 80;
+                    this.mRocket.rocketY = this.mScreenHeight + 80;
+                    this.mRocket.rocketXhaustTime = 0;
+
+                    this.mBall.monsterAttackTrick = 0;
+                    this.mBall.monsterVelocity = random.nextInt(20) + 10;
+                    this.mBall.monsterSleepTime = random.nextInt(15) + 5;
+                }
+            }
+            else
+            {
+                monsterSleepCount = 1;
 
                 if (mBall.monsterX >= mScreenWidth || mBall.monsterY >= mScreenHeight || mBall.monsterX <= 0 || mBall.monsterY <= 0) {
                     this.attackAtX = this.fingerX;
@@ -106,7 +142,8 @@ public class GameView extends SurfaceView {
                         moveStyle = 4;
 
                     this.mBall.monsterVelocity = random.nextInt(20) + 10;
-                    this.mBall.monsterSleepTime = random.nextInt(20) + 1;
+                    this.mBall.monsterSleepTime = random.nextInt(15) + 5;
+
 
                 }
 
@@ -124,7 +161,12 @@ public class GameView extends SurfaceView {
     public void draw(Canvas canvas)
     {
         canvas.drawColor(Color.BLACK);
+
+        if(this.mRocket != null && this.mBall.monsterAttackTrick == 1)
+        canvas.drawCircle((float)mRocket.rocketX, (float)mRocket.rocketY, (float)mRocket.rocketRadius, mRocket.rocketPaint);
+
         canvas.drawCircle((float)mBall.monsterX, (float)mBall.monsterY, (float)mBall.monsterRadius, mBall.monsterPaint);
+
     }
 
     @SuppressLint("ClickableViewAccessibility")
@@ -135,7 +177,6 @@ public class GameView extends SurfaceView {
         {
             switch(event.getAction()){
                 case MotionEvent.ACTION_DOWN:
-                    //Do Something here.
                     is_game_started = true;
                     break;
 
@@ -151,5 +192,14 @@ public class GameView extends SurfaceView {
             }
         }
         return true;
+    }
+
+    public void randomizeTrajectory()
+    {
+        this.mBall.monsterAttackTrick = random.nextInt(4);
+        if(this.mBall.monsterAttackTrick == 1)
+        {
+            this.mRocket.initRocket(mBall);
+        }
     }
 }
