@@ -4,11 +4,9 @@ import android.annotation.SuppressLint;
 import android.content.Context;
 import android.graphics.Canvas;
 import android.graphics.Color;
-import android.graphics.Paint;
 import android.view.MotionEvent;
 import android.view.SurfaceHolder;
 import android.view.SurfaceView;
-
 import java.util.Random;
 
 
@@ -21,9 +19,8 @@ public class GameView extends SurfaceView {
     private int mScreenHeight;
 
     public boolean is_game_started;
-    public boolean is_game_over;
     public boolean is_game_paused;
-
+    public boolean is_game_over;
 
     private MonsterBall mBall = new MonsterBall();
     private MagnetRocket mRocket = new MagnetRocket();
@@ -32,16 +29,16 @@ public class GameView extends SurfaceView {
     private int fingerY;
     private int attackAtX;
     private int attackAtY;
-    private int initialX;
-    private int initialY;
+    private int attackFromX;
+    private int attackFromY;
     private int moveStyle;
 
     private int monsterSleepCount;
     private int rocketXhaustCount;
 
-
     private Random random = new Random();
 
+    
     public GameView(Context context){
         super(context);
 
@@ -129,8 +126,8 @@ public class GameView extends SurfaceView {
                 if (mBall.monsterX >= mScreenWidth || mBall.monsterY >= mScreenHeight || mBall.monsterX <= 0 || mBall.monsterY <= 0) {
                     this.attackAtX = this.fingerX;
                     this.attackAtY = this.fingerY;
-                    this.initialX = this.mBall.monsterX;
-                    this.initialY = this.mBall.monsterY;
+                    this.attackFromX = this.mBall.monsterX;
+                    this.attackFromY = this.mBall.monsterY;
 
                     if (mBall.monsterX < attackAtX && mBall.monsterY < attackAtY)
                         moveStyle = 1;
@@ -147,7 +144,7 @@ public class GameView extends SurfaceView {
 
                 }
 
-                mBall.attackFingerPosition(attackAtX, attackAtY, initialX, initialY, moveStyle);
+                mBall.attackFingerPosition(attackAtX, attackAtY, attackFromX, attackFromY, moveStyle);
             }
         }
 
