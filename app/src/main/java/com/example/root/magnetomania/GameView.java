@@ -12,6 +12,7 @@ import java.util.Random;
 
 public class GameView extends SurfaceView {
 
+    /******************************************** CLASS MEMBERS ********************************************/
     private SurfaceHolder mHolder;
     private GameThread mThread = null;
 
@@ -24,6 +25,7 @@ public class GameView extends SurfaceView {
 
     private MonsterBall mBall = new MonsterBall();
     private MagnetRocket mRocket = new MagnetRocket();
+    private BulletFan[] mFan = new BulletFan[5];
 
     private int fingerX;
     private int fingerY;
@@ -37,8 +39,10 @@ public class GameView extends SurfaceView {
     private int rocketXhaustCount;
 
     private Random random = new Random();
+    /**---------------------------------------------------------------------------------------------------**/
 
-    
+
+    /********************************************* CONSTRUCTOR *********************************************/
     public GameView(Context context){
         super(context);
 
@@ -80,8 +84,9 @@ public class GameView extends SurfaceView {
                 }
             }
         });
-
     }
+    /**---------------------------------------------------------------------------------------------------**/
+
 
     public void update()
     {
