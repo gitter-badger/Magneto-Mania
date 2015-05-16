@@ -4,6 +4,7 @@ import android.annotation.SuppressLint;
 import android.content.Context;
 import android.graphics.Canvas;
 import android.graphics.Color;
+import android.graphics.RectF;
 import android.view.MotionEvent;
 import android.view.SurfaceHolder;
 import android.view.SurfaceView;
@@ -26,6 +27,7 @@ public class GameView extends SurfaceView {
     private MonsterBall mBall = new MonsterBall();
     private MagnetRocket mRocket = new MagnetRocket();
     private BulletFan mFan = new BulletFan();
+    private HeatWave mWave = new HeatWave();
 
     private int fingerX;
     private int fingerY;
@@ -37,8 +39,11 @@ public class GameView extends SurfaceView {
 
     private int monsterSleepCount;
     private int rocketXhaustCount;
+    private RectF heatRect = new RectF();
+
     private boolean time_to_shoot_bullets;
     private boolean bullets_on_screen;
+    private boolean time_for_some_heat;
 
     private Random random = new Random();
 
@@ -168,6 +173,25 @@ public class GameView extends SurfaceView {
                     this.mBall.monsterSleepTime = random.nextInt(10) + 5;
                 }
             }
+            else if(this.mBall.monsterAttackTrick == 4)
+            {
+                monsterSleepCount = 1;
+
+                if(time_for_some_heat)
+                {
+                    heatRect = this.mWave.setHeatWaveSize(this.mBall.monsterX, this.mBall.monsterY);
+
+                    if(this.mWave.heatWaveRadius > this.mScreenHeight)
+                        time_for_some_heat = false;
+
+                }
+                else
+                {
+                    this.mBall.monsterAttackTrick = 0;
+                    this.mBall.monsterVelocity = random.nextInt(20) + 10;
+                    this.mBall.monsterSleepTime = random.nextInt(10) + 5;
+                }
+            }
             else
             {
                 monsterSleepCount = 1;
@@ -221,6 +245,16 @@ public class GameView extends SurfaceView {
         if(this.mRocket != null && this.mBall.monsterAttackTrick == 3)
         canvas.drawCircle((float)mRocket.rocketX, (float)mRocket.rocketY, (float)mRocket.rocketRadius, mRocket.rocketPaint);
 
+        if(this.mWave != null && this.mBall.monsterAttackTrick == 4)
+        {
+            canvas.drawArc(heatRect, 0, 45, false, this.mWave.heatWavePaint);
+            canvas.drawArc(heatRect, 60, 45, false, this.mWave.heatWavePaint);
+            canvas.drawArc(heatRect, 120, 45, false, this.mWave.heatWavePaint);
+            canvas.drawArc(heatRect, 180, 45, false, this.mWave.heatWavePaint);
+            canvas.drawArc(heatRect, 240, 45, false, this.mWave.heatWavePaint);
+            canvas.drawArc(heatRect, 300, 45, false, this.mWave.heatWavePaint);
+        }
+
         canvas.drawCircle((float)mBall.monsterX, (float)mBall.monsterY, (float)mBall.monsterRadius, mBall.monsterPaint);
 
     }
@@ -261,6 +295,11 @@ public class GameView extends SurfaceView {
         {
             this.mFan.initBullets(mBall);
             time_to_shoot_bullets = true;
+        }
+        else if(this.mBall.monsterAttackTrick == 4)
+        {
+            this.mWave.initHeatWave(mBall);
+            time_for_some_heat = true;
         }
     }
 }
