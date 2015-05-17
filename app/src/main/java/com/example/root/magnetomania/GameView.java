@@ -1,7 +1,9 @@
 package com.example.root.magnetomania;
 
 import android.annotation.SuppressLint;
+import android.app.Activity;
 import android.content.Context;
+import android.content.Intent;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.RectF;
@@ -16,6 +18,7 @@ public class GameView extends SurfaceView {
     /******************************************** CLASS MEMBERS ********************************************/
     private SurfaceHolder mHolder;
     private GameThread mThread = null;
+    private Context mContext;
 
     private int mScreenWidth;
     private int mScreenHeight;
@@ -221,9 +224,13 @@ public class GameView extends SurfaceView {
 
         if(is_game_over)
         {
-            is_game_over = false;
+            try {
+                this.gameOver();
+                is_game_over = false;
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
         }
-
     }
 
     public void draw(Canvas canvas)
@@ -252,6 +259,16 @@ public class GameView extends SurfaceView {
         }
 
         canvas.drawCircle((float)mBall.monsterX, (float)mBall.monsterY, (float)mBall.monsterRadius, mBall.monsterPaint);
+
+        if(is_game_over)
+        {
+            try {
+                this.gameOver();
+                is_game_over = false;
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+        }
 
     }
 
@@ -297,5 +314,12 @@ public class GameView extends SurfaceView {
             this.heatRect = null;
             time_for_some_heat = true;
         }
+    }
+
+    void gameOver() throws InterruptedException {
+        mThread.setRunning(false);
+        Intent intent = new Intent(mContext, GameOverActivity.class);
+        mContext.startActivity(intent);
+        ((Activity)mContext).finish();
     }
 }
