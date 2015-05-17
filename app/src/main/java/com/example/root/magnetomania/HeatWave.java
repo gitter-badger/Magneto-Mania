@@ -29,6 +29,7 @@ public class HeatWave {
     {
         this.heatOriginX = monsterBall.monsterX;
         this.heatOriginY = monsterBall.monsterY;
+        this.heatWaveRadius = 0;
     }
 
     public RectF setHeatWaveSize(int centerX, int centerY)
