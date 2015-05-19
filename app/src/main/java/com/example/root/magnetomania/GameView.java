@@ -37,6 +37,8 @@ public class GameView extends SurfaceView {
     private HeatWave mWave1 = new HeatWave();
     private HeatWave mWave2 = new HeatWave();
     private HeatWave mWave3 = new HeatWave();
+    private HeatWave mWave4 = new HeatWave();
+    private HeatWave mWave5 = new HeatWave();
 
     private int fingerX;
     private int fingerY;
@@ -54,6 +56,8 @@ public class GameView extends SurfaceView {
     private RectF heatRect1 = new RectF();
     private RectF heatRect2 = new RectF();
     private RectF heatRect3 = new RectF();
+    private RectF heatRect4 = new RectF();
+    private RectF heatRect5 = new RectF();
 
     private boolean time_to_shoot_bullets;
     private boolean bullets_on_screen;
@@ -214,6 +218,8 @@ public class GameView extends SurfaceView {
                     this.mWave1.initHeatWave(mBall);
                     this.mWave2.initHeatWave(mBall);
                     this.mWave3.initHeatWave(mBall);
+                    this.mWave4.initHeatWave(mBall);
+                    this.mWave5.initHeatWave(mBall);
                 }
 
                 if(heat_waves_on_screen)
@@ -227,8 +233,13 @@ public class GameView extends SurfaceView {
                     if(heatWaveTimeGap>20)
                     heatRect3 = this.mWave3.setHeatWaveSize(this.mBall.monsterX, this.mBall.monsterY);
 
+                    if(heatWaveTimeGap>30)
+                    heatRect4 = this.mWave4.setHeatWaveSize(this.mBall.monsterX, this.mBall.monsterY);
 
-                    if(this.mWave3.heatWaveRadius > this.mScreenHeight)
+                    if(heatWaveTimeGap>40)
+                    heatRect5 = this.mWave5.setHeatWaveSize(this.mBall.monsterX, this.mBall.monsterY);
+
+                    if(this.mWave5.heatWaveRadius > this.mScreenHeight)
                         heat_waves_on_screen = false;
                 }
                 else
@@ -297,31 +308,51 @@ public class GameView extends SurfaceView {
 
         if(this.mWave1 != null && this.mBall.monsterAttackTrick == 4)
         {
-            canvas.drawArc(heatRect1,   0, 30, false, this.mWave1.heatWavePaint);
-            canvas.drawArc(heatRect1,  60, 30, false, this.mWave1.heatWavePaint);
-            canvas.drawArc(heatRect1, 120, 30, false, this.mWave1.heatWavePaint);
-            canvas.drawArc(heatRect1, 180, 30, false, this.mWave1.heatWavePaint);
-            canvas.drawArc(heatRect1, 240, 30, false, this.mWave1.heatWavePaint);
-            canvas.drawArc(heatRect1, 300, 30, false, this.mWave1.heatWavePaint);
-
-            if(heatWaveTimeGap>5)
-            {
-                canvas.drawArc(heatRect2,  10, 30, false, this.mWave1.heatWavePaint);
-                canvas.drawArc(heatRect2,  70, 30, false, this.mWave1.heatWavePaint);
-                canvas.drawArc(heatRect2, 130, 30, false, this.mWave1.heatWavePaint);
-                canvas.drawArc(heatRect2, 190, 30, false, this.mWave1.heatWavePaint);
-                canvas.drawArc(heatRect2, 250, 30, false, this.mWave1.heatWavePaint);
-                canvas.drawArc(heatRect2, 310, 30, false, this.mWave1.heatWavePaint);
-            }
+                canvas.drawArc(heatRect1,   0, 30, false, this.mWave1.heatWavePaint);
+                canvas.drawArc(heatRect1,  60, 30, false, this.mWave1.heatWavePaint);
+                canvas.drawArc(heatRect1, 120, 30, false, this.mWave1.heatWavePaint);
+                canvas.drawArc(heatRect1, 180, 30, false, this.mWave1.heatWavePaint);
+                canvas.drawArc(heatRect1, 240, 30, false, this.mWave1.heatWavePaint);
+                canvas.drawArc(heatRect1, 300, 30, false, this.mWave1.heatWavePaint);
 
             if(heatWaveTimeGap>10)
             {
-                canvas.drawArc(heatRect3,  20, 30, false, this.mWave1.heatWavePaint);
-                canvas.drawArc(heatRect3,  80, 30, false, this.mWave1.heatWavePaint);
-                canvas.drawArc(heatRect3, 140, 30, false, this.mWave1.heatWavePaint);
-                canvas.drawArc(heatRect3, 200, 30, false, this.mWave1.heatWavePaint);
-                canvas.drawArc(heatRect3, 260, 30, false, this.mWave1.heatWavePaint);
-                canvas.drawArc(heatRect3, 320, 30, false, this.mWave1.heatWavePaint);
+                canvas.drawArc(heatRect2,  10, 30, false, this.mWave2.heatWavePaint);
+                canvas.drawArc(heatRect2,  70, 30, false, this.mWave2.heatWavePaint);
+                canvas.drawArc(heatRect2, 130, 30, false, this.mWave2.heatWavePaint);
+                canvas.drawArc(heatRect2, 190, 30, false, this.mWave2.heatWavePaint);
+                canvas.drawArc(heatRect2, 250, 30, false, this.mWave2.heatWavePaint);
+                canvas.drawArc(heatRect2, 310, 30, false, this.mWave2.heatWavePaint);
+            }
+
+            if(heatWaveTimeGap>20)
+            {
+                canvas.drawArc(heatRect3,  20, 30, false, this.mWave3.heatWavePaint);
+                canvas.drawArc(heatRect3,  80, 30, false, this.mWave3.heatWavePaint);
+                canvas.drawArc(heatRect3, 140, 30, false, this.mWave3.heatWavePaint);
+                canvas.drawArc(heatRect3, 200, 30, false, this.mWave3.heatWavePaint);
+                canvas.drawArc(heatRect3, 260, 30, false, this.mWave3.heatWavePaint);
+                canvas.drawArc(heatRect3, 320, 30, false, this.mWave3.heatWavePaint);
+            }
+
+            if(heatWaveTimeGap>30)
+            {
+                canvas.drawArc(heatRect4,  30, 30, false, this.mWave4.heatWavePaint);
+                canvas.drawArc(heatRect4,  90, 30, false, this.mWave4.heatWavePaint);
+                canvas.drawArc(heatRect4, 150, 30, false, this.mWave4.heatWavePaint);
+                canvas.drawArc(heatRect4, 210, 30, false, this.mWave4.heatWavePaint);
+                canvas.drawArc(heatRect4, 270, 30, false, this.mWave4.heatWavePaint);
+                canvas.drawArc(heatRect4, 330, 30, false, this.mWave4.heatWavePaint);
+            }
+
+            if(heatWaveTimeGap>40)
+            {
+                canvas.drawArc(heatRect5,  40, 30, false, this.mWave5.heatWavePaint);
+                canvas.drawArc(heatRect5, 100, 30, false, this.mWave5.heatWavePaint);
+                canvas.drawArc(heatRect5, 160, 30, false, this.mWave5.heatWavePaint);
+                canvas.drawArc(heatRect5, 220, 30, false, this.mWave5.heatWavePaint);
+                canvas.drawArc(heatRect5, 280, 30, false, this.mWave5.heatWavePaint);
+                canvas.drawArc(heatRect5, 340, 30, false, this.mWave5.heatWavePaint);
             }
         }
 
