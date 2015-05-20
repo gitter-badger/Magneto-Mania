@@ -23,7 +23,7 @@ public class BulletFan {
     protected double bulletsVelocity;
 
     protected Paint bulletsPaint = new Paint();
-    protected final int bulletsRadius = 15;
+    protected final int bulletsRadius = 18;
     /**--------------------------------------------------------------------------------------------------**/
 
 
@@ -124,4 +124,19 @@ public class BulletFan {
         }
     }
     /**--------------------------------------------------------------------------------------------------**/
+
+    public boolean didBulletGetTheFinger (int fingerX, int fingerY)
+    {
+        int distance = 0;
+
+        for (int i = 0; i < 7; i++)
+        {
+            distance = (int) Math.sqrt((this.bulletPosition[i].x - fingerX) * (this.bulletPosition[i].x - fingerX) + (this.bulletPosition[i].y - fingerY) * (this.bulletPosition[i].y - fingerY));
+
+            if (distance < this.bulletsRadius)
+                return true;
+        }
+
+        return false;
+    }
 }

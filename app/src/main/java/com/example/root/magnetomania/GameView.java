@@ -176,6 +176,18 @@ public class GameView extends SurfaceView {
             {
                 monsterSleepCount = 1;
 
+                /***/   is_game_over = this.mFan1.didBulletGetTheFinger(this.fingerX, this.fingerY);
+                /***/   if(is_game_over)
+                /***/   tryGameOver();
+
+                /***/   is_game_over = this.mFan2.didBulletGetTheFinger(this.fingerX, this.fingerY);
+                /***/   if(is_game_over)
+                /***/   tryGameOver();
+
+                /***/   is_game_over = this.mFan3.didBulletGetTheFinger(this.fingerX, this.fingerY);
+                /***/   if(is_game_over)
+                /***/   tryGameOver();
+
                 if(time_to_shoot_bullets)
                 {
                     time_to_shoot_bullets = false;
@@ -354,6 +366,7 @@ public class GameView extends SurfaceView {
                 case MotionEvent.ACTION_UP:
                     //Do Something here.
                     is_game_over = true;
+                    tryGameOver();
                     break;
 
                 case MotionEvent.ACTION_MOVE:
