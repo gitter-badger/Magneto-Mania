@@ -37,8 +37,8 @@ public class MonsterBall {
 
 
         /*Velocity and sleeptime is randomized for each attack.*/
-        this.monsterVelocity = random.nextInt(10) + 10;
-        this.monsterSleepTime = random.nextInt(15) + 5;
+        this.monsterVelocity = random.nextInt(10) + 15;
+        this.monsterSleepTime = random.nextInt(10) + 10;
 
         this.monsterAttackTrick = 0;
         monsterPaint.setColor(Color.parseColor("#FFFFFF"));
@@ -48,34 +48,19 @@ public class MonsterBall {
 
 
     /***************** METHOD BY WHICH MONSTER RUSHES AT THE FINGER ALONG LINE OF CONTACT *****************/
-    public void attackFingerPosition(int attackAtX, int attackAtY, int attackFromX, int attackFromY, int moveStyle) {
+    public void attackFingerPosition(int attackAtX, int attackAtY, int attackFromX, int attackFromY) {
 
         /*distance is the length of he line of contact between monster and finger at the moment,
          * when the monster is resting on the wall, and just about to attack the finger. */
         int distance = (int) Math.sqrt((attackAtX - attackFromX) * (attackAtX - attackFromX) + (attackAtY - attackFromY) * (attackAtY - attackFromY));
 
-
         /*These are the x and y components of the velocity of the monster, so that the monster
          *travels with constant velocity during one rush towards the finger.*/
-        int monsterVelocityX = monsterVelocity * Math.abs(attackAtX - attackFromX) / distance;
-        int monsterVelocityY = monsterVelocity * Math.abs(attackAtY - attackFromY) / distance;
+        int monsterVelocityX = monsterVelocity * (attackAtX - attackFromX) / distance;
+        int monsterVelocityY = monsterVelocity * (attackAtY - attackFromY) / distance;
 
-
-        /*moveStyle decides the direction of movement of the monster, its vaue is decided during
-         *update() in the GameView. */
-        if (moveStyle == 1) {
             monsterX += monsterVelocityX;
             monsterY += monsterVelocityY;
-        } else if (moveStyle == 2) {
-            monsterX += monsterVelocityX;
-            monsterY -= monsterVelocityY;
-        } else if (moveStyle == 3) {
-            monsterX -= monsterVelocityX;
-            monsterY -= monsterVelocityY;
-        } else if (moveStyle == 4) {
-            monsterX -= monsterVelocityX;
-            monsterY += monsterVelocityY;
-        }
     }
     /**--------------------------------------------------------------------------------------------------**/
 }

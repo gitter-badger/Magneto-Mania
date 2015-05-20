@@ -254,19 +254,22 @@ public class GameView extends SurfaceView {
                 monsterSleepCount = 1;
 
                 if (mBall.monsterX >= mScreenWidth || mBall.monsterY >= mScreenHeight || mBall.monsterX <= 0 || mBall.monsterY <= 0) {
+
+                    // For preventing glitchy movement at the boundary.
+                    if (mBall.monsterX >= mScreenWidth)
+                    mBall.monsterX = mScreenWidth;
+                    else if (mBall.monsterX <= 0)
+                    mBall.monsterX = 0;
+                    else if (mBall.monsterY >=mScreenHeight)
+                    mBall.monsterY = mScreenHeight;
+                    else if (mBall.monsterY <= 0)
+                    mBall.monsterY = 0;
+
+
                     this.attackAtX = this.fingerX;
                     this.attackAtY = this.fingerY;
                     this.attackFromX = this.mBall.monsterX;
                     this.attackFromY = this.mBall.monsterY;
-
-                    if (mBall.monsterX < attackAtX && mBall.monsterY < attackAtY)
-                        moveStyle = 1;
-                    else if (mBall.monsterX < attackAtX && mBall.monsterY > attackAtY)
-                        moveStyle = 2;
-                    else if (mBall.monsterX > attackAtX && mBall.monsterY > attackAtY)
-                        moveStyle = 3;
-                    else if (mBall.monsterX > attackAtX && mBall.monsterY < attackAtY)
-                        moveStyle = 4;
 
                     this.mBall.monsterVelocity = random.nextInt(20) + 10;
                     this.mBall.monsterSleepTime = random.nextInt(10) + 5;
@@ -274,7 +277,7 @@ public class GameView extends SurfaceView {
 
                 }
 
-                mBall.attackFingerPosition(attackAtX, attackAtY, attackFromX, attackFromY, moveStyle);
+                mBall.attackFingerPosition(attackAtX, attackAtY, attackFromX, attackFromY);
             }
         }
 
