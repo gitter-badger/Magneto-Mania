@@ -148,8 +148,8 @@ public class GameView extends SurfaceView {
                     this.mRocket.rocketXhaustTime = 0;
 
                     this.mBall.monsterAttackTrick = 0;
-                    this.mBall.monsterVelocity = random.nextInt(20) + 10;
-                    this.mBall.monsterSleepTime = random.nextInt(10) + 5;
+                    this.mBall.monsterVelocity = random.nextInt(10) + 15;
+                    this.mBall.monsterSleepTime = random.nextInt(5) + 10;
                 }
             }
             else if(this.mBall.monsterAttackTrick == 2)
@@ -201,8 +201,8 @@ public class GameView extends SurfaceView {
                 else
                 {
                     this.mBall.monsterAttackTrick = 0;
-                    this.mBall.monsterVelocity = random.nextInt(20) + 10;
-                    this.mBall.monsterSleepTime = random.nextInt(10) + 5;
+                    this.mBall.monsterVelocity = random.nextInt(10) + 15;
+                    this.mBall.monsterSleepTime = random.nextInt(5) + 10;
                 }
             }
             else if(this.mBall.monsterAttackTrick == 4)

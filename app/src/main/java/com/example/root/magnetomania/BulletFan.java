@@ -63,7 +63,7 @@ public class BulletFan {
         }
 
         /*Velocity and exhaust time is randomized for each attack. -----------------*/
-        this.bulletsVelocity = random.nextInt(15) + 25;
+        this.bulletsVelocity = 25;
 
         /*Setting slopeOfPath of central bullet and the extreme bullet. ------------*/
         slopeOfPathCentre = ((double)(fingerY - monsterBall.monsterY))/((double)(fingerX - monsterBall.monsterX));
