@@ -62,5 +62,15 @@ public class MonsterBall {
             monsterX += monsterVelocityX;
             monsterY += monsterVelocityY;
     }
+
+    public boolean didMonsterGetTheFinger (int fingerX, int fingerY)
+    {
+        int distance = (int) Math.sqrt((this.monsterX - fingerX)*(this.monsterX - fingerX) + (this.monsterY - fingerY)*(this.monsterY - fingerY));
+
+        if (distance < this.monsterRadius)
+            return true;
+        else
+            return false;
+    }
     /**--------------------------------------------------------------------------------------------------**/
 }

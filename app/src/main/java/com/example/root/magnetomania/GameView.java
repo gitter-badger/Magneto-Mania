@@ -126,6 +126,10 @@ public class GameView extends SurfaceView {
             {
                 monsterSleepCount++;
 
+                /***/   is_game_over = this.mBall.didMonsterGetTheFinger(this.fingerX, this.fingerY);
+                /***/   if(is_game_over)
+                /***/   tryGameOver();
+
                 if(monsterSleepCount == this.mBall.monsterSleepTime)
                 {
                     if(monster_trick_time)
@@ -145,6 +149,10 @@ public class GameView extends SurfaceView {
             else if(this.mBall.monsterAttackTrick == 3)
             {
                 monsterSleepCount = 1;
+
+                /***/   is_game_over = this.mBall.didMonsterGetTheFinger(this.fingerX, this.fingerY);
+                /***/   if(is_game_over)
+                /***/   tryGameOver();
 
                 if(rocketXhaustCount <= this.mRocket.rocketXhaustTime)
                 {
@@ -166,6 +174,10 @@ public class GameView extends SurfaceView {
             else if(this.mBall.monsterAttackTrick == 2)
             {
                 monsterSleepCount = 1;
+
+                /***/   is_game_over = this.mBall.didMonsterGetTheFinger(this.fingerX, this.fingerY);
+                /***/   if(is_game_over)
+                /***/   tryGameOver();
 
                 if(time_to_shoot_bullets)
                 {
@@ -220,6 +232,10 @@ public class GameView extends SurfaceView {
             {
                 monsterSleepCount = 1;
 
+                /***/   is_game_over = this.mBall.didMonsterGetTheFinger(this.fingerX, this.fingerY);
+                /***/   if(is_game_over)
+                /***/   tryGameOver();
+
                 if(time_for_some_heat)
                 {
                     time_for_some_heat = false;
@@ -264,6 +280,10 @@ public class GameView extends SurfaceView {
             {
                 monsterSleepCount = 1;
 
+                /***/   is_game_over = this.mBall.didMonsterGetTheFinger(this.fingerX, this.fingerY);
+                /***/   if(is_game_over)
+                /***/   tryGameOver();
+
                 if (mBall.monsterX >= mScreenWidth || mBall.monsterY >= mScreenHeight || mBall.monsterX <= 0 || mBall.monsterY <= 0) {
 
                     // For preventing glitchy movement at the boundary.
@@ -289,16 +309,6 @@ public class GameView extends SurfaceView {
                 }
 
                 mBall.attackFingerPosition(attackAtX, attackAtY, attackFromX, attackFromY);
-            }
-        }
-
-        if(is_game_over)
-        {
-            try {
-                this.gameOver();
-                is_game_over = false;
-            } catch (InterruptedException e) {
-                e.printStackTrace();
             }
         }
     }
@@ -390,6 +400,19 @@ public class GameView extends SurfaceView {
         else if(this.mBall.monsterAttackTrick == 4)
         {
             time_for_some_heat = true;
+        }
+    }
+
+    public void tryGameOver()
+    {
+        if(is_game_over)
+        {
+            try {
+                this.gameOver();
+                is_game_over = false;
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
         }
     }
 
