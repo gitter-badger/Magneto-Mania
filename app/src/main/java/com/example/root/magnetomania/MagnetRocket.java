@@ -66,4 +66,15 @@ public class MagnetRocket {
             rocketY += rocketVelocityY;
     }
     /**--------------------------------------------------------------------------------------------------**/
+
+
+    public boolean didRocketGetTheFinger (int fingerX, int fingerY)
+    {
+        int distance = (int) Math.sqrt((this.rocketX - fingerX)*(this.rocketX - fingerX) + (this.rocketY - fingerY)*(this.rocketY - fingerY));
+
+        if (distance < this.rocketRadius)
+            return true;
+        else
+            return false;
+    }
 }

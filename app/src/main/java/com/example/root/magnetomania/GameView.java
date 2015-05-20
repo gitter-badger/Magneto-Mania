@@ -122,13 +122,14 @@ public class GameView extends SurfaceView {
     {
 
         if(is_game_started) {
+
+            /***/   is_game_over = this.mBall.didMonsterGetTheFinger(this.fingerX, this.fingerY);
+            /***/   if(is_game_over)
+            /***/   tryGameOver();
+
             if(monsterSleepCount <= this.mBall.monsterSleepTime)
             {
                 monsterSleepCount++;
-
-                /***/   is_game_over = this.mBall.didMonsterGetTheFinger(this.fingerX, this.fingerY);
-                /***/   if(is_game_over)
-                /***/   tryGameOver();
 
                 if(monsterSleepCount == this.mBall.monsterSleepTime)
                 {
@@ -150,7 +151,7 @@ public class GameView extends SurfaceView {
             {
                 monsterSleepCount = 1;
 
-                /***/   is_game_over = this.mBall.didMonsterGetTheFinger(this.fingerX, this.fingerY);
+                /***/   is_game_over = this.mRocket.didRocketGetTheFinger(this.fingerX, this.fingerY);
                 /***/   if(is_game_over)
                 /***/   tryGameOver();
 
@@ -174,10 +175,6 @@ public class GameView extends SurfaceView {
             else if(this.mBall.monsterAttackTrick == 2)
             {
                 monsterSleepCount = 1;
-
-                /***/   is_game_over = this.mBall.didMonsterGetTheFinger(this.fingerX, this.fingerY);
-                /***/   if(is_game_over)
-                /***/   tryGameOver();
 
                 if(time_to_shoot_bullets)
                 {
@@ -218,23 +215,19 @@ public class GameView extends SurfaceView {
                             howManyBulletsOnScreen++;
                     }
 
-                    if(howManyBulletsOnScreen >= 18)
+                    if(howManyBulletsOnScreen >= 16)
                         bullets_on_screen = false;
                 }
                 else
                 {
                     this.mBall.monsterAttackTrick = 0;
                     this.mBall.monsterVelocity = random.nextInt(20) + 15;
-                    this.mBall.monsterSleepTime = random.nextInt(10) + 5;
+                    this.mBall.monsterSleepTime = random.nextInt(1) + 5;
                 }
             }
             else if(this.mBall.monsterAttackTrick == 4)
             {
                 monsterSleepCount = 1;
-
-                /***/   is_game_over = this.mBall.didMonsterGetTheFinger(this.fingerX, this.fingerY);
-                /***/   if(is_game_over)
-                /***/   tryGameOver();
 
                 if(time_for_some_heat)
                 {
@@ -280,20 +273,16 @@ public class GameView extends SurfaceView {
             {
                 monsterSleepCount = 1;
 
-                /***/   is_game_over = this.mBall.didMonsterGetTheFinger(this.fingerX, this.fingerY);
-                /***/   if(is_game_over)
-                /***/   tryGameOver();
-
                 if (mBall.monsterX >= mScreenWidth || mBall.monsterY >= mScreenHeight || mBall.monsterX <= 0 || mBall.monsterY <= 0) {
 
                     // For preventing glitchy movement at the boundary.
-                    if (mBall.monsterX >= mScreenWidth)
+                    if (mBall.monsterX > mScreenWidth)
                     mBall.monsterX = mScreenWidth;
-                    else if (mBall.monsterX <= 0)
+                    else if (mBall.monsterX < 0)
                     mBall.monsterX = 0;
-                    else if (mBall.monsterY >=mScreenHeight)
+                    else if (mBall.monsterY > mScreenHeight)
                     mBall.monsterY = mScreenHeight;
-                    else if (mBall.monsterY <= 0)
+                    else if (mBall.monsterY < 0)
                     mBall.monsterY = 0;
 
 
@@ -348,16 +337,6 @@ public class GameView extends SurfaceView {
         }
 
         canvas.drawCircle((float)mBall.monsterX, (float)mBall.monsterY, (float)mBall.monsterRadius, mBall.monsterPaint);
-
-        if(is_game_over)
-        {
-            try {
-                this.gameOver();
-                is_game_over = false;
-            } catch (InterruptedException e) {
-                e.printStackTrace();
-            }
-        }
 
     }
 
