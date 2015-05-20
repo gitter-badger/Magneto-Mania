@@ -54,4 +54,30 @@ public class HeatWave {
         }
     }
 
+    public boolean didHeatWaveBurnTheFinger (int fingerX, int fingerY, int waveType)
+    {
+        int distance = (int) Math.sqrt((heatOriginX - fingerX)*(heatOriginX - fingerX) + (heatOriginY - fingerY)*(heatOriginY - fingerY));
+        double slope = (double)(fingerY - heatOriginY) / (double)(fingerX - heatOriginX);
+        double tan30 = 0.57735;
+        double tan60 = 1.73205;
+
+        if (distance <= heatWaveRadius && distance >= heatWaveRadius - 5 )
+        {
+            if(waveType == 1)
+            {
+                if((fingerY > heatOriginY && slope < tan30) || (slope > tan60 && fingerX > heatOriginX) || (slope > -tan60 && slope < -tan30) ||
+                   (fingerY < heatOriginY && slope < tan30) || (slope > tan60 && fingerX < heatOriginX))
+                    return true;
+            }
+            else
+            {
+                if((slope > tan30 && slope < tan60) || (fingerX < heatOriginX && slope < -tan60) || (slope > -tan30 && fingerY > heatOriginY) ||
+                   (fingerX > heatOriginX && slope < -tan60) || (slope > -tan30 && fingerY < heatOriginY))
+
+                    return true;
+            }
+        }
+        return false;
+    }
+
 }

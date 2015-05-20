@@ -254,6 +254,26 @@ public class GameView extends SurfaceView {
                     this.mWave5.initHeatWave(mBall);
                 }
 
+                /***/   is_game_over = this.mWave1.didHeatWaveBurnTheFinger(this.fingerX, this.fingerY, 1);
+                /***/   if(is_game_over)
+                /***/   tryGameOver();
+
+                /***/   is_game_over = this.mWave2.didHeatWaveBurnTheFinger(this.fingerX, this.fingerY, 2);
+                /***/   if(is_game_over)
+                /***/   tryGameOver();
+
+                /***/   is_game_over = this.mWave3.didHeatWaveBurnTheFinger(this.fingerX, this.fingerY, 1);
+                /***/   if(is_game_over)
+                /***/   tryGameOver();
+
+                /***/   is_game_over = this.mWave4.didHeatWaveBurnTheFinger(this.fingerX, this.fingerY, 2);
+                /***/   if(is_game_over)
+                /***/   tryGameOver();
+
+                /***/   is_game_over = this.mWave5.didHeatWaveBurnTheFinger(this.fingerX, this.fingerY, 1);
+                /***/   if(is_game_over)
+                /***/   tryGameOver();
+
                 if(heat_waves_on_screen)
                 {
                     heatWaveTimeGap++;
@@ -333,19 +353,19 @@ public class GameView extends SurfaceView {
 
         if(this.mWave1 != null && this.mBall.monsterAttackTrick == 4)
         {
-            this.mWave1.drawHeatWave(canvas, heatRect1, 0);
+            this.mWave1.drawHeatWave(canvas, heatRect1, 30);
 
             if(heatWaveTimeGap > 12)
-            this.mWave2.drawHeatWave(canvas, heatRect2, 25);
+            this.mWave2.drawHeatWave(canvas, heatRect2, 0);
 
             if(heatWaveTimeGap > 24)
-            this.mWave3.drawHeatWave(canvas, heatRect3, 0);
+            this.mWave3.drawHeatWave(canvas, heatRect3, 30);
 
             if(heatWaveTimeGap > 36)
-            this.mWave4.drawHeatWave(canvas, heatRect4, 25);
+            this.mWave4.drawHeatWave(canvas, heatRect4, 0);
 
             if(heatWaveTimeGap > 48)
-            this.mWave5.drawHeatWave(canvas, heatRect5, 0);
+            this.mWave5.drawHeatWave(canvas, heatRect5, 30);
         }
 
         canvas.drawCircle((float)mBall.monsterX, (float)mBall.monsterY, (float)mBall.monsterRadius, mBall.monsterPaint);
