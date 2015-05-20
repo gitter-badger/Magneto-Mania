@@ -59,6 +59,7 @@ public class GameView extends SurfaceView {
     private RectF heatRect4 = new RectF();
     private RectF heatRect5 = new RectF();
 
+    private boolean monster_trick_time;
     private boolean time_to_shoot_bullets;
     private boolean bullets_on_screen;
     private boolean time_for_some_heat;
@@ -81,6 +82,7 @@ public class GameView extends SurfaceView {
         this.mHolder = this.getHolder();
         this.is_game_paused = false;
         this.is_game_over = false;
+        this.monster_trick_time = false;
 
         this.monsterSleepCount = 1;
         this.rocketXhaustCount = 1;
@@ -126,7 +128,16 @@ public class GameView extends SurfaceView {
 
                 if(monsterSleepCount == this.mBall.monsterSleepTime)
                 {
-                    randomizeTrajectory();
+                    if(monster_trick_time)
+                    {
+                        randomizeTrajectory();
+                        monster_trick_time = false;
+                    }
+                    else
+                    {
+                        this.mBall.monsterAttackTrick = 0;
+                        monster_trick_time = true;
+                    }
                     monsterSleepCount++;
                     this.mBall.monsterSleepTime = 0;
                 }
@@ -148,8 +159,8 @@ public class GameView extends SurfaceView {
                     this.mRocket.rocketXhaustTime = 0;
 
                     this.mBall.monsterAttackTrick = 0;
-                    this.mBall.monsterVelocity = random.nextInt(10) + 15;
-                    this.mBall.monsterSleepTime = random.nextInt(5) + 10;
+                    this.mBall.monsterVelocity = random.nextInt(20) + 15;
+                    this.mBall.monsterSleepTime = random.nextInt(10) + 5;
                 }
             }
             else if(this.mBall.monsterAttackTrick == 2)
@@ -201,8 +212,8 @@ public class GameView extends SurfaceView {
                 else
                 {
                     this.mBall.monsterAttackTrick = 0;
-                    this.mBall.monsterVelocity = random.nextInt(10) + 15;
-                    this.mBall.monsterSleepTime = random.nextInt(5) + 10;
+                    this.mBall.monsterVelocity = random.nextInt(20) + 15;
+                    this.mBall.monsterSleepTime = random.nextInt(10) + 5;
                 }
             }
             else if(this.mBall.monsterAttackTrick == 4)
@@ -227,25 +238,25 @@ public class GameView extends SurfaceView {
                     heatWaveTimeGap++;
                     heatRect1 = this.mWave1.setHeatWaveSize(this.mBall.monsterX, this.mBall.monsterY);
 
-                    if(heatWaveTimeGap>10)
+                    if(heatWaveTimeGap > 12)
                     heatRect2 = this.mWave2.setHeatWaveSize(this.mBall.monsterX, this.mBall.monsterY);
 
-                    if(heatWaveTimeGap>20)
+                    if(heatWaveTimeGap > 24)
                     heatRect3 = this.mWave3.setHeatWaveSize(this.mBall.monsterX, this.mBall.monsterY);
 
-                    if(heatWaveTimeGap>30)
+                    if(heatWaveTimeGap > 36)
                     heatRect4 = this.mWave4.setHeatWaveSize(this.mBall.monsterX, this.mBall.monsterY);
 
-                    if(heatWaveTimeGap>40)
+                    if(heatWaveTimeGap > 48)
                     heatRect5 = this.mWave5.setHeatWaveSize(this.mBall.monsterX, this.mBall.monsterY);
 
-                    if(this.mWave5.heatWaveRadius > this.mScreenHeight)
+                    if(this.mWave5.heatWaveRadius > 3*this.mScreenHeight/2)
                         heat_waves_on_screen = false;
                 }
                 else
                 {
                     this.mBall.monsterAttackTrick = 0;
-                    this.mBall.monsterVelocity = random.nextInt(20) + 10;
+                    this.mBall.monsterVelocity = random.nextInt(20) + 15;
                     this.mBall.monsterSleepTime = random.nextInt(10) + 5;
                 }
             }
@@ -271,7 +282,7 @@ public class GameView extends SurfaceView {
                     this.attackFromX = this.mBall.monsterX;
                     this.attackFromY = this.mBall.monsterY;
 
-                    this.mBall.monsterVelocity = random.nextInt(20) + 10;
+                    this.mBall.monsterVelocity = random.nextInt(20) + 15;
                     this.mBall.monsterSleepTime = random.nextInt(10) + 5;
 
 
@@ -311,52 +322,19 @@ public class GameView extends SurfaceView {
 
         if(this.mWave1 != null && this.mBall.monsterAttackTrick == 4)
         {
-                canvas.drawArc(heatRect1,   0, 30, false, this.mWave1.heatWavePaint);
-                canvas.drawArc(heatRect1,  60, 30, false, this.mWave1.heatWavePaint);
-                canvas.drawArc(heatRect1, 120, 30, false, this.mWave1.heatWavePaint);
-                canvas.drawArc(heatRect1, 180, 30, false, this.mWave1.heatWavePaint);
-                canvas.drawArc(heatRect1, 240, 30, false, this.mWave1.heatWavePaint);
-                canvas.drawArc(heatRect1, 300, 30, false, this.mWave1.heatWavePaint);
+            this.mWave1.drawHeatWave(canvas, heatRect1, 0);
 
-            if(heatWaveTimeGap>10)
-            {
-                canvas.drawArc(heatRect2,  10, 30, false, this.mWave2.heatWavePaint);
-                canvas.drawArc(heatRect2,  70, 30, false, this.mWave2.heatWavePaint);
-                canvas.drawArc(heatRect2, 130, 30, false, this.mWave2.heatWavePaint);
-                canvas.drawArc(heatRect2, 190, 30, false, this.mWave2.heatWavePaint);
-                canvas.drawArc(heatRect2, 250, 30, false, this.mWave2.heatWavePaint);
-                canvas.drawArc(heatRect2, 310, 30, false, this.mWave2.heatWavePaint);
-            }
+            if(heatWaveTimeGap > 12)
+            this.mWave2.drawHeatWave(canvas, heatRect2, 25);
 
-            if(heatWaveTimeGap>20)
-            {
-                canvas.drawArc(heatRect3,  20, 30, false, this.mWave3.heatWavePaint);
-                canvas.drawArc(heatRect3,  80, 30, false, this.mWave3.heatWavePaint);
-                canvas.drawArc(heatRect3, 140, 30, false, this.mWave3.heatWavePaint);
-                canvas.drawArc(heatRect3, 200, 30, false, this.mWave3.heatWavePaint);
-                canvas.drawArc(heatRect3, 260, 30, false, this.mWave3.heatWavePaint);
-                canvas.drawArc(heatRect3, 320, 30, false, this.mWave3.heatWavePaint);
-            }
+            if(heatWaveTimeGap > 24)
+            this.mWave3.drawHeatWave(canvas, heatRect3, 0);
 
-            if(heatWaveTimeGap>30)
-            {
-                canvas.drawArc(heatRect4,  30, 30, false, this.mWave4.heatWavePaint);
-                canvas.drawArc(heatRect4,  90, 30, false, this.mWave4.heatWavePaint);
-                canvas.drawArc(heatRect4, 150, 30, false, this.mWave4.heatWavePaint);
-                canvas.drawArc(heatRect4, 210, 30, false, this.mWave4.heatWavePaint);
-                canvas.drawArc(heatRect4, 270, 30, false, this.mWave4.heatWavePaint);
-                canvas.drawArc(heatRect4, 330, 30, false, this.mWave4.heatWavePaint);
-            }
+            if(heatWaveTimeGap > 36)
+            this.mWave4.drawHeatWave(canvas, heatRect4, 25);
 
-            if(heatWaveTimeGap>40)
-            {
-                canvas.drawArc(heatRect5,  40, 30, false, this.mWave5.heatWavePaint);
-                canvas.drawArc(heatRect5, 100, 30, false, this.mWave5.heatWavePaint);
-                canvas.drawArc(heatRect5, 160, 30, false, this.mWave5.heatWavePaint);
-                canvas.drawArc(heatRect5, 220, 30, false, this.mWave5.heatWavePaint);
-                canvas.drawArc(heatRect5, 280, 30, false, this.mWave5.heatWavePaint);
-                canvas.drawArc(heatRect5, 340, 30, false, this.mWave5.heatWavePaint);
-            }
+            if(heatWaveTimeGap > 48)
+            this.mWave5.drawHeatWave(canvas, heatRect5, 0);
         }
 
         canvas.drawCircle((float)mBall.monsterX, (float)mBall.monsterY, (float)mBall.monsterRadius, mBall.monsterPaint);
@@ -400,7 +378,7 @@ public class GameView extends SurfaceView {
 
     public void randomizeTrajectory()
     {
-        this.mBall.monsterAttackTrick = random.nextInt(5);
+        this.mBall.monsterAttackTrick = random.nextInt(4) + 1;
         if(this.mBall.monsterAttackTrick == 2)
         {
             time_to_shoot_bullets = true;

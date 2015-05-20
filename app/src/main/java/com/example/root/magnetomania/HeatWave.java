@@ -1,5 +1,6 @@
 package com.example.root.magnetomania;
 
+import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
 import android.graphics.RectF;
@@ -43,6 +44,14 @@ public class HeatWave {
 
         this.heatWaveRadius += this.heatWaveVelocity;
         return heatRect;
+    }
+
+    public void drawHeatWave(Canvas canvas, RectF heatRect, int startAngle)
+    {
+        for(int i=0; i<6; i++)
+        {
+            canvas.drawArc(heatRect, startAngle + 60*i, 30, false, this.heatWavePaint);
+        }
     }
 
 }
