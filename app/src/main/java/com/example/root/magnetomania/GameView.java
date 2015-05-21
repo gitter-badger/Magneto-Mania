@@ -170,6 +170,8 @@ public class GameView extends SurfaceView {
                     this.mBall.monsterAttackTrick = 0;
                     this.mBall.monsterVelocity = random.nextInt(20) + 15;
                     this.mBall.monsterSleepTime = random.nextInt(10) + 5;
+                    this.attackAtX = this.fingerX;
+                    this.attackAtY = this.fingerY;
                 }
             }
             else if(this.mBall.monsterAttackTrick == 2)
@@ -235,6 +237,8 @@ public class GameView extends SurfaceView {
                     this.mBall.monsterAttackTrick = 0;
                     this.mBall.monsterVelocity = random.nextInt(20) + 15;
                     this.mBall.monsterSleepTime = random.nextInt(1) + 5;
+                    this.attackAtX = this.fingerX;
+                    this.attackAtY = this.fingerY;
                 }
             }
             else if(this.mBall.monsterAttackTrick == 4)
@@ -254,26 +258,6 @@ public class GameView extends SurfaceView {
                     this.mWave5.initHeatWave(mBall);
                 }
 
-                /***/   is_game_over = this.mWave1.didHeatWaveBurnTheFinger(this.fingerX, this.fingerY, 1);
-                /***/   if(is_game_over)
-                /***/   tryGameOver();
-
-                /***/   is_game_over = this.mWave2.didHeatWaveBurnTheFinger(this.fingerX, this.fingerY, 2);
-                /***/   if(is_game_over)
-                /***/   tryGameOver();
-
-                /***/   is_game_over = this.mWave3.didHeatWaveBurnTheFinger(this.fingerX, this.fingerY, 1);
-                /***/   if(is_game_over)
-                /***/   tryGameOver();
-
-                /***/   is_game_over = this.mWave4.didHeatWaveBurnTheFinger(this.fingerX, this.fingerY, 2);
-                /***/   if(is_game_over)
-                /***/   tryGameOver();
-
-                /***/   is_game_over = this.mWave5.didHeatWaveBurnTheFinger(this.fingerX, this.fingerY, 1);
-                /***/   if(is_game_over)
-                /***/   tryGameOver();
-
                 if(heat_waves_on_screen)
                 {
                     heatWaveTimeGap++;
@@ -291,6 +275,28 @@ public class GameView extends SurfaceView {
                     if(heatWaveTimeGap > 48)
                     heatRect5 = this.mWave5.setHeatWaveSize(this.mBall.monsterX, this.mBall.monsterY);
 
+
+                    /***/   is_game_over = this.mWave1.didHeatWaveBurnTheFinger(this.fingerX, this.fingerY, 1);
+                    /***/   if(is_game_over)
+                    /***/   tryGameOver();
+
+                    /***/   is_game_over = this.mWave2.didHeatWaveBurnTheFinger(this.fingerX, this.fingerY, 2);
+                    /***/   if(is_game_over)
+                    /***/   tryGameOver();
+
+                    /***/   is_game_over = this.mWave3.didHeatWaveBurnTheFinger(this.fingerX, this.fingerY, 1);
+                    /***/   if(is_game_over)
+                    /***/   tryGameOver();
+
+                    /***/   is_game_over = this.mWave4.didHeatWaveBurnTheFinger(this.fingerX, this.fingerY, 2);
+                    /***/   if(is_game_over)
+                    /***/   tryGameOver();
+
+                    /***/   is_game_over = this.mWave5.didHeatWaveBurnTheFinger(this.fingerX, this.fingerY, 1);
+                    /***/   if(is_game_over)
+                    /***/   tryGameOver();
+
+
                     if(this.mWave5.heatWaveRadius > 3*this.mScreenHeight/2)
                         heat_waves_on_screen = false;
                 }
@@ -299,6 +305,8 @@ public class GameView extends SurfaceView {
                     this.mBall.monsterAttackTrick = 0;
                     this.mBall.monsterVelocity = random.nextInt(20) + 15;
                     this.mBall.monsterSleepTime = random.nextInt(10) + 5;
+                    this.attackAtX = this.fingerX;
+                    this.attackAtY = this.fingerY;
                 }
             }
             else

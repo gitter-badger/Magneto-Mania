@@ -4,6 +4,7 @@ import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
 import android.graphics.RectF;
+import android.util.Log;
 
 /**
  * Created by root on 16/5/15.
@@ -21,7 +22,7 @@ public class HeatWave {
     {
         this.heatOriginX = GameActivity.mScreenSize.x + 80;
         this.heatOriginY = GameActivity.mScreenSize.y + 80;
-        this.heatWaveVelocity = 15;
+        this.heatWaveVelocity = 12;
         this.heatWaveRadius = 0;
         this.heatWavePaint.setColor(Color.YELLOW);
     }
@@ -61,7 +62,7 @@ public class HeatWave {
         double tan30 = 0.57735;
         double tan60 = 1.73205;
 
-        if (distance <= this.heatWaveRadius && distance >= this.heatWaveRadius - 5)
+        if (distance <= this.heatWaveRadius + 3 && distance >= this.heatWaveRadius - 9)
         {
             if(waveType == 1)
             {
