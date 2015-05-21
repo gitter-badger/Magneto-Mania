@@ -6,6 +6,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.graphics.Canvas;
 import android.graphics.Color;
+import android.graphics.Point;
 import android.graphics.RectF;
 import android.view.MotionEvent;
 import android.view.SurfaceHolder;
@@ -20,8 +21,7 @@ public class GameView extends SurfaceView {
     private GameThread mThread = null;
     private Context mContext;
 
-    private int mScreenWidth;
-    private int mScreenHeight;
+    private Point mScreenDimension = new Point(0,0);
 
     public boolean is_game_started;
     public boolean is_game_paused;
@@ -40,14 +40,10 @@ public class GameView extends SurfaceView {
     private HeatWave mWave4 = new HeatWave();
     private HeatWave mWave5 = new HeatWave();
 
-    private int fingerX;
-    private int fingerY;
-    private int attackAtX;
-    private int attackAtY;
-    private int attackFromX;
-    private int attackFromY;
+    private Point fingerPosition = new Point(0,0);
+    private Point attackAtPoint = new Point(0,0);
+    private Point attackFromPoint = new Point(0,0);
 
-    private int moveStyle;
     private int monsterSleepCount;
     private int rocketXhaustCount;
     private int bulletFansTimeGap;
@@ -75,8 +71,8 @@ public class GameView extends SurfaceView {
         super(context);
 
         this.mContext = getContext();
-        this.mScreenWidth = GameActivity.mScreenSize.x;
-        this.mScreenHeight= GameActivity.mScreenSize.y;
+        this.mScreenDimension.x = GameActivity.mScreenSize.x;
+        this.mScreenDimension.y= GameActivity.mScreenSize.y;
 
         this.mThread = new GameThread(this);
         this.mHolder = this.getHolder();
@@ -123,7 +119,7 @@ public class GameView extends SurfaceView {
 
         if(is_game_started) {
 
-            /***/   is_game_over = mBall.didMonsterGetTheFinger(fingerX, fingerY);
+            /***/   is_game_over = mBall.didMonsterGetTheFinger(fingerPosition);
             /***/   if(is_game_over)
             /***/   tryGameOver();
 
@@ -151,42 +147,42 @@ public class GameView extends SurfaceView {
             {
                 monsterSleepCount = 1;
 
-                /***/   is_game_over = mRocket.didRocketGetTheFinger(fingerX, fingerY);
+                /***/   is_game_over = mRocket.didRocketGetTheFinger(fingerPosition);
                 /***/   if(is_game_over)
                 /***/   tryGameOver();
 
                 if(rocketXhaustCount <= mRocket.rocketXhaustTime)
                 {
-                    mRocket.rocketTrackFinger(fingerX, fingerY);
+                    mRocket.rocketTrackFinger(fingerPosition);
                     rocketXhaustCount++;
                 }
                 else
                 {
                     rocketXhaustCount = 1;
-                    mRocket.rocketX = mScreenWidth + 80;
-                    mRocket.rocketY = mScreenHeight + 80;
+                    mRocket.rocketPosition.x = mScreenDimension.x + 80;
+                    mRocket.rocketPosition.y = mScreenDimension.y + 80;
                     mRocket.rocketXhaustTime = 0;
 
                     mBall.monsterAttackTrick = 0;
                     mBall.monsterVelocity = random.nextInt(20) + 15;
                     mBall.monsterSleepTime = random.nextInt(10) + 5;
-                    attackAtX = fingerX;
-                    attackAtY = fingerY;
+                    attackAtPoint.x = fingerPosition.x;
+                    attackAtPoint.y = fingerPosition.y;
                 }
             }
             else if(mBall.monsterAttackTrick == 2)
             {
                 monsterSleepCount = 1;
 
-                /***/   is_game_over = mFan1.didBulletGetTheFinger(fingerX, fingerY);
+                /***/   is_game_over = mFan1.didBulletGetTheFinger(fingerPosition);
                 /***/   if(is_game_over)
                 /***/   tryGameOver();
 
-                /***/   is_game_over = mFan2.didBulletGetTheFinger(fingerX, fingerY);
+                /***/   is_game_over = mFan2.didBulletGetTheFinger(fingerPosition);
                 /***/   if(is_game_over)
                 /***/   tryGameOver();
 
-                /***/   is_game_over = mFan3.didBulletGetTheFinger(fingerX, fingerY);
+                /***/   is_game_over = mFan3.didBulletGetTheFinger(fingerPosition);
                 /***/   if(is_game_over)
                 /***/   tryGameOver();
 
@@ -196,14 +192,14 @@ public class GameView extends SurfaceView {
                     bullets_on_screen = true;
                     bulletFansTimeGap = 1;
 
-                    attackAtX = fingerX;
-                    attackAtY = fingerY;
-                    attackFromX = mBall.monsterPosition.x;
-                    attackFromY = mBall.monsterPosition.y;
+                    attackAtPoint.x = fingerPosition.x;
+                    attackAtPoint.y = fingerPosition.y;
+                    attackFromPoint.x = mBall.monsterPosition.x;
+                    attackFromPoint.y = mBall.monsterPosition.y;
 
-                    mFan1.initBullets(mBall, attackAtX, attackAtY);
-                    mFan2.initBullets(mBall, attackAtX, attackAtY);
-                    mFan3.initBullets(mBall, attackAtX, attackAtY);
+                    mFan1.initBullets(mBall, attackAtPoint.x, attackAtPoint.y);
+                    mFan2.initBullets(mBall, attackAtPoint.x, attackAtPoint.y);
+                    mFan3.initBullets(mBall, attackAtPoint.x, attackAtPoint.y);
                 }
 
                 if(bullets_on_screen)
@@ -221,11 +217,11 @@ public class GameView extends SurfaceView {
 
                     for(int i=0; i<7; i++)
                     {
-                        if((mFan1.bulletPosition[i].x >= mScreenWidth-10 || mFan1.bulletPosition[i].x <= 10) && (mFan1.bulletPosition[i].y >= mScreenHeight-10 || mFan1.bulletPosition[i].y <= 10))
+                        if((mFan1.bulletPosition[i].x >= mScreenDimension.x-10 || mFan1.bulletPosition[i].x <= 10) && (mFan1.bulletPosition[i].y >= mScreenDimension.y-10 || mFan1.bulletPosition[i].y <= 10))
                             howManyBulletsOnScreen++;
-                        if((mFan2.bulletPosition[i].x >= mScreenWidth-10 || mFan2.bulletPosition[i].x <= 10) && (mFan2.bulletPosition[i].y >= mScreenHeight-10 || mFan2.bulletPosition[i].y <= 10))
+                        if((mFan2.bulletPosition[i].x >= mScreenDimension.x-10 || mFan2.bulletPosition[i].x <= 10) && (mFan2.bulletPosition[i].y >= mScreenDimension.y-10 || mFan2.bulletPosition[i].y <= 10))
                             howManyBulletsOnScreen++;
-                        if((mFan3.bulletPosition[i].x >= mScreenWidth-10 || mFan3.bulletPosition[i].x <= 10) && (mFan3.bulletPosition[i].y >= mScreenHeight-10 || mFan3.bulletPosition[i].y <= 10))
+                        if((mFan3.bulletPosition[i].x >= mScreenDimension.x-10 || mFan3.bulletPosition[i].x <= 10) && (mFan3.bulletPosition[i].y >= mScreenDimension.y-10 || mFan3.bulletPosition[i].y <= 10))
                             howManyBulletsOnScreen++;
                     }
 
@@ -237,8 +233,8 @@ public class GameView extends SurfaceView {
                     mBall.monsterAttackTrick = 0;
                     mBall.monsterVelocity = random.nextInt(20) + 15;
                     mBall.monsterSleepTime = random.nextInt(1) + 5;
-                    attackAtX = fingerX;
-                    attackAtY = fingerY;
+                    attackAtPoint.x = fingerPosition.x;
+                    attackAtPoint.y = fingerPosition.y;
                 }
             }
             else if(mBall.monsterAttackTrick == 4)
@@ -276,28 +272,28 @@ public class GameView extends SurfaceView {
                     heatRect5 = mWave5.setHeatWaveSize(mBall.monsterPosition.x, mBall.monsterPosition.y);
 
 
-                    /***/   is_game_over = mWave1.didHeatWaveBurnTheFinger(fingerX, fingerY, 1);
+                    /***/   is_game_over = mWave1.didHeatWaveBurnTheFinger(fingerPosition, 1);
                     /***/   if(is_game_over)
                     /***/   tryGameOver();
 
-                    /***/   is_game_over = mWave2.didHeatWaveBurnTheFinger(fingerX, fingerY, 2);
+                    /***/   is_game_over = mWave2.didHeatWaveBurnTheFinger(fingerPosition, 2);
                     /***/   if(is_game_over)
                     /***/   tryGameOver();
 
-                    /***/   is_game_over = mWave3.didHeatWaveBurnTheFinger(fingerX, fingerY, 1);
+                    /***/   is_game_over = mWave3.didHeatWaveBurnTheFinger(fingerPosition, 1);
                     /***/   if(is_game_over)
                     /***/   tryGameOver();
 
-                    /***/   is_game_over = mWave4.didHeatWaveBurnTheFinger(fingerX, fingerY, 2);
+                    /***/   is_game_over = mWave4.didHeatWaveBurnTheFinger(fingerPosition, 2);
                     /***/   if(is_game_over)
                     /***/   tryGameOver();
 
-                    /***/   is_game_over = mWave5.didHeatWaveBurnTheFinger(fingerX, fingerY, 1);
+                    /***/   is_game_over = mWave5.didHeatWaveBurnTheFinger(fingerPosition, 1);
                     /***/   if(is_game_over)
                     /***/   tryGameOver();
 
 
-                    if(mWave5.heatWaveRadius > 3*mScreenHeight/2)
+                    if(mWave5.heatWaveRadius > 3*mScreenDimension.y/2)
                         heat_waves_on_screen = false;
                 }
                 else
@@ -305,31 +301,31 @@ public class GameView extends SurfaceView {
                     mBall.monsterAttackTrick = 0;
                     mBall.monsterVelocity = random.nextInt(20) + 15;
                     mBall.monsterSleepTime = random.nextInt(10) + 5;
-                    attackAtX = fingerX;
-                    attackAtY = fingerY;
+                    attackAtPoint.x = fingerPosition.x;
+                    attackAtPoint.y = fingerPosition.y;
                 }
             }
             else
             {
                 monsterSleepCount = 1;
 
-                if (mBall.monsterPosition.x >= mScreenWidth || mBall.monsterPosition.y >= mScreenHeight || mBall.monsterPosition.x <= 0 || mBall.monsterPosition.y <= 0) {
+                if (mBall.monsterPosition.x >= mScreenDimension.x || mBall.monsterPosition.y >= mScreenDimension.y || mBall.monsterPosition.x <= 0 || mBall.monsterPosition.y <= 0) {
 
                     // For preventing glitchy movement at the boundary.
-                    if (mBall.monsterPosition.x > mScreenWidth)
-                    mBall.monsterPosition.x = mScreenWidth;
+                    if (mBall.monsterPosition.x > mScreenDimension.x)
+                    mBall.monsterPosition.x = mScreenDimension.x;
                     else if (mBall.monsterPosition.x < 0)
                     mBall.monsterPosition.x = 0;
-                    else if (mBall.monsterPosition.y > mScreenHeight)
-                    mBall.monsterPosition.y = mScreenHeight;
+                    else if (mBall.monsterPosition.y > mScreenDimension.y)
+                    mBall.monsterPosition.y = mScreenDimension.y;
                     else if (mBall.monsterPosition.y < 0)
                     mBall.monsterPosition.y = 0;
 
 
-                    attackAtX = fingerX;
-                    attackAtY = fingerY;
-                    attackFromX = mBall.monsterPosition.x;
-                    attackFromY = mBall.monsterPosition.y;
+                    attackAtPoint.x = fingerPosition.x;
+                    attackAtPoint.y = fingerPosition.y;
+                    attackFromPoint.x = mBall.monsterPosition.x;
+                    attackFromPoint.y = mBall.monsterPosition.y;
 
                     mBall.monsterVelocity = random.nextInt(20) + 15;
                     mBall.monsterSleepTime = random.nextInt(10) + 5;
@@ -337,7 +333,7 @@ public class GameView extends SurfaceView {
 
                 }
 
-                mBall.attackFingerPosition(attackAtX, attackAtY, attackFromX, attackFromY);
+                mBall.attackFingerPosition(attackAtPoint, attackFromPoint);
             }
         }
     }
@@ -357,7 +353,7 @@ public class GameView extends SurfaceView {
         }
 
         if(mRocket != null && mBall.monsterAttackTrick == 3)
-        canvas.drawCircle((float)mRocket.rocketX, (float)mRocket.rocketY, (float)mRocket.rocketRadius, mRocket.rocketPaint);
+        canvas.drawCircle((float)mRocket.rocketPosition.x, (float)mRocket.rocketPosition.y, (float)mRocket.rocketRadius, mRocket.rocketPaint);
 
         if(mWave1 != null && mBall.monsterAttackTrick == 4)
         {
@@ -398,8 +394,8 @@ public class GameView extends SurfaceView {
                     break;
 
                 case MotionEvent.ACTION_MOVE:
-                    fingerX = (int)event.getX();
-                    fingerY = (int)event.getY();
+                    fingerPosition.x = (int)event.getX();
+                    fingerPosition.y = (int)event.getY();
                     break;
             }
         }

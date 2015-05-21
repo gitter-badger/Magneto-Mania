@@ -3,15 +3,13 @@ package com.example.root.magnetomania;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
+import android.graphics.Point;
 import android.graphics.RectF;
-import android.util.Log;
 
-/**
- * Created by root on 16/5/15.
- */
+
+
 public class HeatWave {
-    protected int heatOriginX;
-    protected int heatOriginY;
+    protected Point heatCenter = new Point(0,0);
 
     protected int heatWaveVelocity;
     protected int heatWaveRadius;
@@ -20,8 +18,8 @@ public class HeatWave {
 
     public HeatWave()
     {
-        this.heatOriginX = GameActivity.mScreenSize.x + 80;
-        this.heatOriginY = GameActivity.mScreenSize.y + 80;
+        this.heatCenter.x = GameActivity.mScreenSize.x + 80;
+        this.heatCenter.y = GameActivity.mScreenSize.y + 80;
         this.heatWaveVelocity = 12;
         this.heatWaveRadius = 0;
         this.heatWavePaint.setColor(Color.YELLOW);
@@ -29,19 +27,19 @@ public class HeatWave {
 
     public void initHeatWave(MonsterBall monsterBall)
     {
-        heatOriginX = monsterBall.monsterPosition.x;
-        heatOriginY = monsterBall.monsterPosition.y;
+        heatCenter.x = monsterBall.monsterPosition.x;
+        heatCenter.y = monsterBall.monsterPosition.y;
         heatWaveRadius = 0;
     }
 
-    public RectF setHeatWaveSize(int centerX, int centerY)
+    public RectF setHeatWaveSize(int centerx, int centery)
     {
         RectF heatRect = new RectF();
 
-        heatRect.left   = centerX - heatWaveRadius;
-        heatRect.top    = centerY - heatWaveRadius;
-        heatRect.right  = centerX + heatWaveRadius;
-        heatRect.bottom = centerY + heatWaveRadius;
+        heatRect.left   = centerx - heatWaveRadius;
+        heatRect.top    = centery - heatWaveRadius;
+        heatRect.right  = centerx + heatWaveRadius;
+        heatRect.bottom = centery + heatWaveRadius;
 
         heatWaveRadius += heatWaveVelocity;
         return heatRect;
@@ -55,10 +53,11 @@ public class HeatWave {
         }
     }
 
-    public boolean didHeatWaveBurnTheFinger (int fingerX, int fingerY, int waveType)
+    public boolean didHeatWaveBurnTheFinger (Point fingerPosition, int waveType)
     {
-        int distance = (int) Math.sqrt((heatOriginX - fingerX)*(heatOriginX - fingerX) + (heatOriginY - fingerY)*(heatOriginY - fingerY));
-        double slope = (double)(fingerY - heatOriginY) / (double)(fingerX - heatOriginX);
+        int distance = Geometry.distance(fingerPosition, heatCenter);
+        
+        double slope = (double)(fingerPosition.y - heatCenter.y) / (double)(fingerPosition.x - heatCenter.x);
         double tan30 = 0.57735;
         double tan60 = 1.73205;
 
@@ -66,24 +65,24 @@ public class HeatWave {
         {
             if(waveType == 1)
             {
-                if(fingerX > heatOriginX && fingerY > heatOriginY)
+                if(fingerPosition.x > heatCenter.x && fingerPosition.y > heatCenter.y)
                 {
                     if(slope > tan30 && slope < tan60)
                         return true;
                 }
-                else if(fingerX < heatOriginX && fingerY > heatOriginY)
+                else if(fingerPosition.x < heatCenter.x && fingerPosition.y > heatCenter.y)
                 {
                     if(slope < -tan60)
                         return true;
                     if(slope > -tan30 && slope < 0)
                         return true;
                 }
-                else if(fingerX < heatOriginX && fingerY < heatOriginY)
+                else if(fingerPosition.x < heatCenter.x && fingerPosition.y < heatCenter.y)
                 {
                     if(slope > tan30 && slope < tan60)
                         return true;
                 }
-                else if(fingerX > heatOriginX && fingerY < heatOriginY)
+                else if(fingerPosition.x > heatCenter.x && fingerPosition.y < heatCenter.y)
                 {
                     if(slope < -tan60)
                         return true;
@@ -93,26 +92,26 @@ public class HeatWave {
             }
             else
             {
-                if(fingerX > heatOriginX && fingerY > heatOriginY)
+                if(fingerPosition.x > heatCenter.x && fingerPosition.y > heatCenter.y)
                 {
                     if(slope > 0 && slope < tan30)
                         return true;
                     if(slope > tan60)
                         return true;
                 }
-                else if(fingerX < heatOriginX && fingerY > heatOriginY)
+                else if(fingerPosition.x < heatCenter.x && fingerPosition.y > heatCenter.y)
                 {
                     if(slope < -tan30 && slope > -tan60)
                         return true;
                 }
-                else if(fingerX < heatOriginX && fingerY < heatOriginY)
+                else if(fingerPosition.x < heatCenter.x && fingerPosition.y < heatCenter.y)
                 {
                     if(slope > 0 && slope < tan30)
                         return true;
                     if(slope > tan60)
                         return true;
                 }
-                else if(fingerX > heatOriginX && fingerY < heatOriginY)
+                else if(fingerPosition.x > heatCenter.x && fingerPosition.y < heatCenter.y)
                 {
                     if(slope < -tan30 && slope > -tan60)
                         return true;

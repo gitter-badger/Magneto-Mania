@@ -102,8 +102,7 @@ public class BulletFan {
         /* Setting distance between the attack point of bullets and destination of bullets, to decide velocity components. */
         for(int i=0; i<7; i++)
         {
-            bulletDistance[i] = Math.sqrt((bulletDestination[i].x - monsterBall.monsterPosition.x) * (bulletDestination[i].x - monsterBall.monsterPosition.x)
-                                             + (bulletDestination[i].y - monsterBall.monsterPosition.y) * (bulletDestination[i].y - monsterBall.monsterPosition.y));
+            bulletDistance[i] = Geometry.distance(bulletDestination[i], monsterBall.monsterPosition);
 
             /* X and Y components of velocity of each bullet, calculate like those of MonsterBall. */
             bulletVelocity[i].x = (int)(bulletsVelocity * (double)(bulletDestination[i].x - monsterBall.monsterPosition.x) / bulletDistance[i]);
@@ -125,13 +124,13 @@ public class BulletFan {
     }
     /**--------------------------------------------------------------------------------------------------**/
 
-    public boolean didBulletGetTheFinger (int fingerX, int fingerY)
+    public boolean didBulletGetTheFinger (Point fingerPosition)
     {
         int distance = 0;
 
         for (int i = 0; i < 7; i++)
         {
-            distance = (int) Math.sqrt((bulletPosition[i].x - fingerX) * (bulletPosition[i].x - fingerX) + (bulletPosition[i].y - fingerY) * (bulletPosition[i].y - fingerY));
+            distance = Geometry.distance(bulletPosition[i], fingerPosition);
 
             if (distance < bulletsRadius)
                 return true;

@@ -2,14 +2,15 @@ package com.example.root.magnetomania;
 
 import android.graphics.Color;
 import android.graphics.Paint;
+import android.graphics.Point;
+
 import java.util.Random;
 
 
 public class MagnetRocket {
 
     /******************************************** CLASS MEMBERS ********************************************/
-    protected int rocketX;
-    protected int rocketY;
+    protected Point rocketPosition = new Point(0,0);
     protected int rocketVelocity;
 
     protected Paint rocketPaint = new Paint();
@@ -25,8 +26,8 @@ public class MagnetRocket {
 
     /********************************************* CONSTRUCTOR *********************************************/
     public MagnetRocket() {
-        this.rocketX = GameActivity.mScreenSize.x + 80;
-        this.rocketY = GameActivity.mScreenSize.y + 80;
+        this.rocketPosition.x = GameActivity.mScreenSize.x + 80;
+        this.rocketPosition.y = GameActivity.mScreenSize.y + 80;
         this.rocketVelocity = 0;
 
         this.rocketXhaustTime = 0;
@@ -40,8 +41,8 @@ public class MagnetRocket {
     public void initRocket(MonsterBall monsterBall) {
         Random random = new Random();
 
-        rocketX = monsterBall.monsterPosition.x;
-        rocketY = monsterBall.monsterPosition.y;
+        rocketPosition.x = monsterBall.monsterPosition.x;
+        rocketPosition.y = monsterBall.monsterPosition.y;
 
         /*Velocity and exhaust time is randomized for each attack.*/
         rocketVelocity = random.nextInt(15) + 15;
@@ -54,23 +55,24 @@ public class MagnetRocket {
 
 
     /********************* METHOD THAT ENABLES ROCKET TO CONSTANTLY FOLLOW THE FINGER *********************/
-    public void rocketTrackFinger(int fingerX, int fingerY) {
+    public void rocketTrackFinger(Point fingerPosition) {
         /*Meanings of the variables here are same as that in MonsterBall method.*/
-        int distance = (int) Math.sqrt((fingerX - rocketX)*(fingerX - rocketX) + (fingerY - rocketY)*(fingerY - rocketY));
-        int rocketVelocityX = rocketVelocity * (fingerX - rocketX) / distance;
-        int rocketVelocityY = rocketVelocity * (fingerY - rocketY) / distance;
+        int distance = Geometry.distance(fingerPosition, rocketPosition);
+
+        int rocketVelocityX = rocketVelocity * (fingerPosition.x - rocketPosition.x) / distance;
+        int rocketVelocityY = rocketVelocity * (fingerPosition.y - rocketPosition.y) / distance;
 
         /*No moveStyle variable needed as it always has to travel in direction of finger
          * at every instant. */
-            rocketX += rocketVelocityX;
-            rocketY += rocketVelocityY;
+            rocketPosition.x += rocketVelocityX;
+            rocketPosition.y += rocketVelocityY;
     }
     /**--------------------------------------------------------------------------------------------------**/
 
 
-    public boolean didRocketGetTheFinger (int fingerX, int fingerY)
+    public boolean didRocketGetTheFinger (Point fingerPosition)
     {
-        int distance = (int) Math.sqrt((this.rocketX - fingerX)*(this.rocketX - fingerX) + (this.rocketY - fingerY)*(this.rocketY - fingerY));
+        int distance = Geometry.distance(fingerPosition, rocketPosition);
 
         if (distance < this.rocketRadius)
             return true;

@@ -10,7 +10,7 @@ import java.util.Random;
 public class MonsterBall {
 
     /******************************************** CLASS MEMBERS ********************************************/
-    protected Point monsterPosition;
+    protected Point monsterPosition = new Point(0,0);
     protected int monsterVelocity;
 
     protected Paint monsterPaint = new Paint();
@@ -49,25 +49,25 @@ public class MonsterBall {
 
 
     /***************** METHOD BY WHICH MONSTER RUSHES AT THE FINGER ALONG LINE OF CONTACT *****************/
-    public void attackFingerPosition(int attackAtX, int attackAtY, int attackFromX, int attackFromY) {
+    public void attackFingerPosition(Point attackAtPoint, Point attackFromPoint) {
 
         /*distance is the length of he line of contact between monster and finger at the moment,
          * when the monster is resting on the wall, and just about to attack the finger. */
-        int distance = (int) Math.sqrt((attackAtX - attackFromX) * (attackAtX - attackFromX) + (attackAtY - attackFromY) * (attackAtY - attackFromY));
+        int distance = Geometry.distance(attackAtPoint, attackFromPoint);
 
         /*These are the x and y components of the velocity of the monster, so that the monster
          *travels with constant velocity during one rush towards the finger.*/
-        Point monsterVelocityComponent = new Point();
-        monsterVelocityComponent.x = monsterVelocity * (attackAtX - attackFromX) / distance;
-        monsterVelocityComponent.y = monsterVelocity * (attackAtY - attackFromY) / distance;
+        Point monsterVelocityComponent = new Point(0,0);
+        monsterVelocityComponent.x = monsterVelocity * (attackAtPoint.x - attackFromPoint.x) / distance;
+        monsterVelocityComponent.y = monsterVelocity * (attackAtPoint.y - attackFromPoint.y) / distance;
 
             monsterPosition.x += monsterVelocityComponent.x;
             monsterPosition.y += monsterVelocityComponent.y;
     }
 
-    public boolean didMonsterGetTheFinger (int fingerX, int fingerY)
+    public boolean didMonsterGetTheFinger (Point fingerPosition)
     {
-        int distance = (int) Math.sqrt((this.monsterPosition.x - fingerX)*(this.monsterPosition.x - fingerX) + (this.monsterPosition.y - fingerY)*(this.monsterPosition.y - fingerY));
+        int distance = Geometry.distance(fingerPosition, monsterPosition);
 
         if (distance < this.monsterRadius)
             return true;
