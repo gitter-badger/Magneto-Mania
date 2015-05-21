@@ -30,9 +30,7 @@ public class GameView extends SurfaceView {
     private MonsterBall mBall = new MonsterBall();
     private MagnetRocket mRocket = new MagnetRocket();
 
-    private BulletFan mFan1 = new BulletFan();
-    private BulletFan mFan2 = new BulletFan();
-    private BulletFan mFan3 = new BulletFan();
+    private BulletFan[] mFan = new BulletFan[3];
 
     private HeatWave mWave1 = new HeatWave();
     private HeatWave mWave2 = new HeatWave();
@@ -79,6 +77,11 @@ public class GameView extends SurfaceView {
         this.is_game_paused = false;
         this.is_game_over = false;
         this.monster_trick_time = false;
+
+        for(int i=0; i<3; i++)
+        {
+            this.mFan[i] = new BulletFan();
+        }
 
         this.monsterSleepCount = 1;
         this.rocketXhaustCount = 1;
@@ -174,17 +177,12 @@ public class GameView extends SurfaceView {
             {
                 monsterSleepCount = 1;
 
-                /***/   is_game_over = mFan1.didBulletGetTheFinger(fingerPosition);
-                /***/   if(is_game_over)
-                /***/   tryGameOver();
-
-                /***/   is_game_over = mFan2.didBulletGetTheFinger(fingerPosition);
-                /***/   if(is_game_over)
-                /***/   tryGameOver();
-
-                /***/   is_game_over = mFan3.didBulletGetTheFinger(fingerPosition);
-                /***/   if(is_game_over)
-                /***/   tryGameOver();
+            for(int i=0; i<3; i++)
+            {
+                /***/is_game_over = mFan[i].didBulletGetTheFinger(fingerPosition);
+                /***/if (is_game_over)
+                /***/ tryGameOver();
+            }
 
                 if(time_to_shoot_bullets)
                 {
@@ -197,32 +195,32 @@ public class GameView extends SurfaceView {
                     attackFromPoint.x = mBall.monsterPosition.x;
                     attackFromPoint.y = mBall.monsterPosition.y;
 
-                    mFan1.initBullets(mBall, attackAtPoint.x, attackAtPoint.y);
-                    mFan2.initBullets(mBall, attackAtPoint.x, attackAtPoint.y);
-                    mFan3.initBullets(mBall, attackAtPoint.x, attackAtPoint.y);
+                    mFan[0].initBullets(mBall, attackAtPoint.x, attackAtPoint.y);
+                    mFan[1].initBullets(mBall, attackAtPoint.x, attackAtPoint.y);
+                    mFan[2].initBullets(mBall, attackAtPoint.x, attackAtPoint.y);
                 }
 
                 if(bullets_on_screen)
                 {
-                    mFan1.setDirectionAndShoot();
                     bulletFansTimeGap++;
+                        mFan[0].setDirectionAndShoot();
 
                     if(bulletFansTimeGap>5)
-                        mFan2.setDirectionAndShoot();
+                        mFan[1].setDirectionAndShoot();
 
                     if(bulletFansTimeGap>10)
-                        mFan3.setDirectionAndShoot();
+                        mFan[2].setDirectionAndShoot();
 
                     int howManyBulletsOnScreen = 0;
 
-                    for(int i=0; i<7; i++)
+                    for(int i=0; i<3; i++)
                     {
-                        if((mFan1.bulletPosition[i].x >= mScreenDimension.x-10 || mFan1.bulletPosition[i].x <= 10) && (mFan1.bulletPosition[i].y >= mScreenDimension.y-10 || mFan1.bulletPosition[i].y <= 10))
-                            howManyBulletsOnScreen++;
-                        if((mFan2.bulletPosition[i].x >= mScreenDimension.x-10 || mFan2.bulletPosition[i].x <= 10) && (mFan2.bulletPosition[i].y >= mScreenDimension.y-10 || mFan2.bulletPosition[i].y <= 10))
-                            howManyBulletsOnScreen++;
-                        if((mFan3.bulletPosition[i].x >= mScreenDimension.x-10 || mFan3.bulletPosition[i].x <= 10) && (mFan3.bulletPosition[i].y >= mScreenDimension.y-10 || mFan3.bulletPosition[i].y <= 10))
-                            howManyBulletsOnScreen++;
+                        for(int j=0; j<7; j++)
+                        {
+                            if ((mFan[i].bulletPosition[j].x >= mScreenDimension.x - 10 || mFan[i].bulletPosition[j].x <= 10) &&
+                                (mFan[i].bulletPosition[j].y >= mScreenDimension.y - 10 || mFan[i].bulletPosition[j].y <= 10))
+                                howManyBulletsOnScreen++;
+                        }
                     }
 
                     if(howManyBulletsOnScreen >= 16)
@@ -342,13 +340,12 @@ public class GameView extends SurfaceView {
     {
         canvas.drawColor(Color.BLACK);
 
-        if(mFan1 != null && mBall.monsterAttackTrick == 2)
+        if(mFan != null && mBall.monsterAttackTrick == 2)
         {
             for(int i=0; i<7; i++)
             {
-                canvas.drawCircle((float)mFan1.bulletPosition[i].x , (float)mFan1.bulletPosition[i].y , (float)mFan1.bulletsRadius , mFan1.bulletsPaint);
-                canvas.drawCircle((float)mFan2.bulletPosition[i].x , (float)mFan2.bulletPosition[i].y , (float)mFan2.bulletsRadius , mFan2.bulletsPaint);
-                canvas.drawCircle((float)mFan3.bulletPosition[i].x , (float)mFan3.bulletPosition[i].y , (float)mFan3.bulletsRadius , mFan3.bulletsPaint);
+                for(int j=0; j<3; j++)
+                canvas.drawCircle((float)mFan[j].bulletPosition[i].x , (float)mFan[j].bulletPosition[i].y , (float)mFan[j].bulletsRadius , mFan[j].bulletsPaint);
             }
         }
 
