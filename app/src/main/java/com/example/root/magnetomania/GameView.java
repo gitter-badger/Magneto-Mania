@@ -32,11 +32,8 @@ public class GameView extends SurfaceView {
 
     private BulletFan[] mFan = new BulletFan[3];
 
-    private HeatWave mWave1 = new HeatWave();
-    private HeatWave mWave2 = new HeatWave();
-    private HeatWave mWave3 = new HeatWave();
-    private HeatWave mWave4 = new HeatWave();
-    private HeatWave mWave5 = new HeatWave();
+    private HeatWave[] mWave = new HeatWave[5];
+    private RectF[] heatRect = new RectF[5];
 
     private Point fingerPosition = new Point(0,0);
     private Point destinationPoint = new Point(0,0);
@@ -46,12 +43,6 @@ public class GameView extends SurfaceView {
     private int rocketXhaustCount;
     private int bulletFansTimeGap;
     private int heatWaveTimeGap;
-
-    private RectF heatRect1 = new RectF();
-    private RectF heatRect2 = new RectF();
-    private RectF heatRect3 = new RectF();
-    private RectF heatRect4 = new RectF();
-    private RectF heatRect5 = new RectF();
 
     private boolean monster_trick_time;
     private boolean time_to_shoot_bullets;
@@ -81,6 +72,12 @@ public class GameView extends SurfaceView {
         for(int i=0; i<3; i++)
         {
             this.mFan[i] = new BulletFan();
+        }
+
+        for(int i=0; i<5; i++)
+        {
+            this.heatRect[i] = new RectF();
+            this.mWave[i] = new HeatWave();
         }
 
         this.monsterSleepCount = 1;
@@ -245,53 +242,36 @@ public class GameView extends SurfaceView {
                     heat_waves_on_screen = true;
                     heatWaveTimeGap = 1;
 
-                    mWave1.initHeatWave(mBall);
-                    mWave2.initHeatWave(mBall);
-                    mWave3.initHeatWave(mBall);
-                    mWave4.initHeatWave(mBall);
-                    mWave5.initHeatWave(mBall);
+                    for(int i=0; i<5; i++)
+                    mWave[i].initHeatWave(mBall);
                 }
 
                 if(heat_waves_on_screen)
                 {
                     heatWaveTimeGap++;
-                    heatRect1 = mWave1.setHeatWaveSize(mBall.monsterPosition.x, mBall.monsterPosition.y);
+                    heatRect[0] = mWave[0].setHeatWaveSize(mBall.monsterPosition);
 
                     if(heatWaveTimeGap > 12)
-                    heatRect2 = mWave2.setHeatWaveSize(mBall.monsterPosition.x, mBall.monsterPosition.y);
+                    heatRect[1] = mWave[1].setHeatWaveSize(mBall.monsterPosition);
 
                     if(heatWaveTimeGap > 24)
-                    heatRect3 = mWave3.setHeatWaveSize(mBall.monsterPosition.x, mBall.monsterPosition.y);
+                    heatRect[2] = mWave[2].setHeatWaveSize(mBall.monsterPosition);
 
                     if(heatWaveTimeGap > 36)
-                    heatRect4 = mWave4.setHeatWaveSize(mBall.monsterPosition.x, mBall.monsterPosition.y);
+                    heatRect[3] = mWave[3].setHeatWaveSize(mBall.monsterPosition);
 
                     if(heatWaveTimeGap > 48)
-                    heatRect5 = mWave5.setHeatWaveSize(mBall.monsterPosition.x, mBall.monsterPosition.y);
+                    heatRect[4] = mWave[4].setHeatWaveSize(mBall.monsterPosition);
 
 
-                    /***/   is_game_over = mWave1.didHeatWaveBurnTheFinger(fingerPosition, 1);
-                    /***/   if(is_game_over)
-                    /***/   tryGameOver();
+                    for(int i=0; i<5; i++)
+                    {
+                        /***/is_game_over = mWave[i].didHeatWaveBurnTheFinger(fingerPosition, (i+1)%2);
+                        /***/if (is_game_over)
+                        /***/ tryGameOver();
+                    }
 
-                    /***/   is_game_over = mWave2.didHeatWaveBurnTheFinger(fingerPosition, 2);
-                    /***/   if(is_game_over)
-                    /***/   tryGameOver();
-
-                    /***/   is_game_over = mWave3.didHeatWaveBurnTheFinger(fingerPosition, 1);
-                    /***/   if(is_game_over)
-                    /***/   tryGameOver();
-
-                    /***/   is_game_over = mWave4.didHeatWaveBurnTheFinger(fingerPosition, 2);
-                    /***/   if(is_game_over)
-                    /***/   tryGameOver();
-
-                    /***/   is_game_over = mWave5.didHeatWaveBurnTheFinger(fingerPosition, 1);
-                    /***/   if(is_game_over)
-                    /***/   tryGameOver();
-
-
-                    if(mWave5.heatWaveRadius > 3*mScreenDimension.y/2)
+                    if(mWave[4].heatWaveRadius > 3*mScreenDimension.y/2)
                         heat_waves_on_screen = false;
                 }
                 else
@@ -352,21 +332,21 @@ public class GameView extends SurfaceView {
         if(mRocket != null && mBall.monsterAttackTrick == 3)
         canvas.drawCircle((float)mRocket.rocketPosition.x, (float)mRocket.rocketPosition.y, (float)mRocket.rocketRadius, mRocket.rocketPaint);
 
-        if(mWave1 != null && mBall.monsterAttackTrick == 4)
+        if(mWave != null && mBall.monsterAttackTrick == 4)
         {
-            mWave1.drawHeatWave(canvas, heatRect1, 30);
+            mWave[0].drawHeatWave(canvas, heatRect[0], 30);
 
             if(heatWaveTimeGap > 12)
-            mWave2.drawHeatWave(canvas, heatRect2, 0);
+            mWave[1].drawHeatWave(canvas, heatRect[1], 0);
 
             if(heatWaveTimeGap > 24)
-            mWave3.drawHeatWave(canvas, heatRect3, 30);
+            mWave[2].drawHeatWave(canvas, heatRect[2], 30);
 
             if(heatWaveTimeGap > 36)
-            mWave4.drawHeatWave(canvas, heatRect4, 0);
+            mWave[3].drawHeatWave(canvas, heatRect[3], 0);
 
             if(heatWaveTimeGap > 48)
-            mWave5.drawHeatWave(canvas, heatRect5, 30);
+            mWave[4].drawHeatWave(canvas, heatRect[4], 30);
         }
 
         canvas.drawCircle((float)mBall.monsterPosition.x, (float)mBall.monsterPosition.y, (float)mBall.monsterRadius, mBall.monsterPaint);
@@ -385,7 +365,6 @@ public class GameView extends SurfaceView {
                     break;
 
                 case MotionEvent.ACTION_UP:
-                    //Do Something here.
                     is_game_over = true;
                     tryGameOver();
                     break;

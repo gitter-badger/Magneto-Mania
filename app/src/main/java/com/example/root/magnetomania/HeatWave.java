@@ -32,14 +32,14 @@ public class HeatWave {
         heatWaveRadius = 0;
     }
 
-    public RectF setHeatWaveSize(int centerx, int centery)
+    public RectF setHeatWaveSize(Point center)
     {
         RectF heatRect = new RectF();
 
-        heatRect.left   = centerx - heatWaveRadius;
-        heatRect.top    = centery - heatWaveRadius;
-        heatRect.right  = centerx + heatWaveRadius;
-        heatRect.bottom = centery + heatWaveRadius;
+        heatRect.left   = center.x - heatWaveRadius;
+        heatRect.top    = center.y - heatWaveRadius;
+        heatRect.right  = center.x + heatWaveRadius;
+        heatRect.bottom = center.y + heatWaveRadius;
 
         heatWaveRadius += heatWaveVelocity;
         return heatRect;
