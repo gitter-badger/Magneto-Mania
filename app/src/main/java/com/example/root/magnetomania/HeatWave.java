@@ -56,25 +56,66 @@ public class HeatWave {
 
     public boolean didHeatWaveBurnTheFinger (int fingerX, int fingerY, int waveType)
     {
-        int distance = (int) Math.sqrt((heatOriginX - fingerX)*(heatOriginX - fingerX) + (heatOriginY - fingerY)*(heatOriginY - fingerY));
-        double slope = (double)(fingerY - heatOriginY) / (double)(fingerX - heatOriginX);
+        int distance = (int) Math.sqrt((this.heatOriginX - fingerX)*(this.heatOriginX - fingerX) + (this.heatOriginY - fingerY)*(this.heatOriginY - fingerY));
+        double slope = (double)(fingerY - this.heatOriginY) / (double)(fingerX - this.heatOriginX);
         double tan30 = 0.57735;
         double tan60 = 1.73205;
 
-        if (distance <= heatWaveRadius && distance >= heatWaveRadius - 5 )
+        if (distance <= this.heatWaveRadius && distance >= this.heatWaveRadius - 5)
         {
             if(waveType == 1)
             {
-                if((fingerY > heatOriginY && slope < tan30) || (slope > tan60 && fingerX > heatOriginX) || (slope > -tan60 && slope < -tan30) ||
-                   (fingerY < heatOriginY && slope < tan30) || (slope > tan60 && fingerX < heatOriginX))
-                    return true;
+                if(fingerX > this.heatOriginX && fingerY > this.heatOriginY)
+                {
+                    if(slope > tan30 && slope < tan60)
+                        return true;
+                }
+                else if(fingerX < this.heatOriginX && fingerY > this.heatOriginY)
+                {
+                    if(slope < -tan60)
+                        return true;
+                    if(slope > -tan30 && slope < 0)
+                        return true;
+                }
+                else if(fingerX < this.heatOriginX && fingerY < this.heatOriginY)
+                {
+                    if(slope > tan30 && slope < tan60)
+                        return true;
+                }
+                else if(fingerX > this.heatOriginX && fingerY < this.heatOriginY)
+                {
+                    if(slope < -tan60)
+                        return true;
+                    if(slope > -tan30 && slope < 0)
+                        return true;
+                }
             }
             else
             {
-                if((slope > tan30 && slope < tan60) || (fingerX < heatOriginX && slope < -tan60) || (slope > -tan30 && fingerY > heatOriginY) ||
-                   (fingerX > heatOriginX && slope < -tan60) || (slope > -tan30 && fingerY < heatOriginY))
-
-                    return true;
+                if(fingerX > this.heatOriginX && fingerY > this.heatOriginY)
+                {
+                    if(slope > 0 && slope < tan30)
+                        return true;
+                    if(slope > tan60)
+                        return true;
+                }
+                else if(fingerX < this.heatOriginX && fingerY > this.heatOriginY)
+                {
+                    if(slope < -tan30 && slope > -tan60)
+                        return true;
+                }
+                else if(fingerX < this.heatOriginX && fingerY < this.heatOriginY)
+                {
+                    if(slope > 0 && slope < tan30)
+                        return true;
+                    if(slope > tan60)
+                        return true;
+                }
+                else if(fingerX > this.heatOriginX && fingerY < this.heatOriginY)
+                {
+                    if(slope < -tan30 && slope > -tan60)
+                        return true;
+                }
             }
         }
         return false;
