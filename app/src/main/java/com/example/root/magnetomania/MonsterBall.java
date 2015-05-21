@@ -49,20 +49,12 @@ public class MonsterBall {
 
 
     /***************** METHOD BY WHICH MONSTER RUSHES AT THE FINGER ALONG LINE OF CONTACT *****************/
-    public void attackFingerPosition(Point attackAtPoint, Point attackFromPoint) {
+    public void attackFingerPosition(Point destinationPoint, Point initialPoint) {
 
-        /*distance is the length of he line of contact between monster and finger at the moment,
-         * when the monster is resting on the wall, and just about to attack the finger. */
-        int distance = Geometry.distance(attackAtPoint, attackFromPoint);
+        Point mVelocityComponent = Geometry.calcVelocityComponents(destinationPoint, initialPoint, monsterVelocity);
 
-        /*These are the x and y components of the velocity of the monster, so that the monster
-         *travels with constant velocity during one rush towards the finger.*/
-        Point monsterVelocityComponent = new Point(0,0);
-        monsterVelocityComponent.x = monsterVelocity * (attackAtPoint.x - attackFromPoint.x) / distance;
-        monsterVelocityComponent.y = monsterVelocity * (attackAtPoint.y - attackFromPoint.y) / distance;
-
-            monsterPosition.x += monsterVelocityComponent.x;
-            monsterPosition.y += monsterVelocityComponent.y;
+            monsterPosition.x += mVelocityComponent.x;
+            monsterPosition.y += mVelocityComponent.y;
     }
 
     public boolean didMonsterGetTheFinger (Point fingerPosition)

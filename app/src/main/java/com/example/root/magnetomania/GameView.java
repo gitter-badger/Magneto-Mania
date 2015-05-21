@@ -39,8 +39,8 @@ public class GameView extends SurfaceView {
     private HeatWave mWave5 = new HeatWave();
 
     private Point fingerPosition = new Point(0,0);
-    private Point attackAtPoint = new Point(0,0);
-    private Point attackFromPoint = new Point(0,0);
+    private Point destinationPoint = new Point(0,0);
+    private Point initialPoint = new Point(0,0);
 
     private int monsterSleepCount;
     private int rocketXhaustCount;
@@ -169,8 +169,8 @@ public class GameView extends SurfaceView {
                     mBall.monsterAttackTrick = 0;
                     mBall.monsterVelocity = random.nextInt(20) + 15;
                     mBall.monsterSleepTime = random.nextInt(10) + 5;
-                    attackAtPoint.x = fingerPosition.x;
-                    attackAtPoint.y = fingerPosition.y;
+                    destinationPoint.x = fingerPosition.x;
+                    destinationPoint.y = fingerPosition.y;
                 }
             }
             else if(mBall.monsterAttackTrick == 2)
@@ -190,14 +190,14 @@ public class GameView extends SurfaceView {
                     bullets_on_screen = true;
                     bulletFansTimeGap = 1;
 
-                    attackAtPoint.x = fingerPosition.x;
-                    attackAtPoint.y = fingerPosition.y;
-                    attackFromPoint.x = mBall.monsterPosition.x;
-                    attackFromPoint.y = mBall.monsterPosition.y;
+                    destinationPoint.x = fingerPosition.x;
+                    destinationPoint.y = fingerPosition.y;
+                    initialPoint.x = mBall.monsterPosition.x;
+                    initialPoint.y = mBall.monsterPosition.y;
 
-                    mFan[0].initBullets(mBall, attackAtPoint.x, attackAtPoint.y);
-                    mFan[1].initBullets(mBall, attackAtPoint.x, attackAtPoint.y);
-                    mFan[2].initBullets(mBall, attackAtPoint.x, attackAtPoint.y);
+                    mFan[0].initBullets(mBall, destinationPoint.x, destinationPoint.y);
+                    mFan[1].initBullets(mBall, destinationPoint.x, destinationPoint.y);
+                    mFan[2].initBullets(mBall, destinationPoint.x, destinationPoint.y);
                 }
 
                 if(bullets_on_screen)
@@ -231,8 +231,8 @@ public class GameView extends SurfaceView {
                     mBall.monsterAttackTrick = 0;
                     mBall.monsterVelocity = random.nextInt(20) + 15;
                     mBall.monsterSleepTime = random.nextInt(1) + 5;
-                    attackAtPoint.x = fingerPosition.x;
-                    attackAtPoint.y = fingerPosition.y;
+                    destinationPoint.x = fingerPosition.x;
+                    destinationPoint.y = fingerPosition.y;
                 }
             }
             else if(mBall.monsterAttackTrick == 4)
@@ -299,8 +299,8 @@ public class GameView extends SurfaceView {
                     mBall.monsterAttackTrick = 0;
                     mBall.monsterVelocity = random.nextInt(20) + 15;
                     mBall.monsterSleepTime = random.nextInt(10) + 5;
-                    attackAtPoint.x = fingerPosition.x;
-                    attackAtPoint.y = fingerPosition.y;
+                    destinationPoint.x = fingerPosition.x;
+                    destinationPoint.y = fingerPosition.y;
                 }
             }
             else
@@ -320,10 +320,10 @@ public class GameView extends SurfaceView {
                     mBall.monsterPosition.y = 0;
 
 
-                    attackAtPoint.x = fingerPosition.x;
-                    attackAtPoint.y = fingerPosition.y;
-                    attackFromPoint.x = mBall.monsterPosition.x;
-                    attackFromPoint.y = mBall.monsterPosition.y;
+                    destinationPoint.x = fingerPosition.x;
+                    destinationPoint.y = fingerPosition.y;
+                    initialPoint.x = mBall.monsterPosition.x;
+                    initialPoint.y = mBall.monsterPosition.y;
 
                     mBall.monsterVelocity = random.nextInt(20) + 15;
                     mBall.monsterSleepTime = random.nextInt(10) + 5;
@@ -331,7 +331,7 @@ public class GameView extends SurfaceView {
 
                 }
 
-                mBall.attackFingerPosition(attackAtPoint, attackFromPoint);
+                mBall.attackFingerPosition(destinationPoint, initialPoint);
             }
         }
     }

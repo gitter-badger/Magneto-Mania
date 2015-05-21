@@ -23,7 +23,7 @@ public class BulletFan {
     protected double bulletsVelocity;
 
     protected Paint bulletsPaint = new Paint();
-    protected final int bulletsRadius = 18;
+    protected final int bulletsRadius = 20;
     /**--------------------------------------------------------------------------------------------------**/
 
 
@@ -54,8 +54,8 @@ public class BulletFan {
 
 
     /********************* METHOD WHICH FIXES DIRECTIONS AND VELOCITIES OF BULLETS ************************/
-    public void initBullets(MonsterBall monsterBall, int fingerX, int fingerY) {
-        Random random = new Random();
+    public void initBullets(MonsterBall monsterBall, int fingerX, int fingerY)
+    {
 
         for(int i=0; i<7; i++) {
             bulletPosition[i].x = monsterBall.monsterPosition.x;
@@ -102,11 +102,7 @@ public class BulletFan {
         /* Setting distance between the attack point of bullets and destination of bullets, to decide velocity components. */
         for(int i=0; i<7; i++)
         {
-            bulletDistance[i] = Geometry.distance(bulletDestination[i], monsterBall.monsterPosition);
-
-            /* X and Y components of velocity of each bullet, calculate like those of MonsterBall. */
-            bulletVelocity[i].x = (int)(bulletsVelocity * (double)(bulletDestination[i].x - monsterBall.monsterPosition.x) / bulletDistance[i]);
-            bulletVelocity[i].y = (int)(bulletsVelocity * (double)(bulletDestination[i].y - monsterBall.monsterPosition.y) / bulletDistance[i]);
+            bulletVelocity[i] = Geometry.calcVelocityComponents(bulletDestination[i], monsterBall.monsterPosition, (int)bulletsVelocity);
         }
     }
     /**--------------------------------------------------------------------------------------------------**/
@@ -126,16 +122,14 @@ public class BulletFan {
 
     public boolean didBulletGetTheFinger (Point fingerPosition)
     {
-        int distance = 0;
-
-        for (int i = 0; i < 7; i++)
+        int distance;
+        for (int i=0; i<7; i++)
         {
             distance = Geometry.distance(bulletPosition[i], fingerPosition);
 
             if (distance < bulletsRadius)
                 return true;
         }
-
         return false;
     }
 }

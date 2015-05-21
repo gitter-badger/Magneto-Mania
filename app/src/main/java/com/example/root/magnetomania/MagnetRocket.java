@@ -56,16 +56,10 @@ public class MagnetRocket {
 
     /********************* METHOD THAT ENABLES ROCKET TO CONSTANTLY FOLLOW THE FINGER *********************/
     public void rocketTrackFinger(Point fingerPosition) {
-        /*Meanings of the variables here are same as that in MonsterBall method.*/
-        int distance = Geometry.distance(fingerPosition, rocketPosition);
+        Point rVelocityComponent = Geometry.calcVelocityComponents(fingerPosition, rocketPosition, rocketVelocity);
 
-        int rocketVelocityX = rocketVelocity * (fingerPosition.x - rocketPosition.x) / distance;
-        int rocketVelocityY = rocketVelocity * (fingerPosition.y - rocketPosition.y) / distance;
-
-        /*No moveStyle variable needed as it always has to travel in direction of finger
-         * at every instant. */
-            rocketPosition.x += rocketVelocityX;
-            rocketPosition.y += rocketVelocityY;
+            rocketPosition.x += rVelocityComponent.x;
+            rocketPosition.y += rVelocityComponent.y;
     }
     /**--------------------------------------------------------------------------------------------------**/
 
