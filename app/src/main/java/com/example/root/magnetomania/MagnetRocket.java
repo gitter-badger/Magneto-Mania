@@ -40,12 +40,12 @@ public class MagnetRocket {
     public void initRocket(MonsterBall monsterBall) {
         Random random = new Random();
 
-        this.rocketX = monsterBall.monsterX;
-        this.rocketY = monsterBall.monsterY;
+        rocketX = monsterBall.monsterPosition.x;
+        rocketY = monsterBall.monsterPosition.y;
 
         /*Velocity and exhaust time is randomized for each attack.*/
-        this.rocketVelocity = random.nextInt(15) + 15;
-        this.rocketXhaustTime = random.nextInt(50) + 100;
+        rocketVelocity = random.nextInt(15) + 15;
+        rocketXhaustTime = random.nextInt(50) + 100;
 
         rocketPaint.setColor(Color.parseColor("#CC1100"));
     }

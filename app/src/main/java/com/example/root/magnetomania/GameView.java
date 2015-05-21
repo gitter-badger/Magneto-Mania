@@ -123,15 +123,15 @@ public class GameView extends SurfaceView {
 
         if(is_game_started) {
 
-            /***/   is_game_over = this.mBall.didMonsterGetTheFinger(this.fingerX, this.fingerY);
+            /***/   is_game_over = mBall.didMonsterGetTheFinger(fingerX, fingerY);
             /***/   if(is_game_over)
             /***/   tryGameOver();
 
-            if(monsterSleepCount <= this.mBall.monsterSleepTime)
+            if(monsterSleepCount <= mBall.monsterSleepTime)
             {
                 monsterSleepCount++;
 
-                if(monsterSleepCount == this.mBall.monsterSleepTime)
+                if(monsterSleepCount == mBall.monsterSleepTime)
                 {
                     if(monster_trick_time)
                     {
@@ -140,53 +140,53 @@ public class GameView extends SurfaceView {
                     }
                     else
                     {
-                        this.mBall.monsterAttackTrick = 0;
+                        mBall.monsterAttackTrick = 0;
                         monster_trick_time = true;
                     }
                     monsterSleepCount++;
-                    this.mBall.monsterSleepTime = 0;
+                    mBall.monsterSleepTime = 0;
                 }
             }
-            else if(this.mBall.monsterAttackTrick == 3)
+            else if(mBall.monsterAttackTrick == 3)
             {
                 monsterSleepCount = 1;
 
-                /***/   is_game_over = this.mRocket.didRocketGetTheFinger(this.fingerX, this.fingerY);
+                /***/   is_game_over = mRocket.didRocketGetTheFinger(fingerX, fingerY);
                 /***/   if(is_game_over)
                 /***/   tryGameOver();
 
-                if(rocketXhaustCount <= this.mRocket.rocketXhaustTime)
+                if(rocketXhaustCount <= mRocket.rocketXhaustTime)
                 {
-                    this.mRocket.rocketTrackFinger(this.fingerX, this.fingerY);
+                    mRocket.rocketTrackFinger(fingerX, fingerY);
                     rocketXhaustCount++;
                 }
                 else
                 {
                     rocketXhaustCount = 1;
-                    this.mRocket.rocketX = this.mScreenWidth + 80;
-                    this.mRocket.rocketY = this.mScreenHeight + 80;
-                    this.mRocket.rocketXhaustTime = 0;
+                    mRocket.rocketX = mScreenWidth + 80;
+                    mRocket.rocketY = mScreenHeight + 80;
+                    mRocket.rocketXhaustTime = 0;
 
-                    this.mBall.monsterAttackTrick = 0;
-                    this.mBall.monsterVelocity = random.nextInt(20) + 15;
-                    this.mBall.monsterSleepTime = random.nextInt(10) + 5;
-                    this.attackAtX = this.fingerX;
-                    this.attackAtY = this.fingerY;
+                    mBall.monsterAttackTrick = 0;
+                    mBall.monsterVelocity = random.nextInt(20) + 15;
+                    mBall.monsterSleepTime = random.nextInt(10) + 5;
+                    attackAtX = fingerX;
+                    attackAtY = fingerY;
                 }
             }
-            else if(this.mBall.monsterAttackTrick == 2)
+            else if(mBall.monsterAttackTrick == 2)
             {
                 monsterSleepCount = 1;
 
-                /***/   is_game_over = this.mFan1.didBulletGetTheFinger(this.fingerX, this.fingerY);
+                /***/   is_game_over = mFan1.didBulletGetTheFinger(fingerX, fingerY);
                 /***/   if(is_game_over)
                 /***/   tryGameOver();
 
-                /***/   is_game_over = this.mFan2.didBulletGetTheFinger(this.fingerX, this.fingerY);
+                /***/   is_game_over = mFan2.didBulletGetTheFinger(fingerX, fingerY);
                 /***/   if(is_game_over)
                 /***/   tryGameOver();
 
-                /***/   is_game_over = this.mFan3.didBulletGetTheFinger(this.fingerX, this.fingerY);
+                /***/   is_game_over = mFan3.didBulletGetTheFinger(fingerX, fingerY);
                 /***/   if(is_game_over)
                 /***/   tryGameOver();
 
@@ -196,14 +196,14 @@ public class GameView extends SurfaceView {
                     bullets_on_screen = true;
                     bulletFansTimeGap = 1;
 
-                    this.attackAtX = this.fingerX;
-                    this.attackAtY = this.fingerY;
-                    this.attackFromX = this.mBall.monsterX;
-                    this.attackFromY = this.mBall.monsterY;
+                    attackAtX = fingerX;
+                    attackAtY = fingerY;
+                    attackFromX = mBall.monsterPosition.x;
+                    attackFromY = mBall.monsterPosition.y;
 
-                    this.mFan1.initBullets(mBall, this.attackAtX, this.attackAtY);
-                    this.mFan2.initBullets(mBall, this.attackAtX, this.attackAtY);
-                    this.mFan3.initBullets(mBall, this.attackAtX, this.attackAtY);
+                    mFan1.initBullets(mBall, attackAtX, attackAtY);
+                    mFan2.initBullets(mBall, attackAtX, attackAtY);
+                    mFan3.initBullets(mBall, attackAtX, attackAtY);
                 }
 
                 if(bullets_on_screen)
@@ -221,11 +221,11 @@ public class GameView extends SurfaceView {
 
                     for(int i=0; i<7; i++)
                     {
-                        if((this.mFan1.bulletPosition[i].x >= mScreenWidth-10 || this.mFan1.bulletPosition[i].x <= 10) && (this.mFan1.bulletPosition[i].y >= mScreenHeight-10 || this.mFan1.bulletPosition[i].y <= 10))
+                        if((mFan1.bulletPosition[i].x >= mScreenWidth-10 || mFan1.bulletPosition[i].x <= 10) && (mFan1.bulletPosition[i].y >= mScreenHeight-10 || mFan1.bulletPosition[i].y <= 10))
                             howManyBulletsOnScreen++;
-                        if((this.mFan2.bulletPosition[i].x >= mScreenWidth-10 || this.mFan2.bulletPosition[i].x <= 10) && (this.mFan2.bulletPosition[i].y >= mScreenHeight-10 || this.mFan2.bulletPosition[i].y <= 10))
+                        if((mFan2.bulletPosition[i].x >= mScreenWidth-10 || mFan2.bulletPosition[i].x <= 10) && (mFan2.bulletPosition[i].y >= mScreenHeight-10 || mFan2.bulletPosition[i].y <= 10))
                             howManyBulletsOnScreen++;
-                        if((this.mFan3.bulletPosition[i].x >= mScreenWidth-10 || this.mFan3.bulletPosition[i].x <= 10) && (this.mFan3.bulletPosition[i].y >= mScreenHeight-10 || this.mFan3.bulletPosition[i].y <= 10))
+                        if((mFan3.bulletPosition[i].x >= mScreenWidth-10 || mFan3.bulletPosition[i].x <= 10) && (mFan3.bulletPosition[i].y >= mScreenHeight-10 || mFan3.bulletPosition[i].y <= 10))
                             howManyBulletsOnScreen++;
                     }
 
@@ -234,14 +234,14 @@ public class GameView extends SurfaceView {
                 }
                 else
                 {
-                    this.mBall.monsterAttackTrick = 0;
-                    this.mBall.monsterVelocity = random.nextInt(20) + 15;
-                    this.mBall.monsterSleepTime = random.nextInt(1) + 5;
-                    this.attackAtX = this.fingerX;
-                    this.attackAtY = this.fingerY;
+                    mBall.monsterAttackTrick = 0;
+                    mBall.monsterVelocity = random.nextInt(20) + 15;
+                    mBall.monsterSleepTime = random.nextInt(1) + 5;
+                    attackAtX = fingerX;
+                    attackAtY = fingerY;
                 }
             }
-            else if(this.mBall.monsterAttackTrick == 4)
+            else if(mBall.monsterAttackTrick == 4)
             {
                 monsterSleepCount = 1;
 
@@ -251,88 +251,88 @@ public class GameView extends SurfaceView {
                     heat_waves_on_screen = true;
                     heatWaveTimeGap = 1;
 
-                    this.mWave1.initHeatWave(mBall);
-                    this.mWave2.initHeatWave(mBall);
-                    this.mWave3.initHeatWave(mBall);
-                    this.mWave4.initHeatWave(mBall);
-                    this.mWave5.initHeatWave(mBall);
+                    mWave1.initHeatWave(mBall);
+                    mWave2.initHeatWave(mBall);
+                    mWave3.initHeatWave(mBall);
+                    mWave4.initHeatWave(mBall);
+                    mWave5.initHeatWave(mBall);
                 }
 
                 if(heat_waves_on_screen)
                 {
                     heatWaveTimeGap++;
-                    heatRect1 = this.mWave1.setHeatWaveSize(this.mBall.monsterX, this.mBall.monsterY);
+                    heatRect1 = mWave1.setHeatWaveSize(mBall.monsterPosition.x, mBall.monsterPosition.y);
 
                     if(heatWaveTimeGap > 12)
-                    heatRect2 = this.mWave2.setHeatWaveSize(this.mBall.monsterX, this.mBall.monsterY);
+                    heatRect2 = mWave2.setHeatWaveSize(mBall.monsterPosition.x, mBall.monsterPosition.y);
 
                     if(heatWaveTimeGap > 24)
-                    heatRect3 = this.mWave3.setHeatWaveSize(this.mBall.monsterX, this.mBall.monsterY);
+                    heatRect3 = mWave3.setHeatWaveSize(mBall.monsterPosition.x, mBall.monsterPosition.y);
 
                     if(heatWaveTimeGap > 36)
-                    heatRect4 = this.mWave4.setHeatWaveSize(this.mBall.monsterX, this.mBall.monsterY);
+                    heatRect4 = mWave4.setHeatWaveSize(mBall.monsterPosition.x, mBall.monsterPosition.y);
 
                     if(heatWaveTimeGap > 48)
-                    heatRect5 = this.mWave5.setHeatWaveSize(this.mBall.monsterX, this.mBall.monsterY);
+                    heatRect5 = mWave5.setHeatWaveSize(mBall.monsterPosition.x, mBall.monsterPosition.y);
 
 
-                    /***/   is_game_over = this.mWave1.didHeatWaveBurnTheFinger(this.fingerX, this.fingerY, 1);
+                    /***/   is_game_over = mWave1.didHeatWaveBurnTheFinger(fingerX, fingerY, 1);
                     /***/   if(is_game_over)
                     /***/   tryGameOver();
 
-                    /***/   is_game_over = this.mWave2.didHeatWaveBurnTheFinger(this.fingerX, this.fingerY, 2);
+                    /***/   is_game_over = mWave2.didHeatWaveBurnTheFinger(fingerX, fingerY, 2);
                     /***/   if(is_game_over)
                     /***/   tryGameOver();
 
-                    /***/   is_game_over = this.mWave3.didHeatWaveBurnTheFinger(this.fingerX, this.fingerY, 1);
+                    /***/   is_game_over = mWave3.didHeatWaveBurnTheFinger(fingerX, fingerY, 1);
                     /***/   if(is_game_over)
                     /***/   tryGameOver();
 
-                    /***/   is_game_over = this.mWave4.didHeatWaveBurnTheFinger(this.fingerX, this.fingerY, 2);
+                    /***/   is_game_over = mWave4.didHeatWaveBurnTheFinger(fingerX, fingerY, 2);
                     /***/   if(is_game_over)
                     /***/   tryGameOver();
 
-                    /***/   is_game_over = this.mWave5.didHeatWaveBurnTheFinger(this.fingerX, this.fingerY, 1);
+                    /***/   is_game_over = mWave5.didHeatWaveBurnTheFinger(fingerX, fingerY, 1);
                     /***/   if(is_game_over)
                     /***/   tryGameOver();
 
 
-                    if(this.mWave5.heatWaveRadius > 3*this.mScreenHeight/2)
+                    if(mWave5.heatWaveRadius > 3*mScreenHeight/2)
                         heat_waves_on_screen = false;
                 }
                 else
                 {
-                    this.mBall.monsterAttackTrick = 0;
-                    this.mBall.monsterVelocity = random.nextInt(20) + 15;
-                    this.mBall.monsterSleepTime = random.nextInt(10) + 5;
-                    this.attackAtX = this.fingerX;
-                    this.attackAtY = this.fingerY;
+                    mBall.monsterAttackTrick = 0;
+                    mBall.monsterVelocity = random.nextInt(20) + 15;
+                    mBall.monsterSleepTime = random.nextInt(10) + 5;
+                    attackAtX = fingerX;
+                    attackAtY = fingerY;
                 }
             }
             else
             {
                 monsterSleepCount = 1;
 
-                if (mBall.monsterX >= mScreenWidth || mBall.monsterY >= mScreenHeight || mBall.monsterX <= 0 || mBall.monsterY <= 0) {
+                if (mBall.monsterPosition.x >= mScreenWidth || mBall.monsterPosition.y >= mScreenHeight || mBall.monsterPosition.x <= 0 || mBall.monsterPosition.y <= 0) {
 
                     // For preventing glitchy movement at the boundary.
-                    if (mBall.monsterX > mScreenWidth)
-                    mBall.monsterX = mScreenWidth;
-                    else if (mBall.monsterX < 0)
-                    mBall.monsterX = 0;
-                    else if (mBall.monsterY > mScreenHeight)
-                    mBall.monsterY = mScreenHeight;
-                    else if (mBall.monsterY < 0)
-                    mBall.monsterY = 0;
+                    if (mBall.monsterPosition.x > mScreenWidth)
+                    mBall.monsterPosition.x = mScreenWidth;
+                    else if (mBall.monsterPosition.x < 0)
+                    mBall.monsterPosition.x = 0;
+                    else if (mBall.monsterPosition.y > mScreenHeight)
+                    mBall.monsterPosition.y = mScreenHeight;
+                    else if (mBall.monsterPosition.y < 0)
+                    mBall.monsterPosition.y = 0;
 
 
-                    this.attackAtX = this.fingerX;
-                    this.attackAtY = this.fingerY;
-                    this.attackFromX = this.mBall.monsterX;
-                    this.attackFromY = this.mBall.monsterY;
+                    attackAtX = fingerX;
+                    attackAtY = fingerY;
+                    attackFromX = mBall.monsterPosition.x;
+                    attackFromY = mBall.monsterPosition.y;
 
-                    this.mBall.monsterVelocity = random.nextInt(20) + 15;
-                    this.mBall.monsterSleepTime = random.nextInt(10) + 5;
+                    mBall.monsterVelocity = random.nextInt(20) + 15;
+                    mBall.monsterSleepTime = random.nextInt(10) + 5;
 
 
                 }
@@ -346,7 +346,7 @@ public class GameView extends SurfaceView {
     {
         canvas.drawColor(Color.BLACK);
 
-        if(this.mFan1 != null && this.mBall.monsterAttackTrick == 2)
+        if(mFan1 != null && mBall.monsterAttackTrick == 2)
         {
             for(int i=0; i<7; i++)
             {
@@ -356,27 +356,27 @@ public class GameView extends SurfaceView {
             }
         }
 
-        if(this.mRocket != null && this.mBall.monsterAttackTrick == 3)
+        if(mRocket != null && mBall.monsterAttackTrick == 3)
         canvas.drawCircle((float)mRocket.rocketX, (float)mRocket.rocketY, (float)mRocket.rocketRadius, mRocket.rocketPaint);
 
-        if(this.mWave1 != null && this.mBall.monsterAttackTrick == 4)
+        if(mWave1 != null && mBall.monsterAttackTrick == 4)
         {
-            this.mWave1.drawHeatWave(canvas, heatRect1, 30);
+            mWave1.drawHeatWave(canvas, heatRect1, 30);
 
             if(heatWaveTimeGap > 12)
-            this.mWave2.drawHeatWave(canvas, heatRect2, 0);
+            mWave2.drawHeatWave(canvas, heatRect2, 0);
 
             if(heatWaveTimeGap > 24)
-            this.mWave3.drawHeatWave(canvas, heatRect3, 30);
+            mWave3.drawHeatWave(canvas, heatRect3, 30);
 
             if(heatWaveTimeGap > 36)
-            this.mWave4.drawHeatWave(canvas, heatRect4, 0);
+            mWave4.drawHeatWave(canvas, heatRect4, 0);
 
             if(heatWaveTimeGap > 48)
-            this.mWave5.drawHeatWave(canvas, heatRect5, 30);
+            mWave5.drawHeatWave(canvas, heatRect5, 30);
         }
 
-        canvas.drawCircle((float)mBall.monsterX, (float)mBall.monsterY, (float)mBall.monsterRadius, mBall.monsterPaint);
+        canvas.drawCircle((float)mBall.monsterPosition.x, (float)mBall.monsterPosition.y, (float)mBall.monsterRadius, mBall.monsterPaint);
 
     }
 
@@ -398,8 +398,8 @@ public class GameView extends SurfaceView {
                     break;
 
                 case MotionEvent.ACTION_MOVE:
-                    this.fingerX = (int)event.getX();
-                    this.fingerY = (int)event.getY();
+                    fingerX = (int)event.getX();
+                    fingerY = (int)event.getY();
                     break;
             }
         }
@@ -408,16 +408,16 @@ public class GameView extends SurfaceView {
 
     public void randomizeTrajectory()
     {
-        this.mBall.monsterAttackTrick = random.nextInt(4) + 1;
-        if(this.mBall.monsterAttackTrick == 2)
+        mBall.monsterAttackTrick = random.nextInt(4) + 1;
+        if(mBall.monsterAttackTrick == 2)
         {
             time_to_shoot_bullets = true;
         }
-        else if(this.mBall.monsterAttackTrick == 3)
+        else if(mBall.monsterAttackTrick == 3)
         {
-            this.mRocket.initRocket(mBall);
+            mRocket.initRocket(mBall);
         }
-        else if(this.mBall.monsterAttackTrick == 4)
+        else if(mBall.monsterAttackTrick == 4)
         {
             time_for_some_heat = true;
         }
@@ -428,7 +428,7 @@ public class GameView extends SurfaceView {
         if(is_game_over)
         {
             try {
-                this.gameOver();
+                gameOver();
                 is_game_over = false;
             } catch (InterruptedException e) {
                 e.printStackTrace();

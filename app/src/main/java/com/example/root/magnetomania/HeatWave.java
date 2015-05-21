@@ -29,21 +29,21 @@ public class HeatWave {
 
     public void initHeatWave(MonsterBall monsterBall)
     {
-        this.heatOriginX = monsterBall.monsterX;
-        this.heatOriginY = monsterBall.monsterY;
-        this.heatWaveRadius = 0;
+        heatOriginX = monsterBall.monsterPosition.x;
+        heatOriginY = monsterBall.monsterPosition.y;
+        heatWaveRadius = 0;
     }
 
     public RectF setHeatWaveSize(int centerX, int centerY)
     {
         RectF heatRect = new RectF();
 
-        heatRect.left   = centerX - this.heatWaveRadius;
-        heatRect.top    = centerY - this.heatWaveRadius;
-        heatRect.right  = centerX + this.heatWaveRadius;
-        heatRect.bottom = centerY + this.heatWaveRadius;
+        heatRect.left   = centerX - heatWaveRadius;
+        heatRect.top    = centerY - heatWaveRadius;
+        heatRect.right  = centerX + heatWaveRadius;
+        heatRect.bottom = centerY + heatWaveRadius;
 
-        this.heatWaveRadius += this.heatWaveVelocity;
+        heatWaveRadius += heatWaveVelocity;
         return heatRect;
     }
 
@@ -51,39 +51,39 @@ public class HeatWave {
     {
         for(int i=0; i<6; i++)
         {
-            canvas.drawArc(heatRect, startAngle + 60*i, 30, false, this.heatWavePaint);
+            canvas.drawArc(heatRect, startAngle + 60*i, 30, false, heatWavePaint);
         }
     }
 
     public boolean didHeatWaveBurnTheFinger (int fingerX, int fingerY, int waveType)
     {
-        int distance = (int) Math.sqrt((this.heatOriginX - fingerX)*(this.heatOriginX - fingerX) + (this.heatOriginY - fingerY)*(this.heatOriginY - fingerY));
-        double slope = (double)(fingerY - this.heatOriginY) / (double)(fingerX - this.heatOriginX);
+        int distance = (int) Math.sqrt((heatOriginX - fingerX)*(heatOriginX - fingerX) + (heatOriginY - fingerY)*(heatOriginY - fingerY));
+        double slope = (double)(fingerY - heatOriginY) / (double)(fingerX - heatOriginX);
         double tan30 = 0.57735;
         double tan60 = 1.73205;
 
-        if (distance <= this.heatWaveRadius + 3 && distance >= this.heatWaveRadius - 9)
+        if (distance <= heatWaveRadius + 3 && distance >= heatWaveRadius - 9)
         {
             if(waveType == 1)
             {
-                if(fingerX > this.heatOriginX && fingerY > this.heatOriginY)
+                if(fingerX > heatOriginX && fingerY > heatOriginY)
                 {
                     if(slope > tan30 && slope < tan60)
                         return true;
                 }
-                else if(fingerX < this.heatOriginX && fingerY > this.heatOriginY)
+                else if(fingerX < heatOriginX && fingerY > heatOriginY)
                 {
                     if(slope < -tan60)
                         return true;
                     if(slope > -tan30 && slope < 0)
                         return true;
                 }
-                else if(fingerX < this.heatOriginX && fingerY < this.heatOriginY)
+                else if(fingerX < heatOriginX && fingerY < heatOriginY)
                 {
                     if(slope > tan30 && slope < tan60)
                         return true;
                 }
-                else if(fingerX > this.heatOriginX && fingerY < this.heatOriginY)
+                else if(fingerX > heatOriginX && fingerY < heatOriginY)
                 {
                     if(slope < -tan60)
                         return true;
@@ -93,26 +93,26 @@ public class HeatWave {
             }
             else
             {
-                if(fingerX > this.heatOriginX && fingerY > this.heatOriginY)
+                if(fingerX > heatOriginX && fingerY > heatOriginY)
                 {
                     if(slope > 0 && slope < tan30)
                         return true;
                     if(slope > tan60)
                         return true;
                 }
-                else if(fingerX < this.heatOriginX && fingerY > this.heatOriginY)
+                else if(fingerX < heatOriginX && fingerY > heatOriginY)
                 {
                     if(slope < -tan30 && slope > -tan60)
                         return true;
                 }
-                else if(fingerX < this.heatOriginX && fingerY < this.heatOriginY)
+                else if(fingerX < heatOriginX && fingerY < heatOriginY)
                 {
                     if(slope > 0 && slope < tan30)
                         return true;
                     if(slope > tan60)
                         return true;
                 }
-                else if(fingerX > this.heatOriginX && fingerY < this.heatOriginY)
+                else if(fingerX > heatOriginX && fingerY < heatOriginY)
                 {
                     if(slope < -tan30 && slope > -tan60)
                         return true;

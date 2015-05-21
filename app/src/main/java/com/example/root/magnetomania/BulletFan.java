@@ -58,20 +58,20 @@ public class BulletFan {
         Random random = new Random();
 
         for(int i=0; i<7; i++) {
-            this.bulletPosition[i].x = monsterBall.monsterX;
-            this.bulletPosition[i].y = monsterBall.monsterY;
+            bulletPosition[i].x = monsterBall.monsterPosition.x;
+            bulletPosition[i].y = monsterBall.monsterPosition.y;
         }
 
         /*Velocity and exhaust time is randomized for each attack. -----------------*/
-        this.bulletsVelocity = 25;
+        bulletsVelocity = 25;
 
         /*Setting slopeOfPath of central bullet and the extreme bullet. ------------*/
-        slopeOfPathCentre = ((double)(fingerY - monsterBall.monsterY))/((double)(fingerX - monsterBall.monsterX));
+        slopeOfPathCentre = ((double)(fingerY - monsterBall.monsterPosition.y))/((double)(fingerX - monsterBall.monsterPosition.x));
         slopeOfPathCorner = (slopeOfPathCentre + 1.73205) / (1.0 - 1.73205*slopeOfPathCentre);
 
 
         /* First Bullet: Making 60 degrees lagging angle with the central bullet. --*/
-        bulletDestination[0].x = (int)(((double)(fingerY - monsterBall.monsterY) + ((double)fingerX / slopeOfPathCentre) + (double)monsterBall.monsterX * slopeOfPathCorner)/(slopeOfPathCorner + 1.00/slopeOfPathCentre));
+        bulletDestination[0].x = (int)(((double)(fingerY - monsterBall.monsterPosition.y) + ((double)fingerX / slopeOfPathCentre) + (double)monsterBall.monsterPosition.x * slopeOfPathCorner)/(slopeOfPathCorner + 1.00/slopeOfPathCentre));
         bulletDestination[0].y = (int)((double)fingerY + ((double)fingerX/slopeOfPathCentre) - ((double)bulletDestination[0].x/slopeOfPathCentre));
 
         /* Second Bullet: Between the central and first bullet. --------------------*/
@@ -102,12 +102,12 @@ public class BulletFan {
         /* Setting distance between the attack point of bullets and destination of bullets, to decide velocity components. */
         for(int i=0; i<7; i++)
         {
-            this.bulletDistance[i] = Math.sqrt((bulletDestination[i].x - monsterBall.monsterX) * (bulletDestination[i].x - monsterBall.monsterX)
-                                             + (bulletDestination[i].y - monsterBall.monsterY) * (bulletDestination[i].y - monsterBall.monsterY));
+            bulletDistance[i] = Math.sqrt((bulletDestination[i].x - monsterBall.monsterPosition.x) * (bulletDestination[i].x - monsterBall.monsterPosition.x)
+                                             + (bulletDestination[i].y - monsterBall.monsterPosition.y) * (bulletDestination[i].y - monsterBall.monsterPosition.y));
 
             /* X and Y components of velocity of each bullet, calculate like those of MonsterBall. */
-            this.bulletVelocity[i].x = (int)(bulletsVelocity * (double)(bulletDestination[i].x - monsterBall.monsterX) / bulletDistance[i]);
-            this.bulletVelocity[i].y = (int)(bulletsVelocity * (double)(bulletDestination[i].y - monsterBall.monsterY) / bulletDistance[i]);
+            bulletVelocity[i].x = (int)(bulletsVelocity * (double)(bulletDestination[i].x - monsterBall.monsterPosition.x) / bulletDistance[i]);
+            bulletVelocity[i].y = (int)(bulletsVelocity * (double)(bulletDestination[i].y - monsterBall.monsterPosition.y) / bulletDistance[i]);
         }
     }
     /**--------------------------------------------------------------------------------------------------**/
@@ -131,9 +131,9 @@ public class BulletFan {
 
         for (int i = 0; i < 7; i++)
         {
-            distance = (int) Math.sqrt((this.bulletPosition[i].x - fingerX) * (this.bulletPosition[i].x - fingerX) + (this.bulletPosition[i].y - fingerY) * (this.bulletPosition[i].y - fingerY));
+            distance = (int) Math.sqrt((bulletPosition[i].x - fingerX) * (bulletPosition[i].x - fingerX) + (bulletPosition[i].y - fingerY) * (bulletPosition[i].y - fingerY));
 
-            if (distance < this.bulletsRadius)
+            if (distance < bulletsRadius)
                 return true;
         }
 
