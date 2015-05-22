@@ -29,11 +29,12 @@ public class HeatWave {
     }
     /**--------------------------------------------------------------------------------------------------**/
 
+
     public void initHeatWave(MonsterBall monsterBall) {
-        heatCenter.x = monsterBall.monsterPosition.x;
-        heatCenter.y = monsterBall.monsterPosition.y;
+        heatCenter = Geometry.setCoordinates(monsterBall.monsterPosition);
         heatWaveRadius = 0;
     }
+
 
     public RectF setHeatWaveSize(Point center) {
         RectF heatRect = new RectF();

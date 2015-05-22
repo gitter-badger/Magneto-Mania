@@ -59,9 +59,7 @@ public class GameView extends SurfaceView {
         this.mHolder                = this.getHolder();
         this.mThread                = new GameThread(this);
         this.mContext               = getContext();
-
-        this.mScreenDimension.x     = GameActivity.mScreenSize.x;
-        this.mScreenDimension.y     = GameActivity.mScreenSize.y;
+        this.mScreenDimension       = Geometry.setCoordinates(GameActivity.mScreenSize);
 
         this.is_game_started        = false;
         this.is_game_over           = false;
@@ -159,8 +157,7 @@ public class GameView extends SurfaceView {
                     mBall.monsterAttackTrick = 0;
                     mBall.monsterVelocity = random.nextInt(20) + 15;
                     mBall.monsterSleepTime = random.nextInt(10) + 5;
-                    destinationPoint.x = fingerPosition.x;
-                    destinationPoint.y = fingerPosition.y;
+                    destinationPoint = Geometry.setCoordinates(fingerPosition);
                 }
             }
             else if(mBall.monsterAttackTrick == 2) {
@@ -179,18 +176,15 @@ public class GameView extends SurfaceView {
                     bullets_on_screen = true;
                     bulletFansTimeGap = 1;
 
-                    destinationPoint.x = fingerPosition.x;
-                    destinationPoint.y = fingerPosition.y;
-                    initialPoint.x = mBall.monsterPosition.x;
-                    initialPoint.y = mBall.monsterPosition.y;
+                    destinationPoint = Geometry.setCoordinates(fingerPosition);
+                    initialPoint = Geometry.setCoordinates(mBall.monsterPosition);
 
-                    mFan[0].initBullets(mBall, destinationPoint.x, destinationPoint.y);
-                    mFan[1].initBullets(mBall, destinationPoint.x, destinationPoint.y);
-                    mFan[2].initBullets(mBall, destinationPoint.x, destinationPoint.y);
+                    mFan[0].initBullets(mBall, destinationPoint);
+                    mFan[1].initBullets(mBall, destinationPoint);
+                    mFan[2].initBullets(mBall, destinationPoint);
                 }
 
                 if(bullets_on_screen) {
-
                     bulletFansTimeGap++;
                     mFan[0].setDirectionAndShoot();
 
@@ -215,10 +209,9 @@ public class GameView extends SurfaceView {
                 }
                 else {
                     mBall.monsterAttackTrick = 0;
-                    mBall.monsterVelocity = random.nextInt(20) + 15;
-                    mBall.monsterSleepTime = random.nextInt(1) + 5;
-                    destinationPoint.x = fingerPosition.x;
-                    destinationPoint.y = fingerPosition.y;
+                    mBall.monsterVelocity    = random.nextInt(20) + 15;
+                    mBall.monsterSleepTime   = random.nextInt(1) + 5;
+                    destinationPoint         = Geometry.setCoordinates(fingerPosition);
                 }
             }
             else if(mBall.monsterAttackTrick == 4) {
@@ -265,8 +258,7 @@ public class GameView extends SurfaceView {
                     mBall.monsterAttackTrick = 0;
                     mBall.monsterVelocity = random.nextInt(20) + 15;
                     mBall.monsterSleepTime = random.nextInt(10) + 5;
-                    destinationPoint.x = fingerPosition.x;
-                    destinationPoint.y = fingerPosition.y;
+                    destinationPoint = Geometry.setCoordinates(fingerPosition);
                 }
             }
             else {
@@ -289,12 +281,10 @@ public class GameView extends SurfaceView {
                         mBall.monsterPosition.y = 0;
                     }
 
-                    destinationPoint.x = fingerPosition.x;
-                    destinationPoint.y = fingerPosition.y;
-                    initialPoint.x = mBall.monsterPosition.x;
-                    initialPoint.y = mBall.monsterPosition.y;
+                    destinationPoint = Geometry.setCoordinates(fingerPosition);
+                    initialPoint     = Geometry.setCoordinates(mBall.monsterPosition);
 
-                    mBall.monsterVelocity = random.nextInt(20) + 15;
+                    mBall.monsterVelocity  = random.nextInt(20) + 15;
                     mBall.monsterSleepTime = random.nextInt(10) + 5;
                 }
                 mBall.attackFingerPosition(destinationPoint, initialPoint);

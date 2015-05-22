@@ -47,46 +47,45 @@ public class BulletFan {
     /**--------------------------------------------------------------------------------------------------**/
 
 
-    public void initBullets(MonsterBall monsterBall, int fingerX, int fingerY) {
+    public void initBullets(MonsterBall monsterBall, Point fingerPosition) {
 
         for(int i=0; i<7; i++) {
-            bulletPosition[i].x = monsterBall.monsterPosition.x;
-            bulletPosition[i].y = monsterBall.monsterPosition.y;
+            bulletPosition[i] = Geometry.setCoordinates(monsterBall.monsterPosition);
         }
         bulletsVelocity = 25;
 
         /*Setting slopeOfPath of central bullet and the extreme bullet. ------------*/
-        slopeOfPathCentre = ((double)(fingerY - monsterBall.monsterPosition.y))/((double)(fingerX - monsterBall.monsterPosition.x));
+        slopeOfPathCentre = ((double)(fingerPosition.y - monsterBall.monsterPosition.y))/((double)(fingerPosition.y - monsterBall.monsterPosition.x));
         slopeOfPathCorner = (slopeOfPathCentre + 1.73205) / (1.0 - 1.73205*slopeOfPathCentre);
 
 
         /* First Bullet: Making 60 degrees lagging angle with the central bullet. --*/
-        bulletDestination[0].x = (int)(((double)(fingerY - monsterBall.monsterPosition.y) + ((double)fingerX / slopeOfPathCentre) + (double)monsterBall.monsterPosition.x * slopeOfPathCorner)/(slopeOfPathCorner + 1.00/slopeOfPathCentre));
-        bulletDestination[0].y = (int)((double)fingerY + ((double)fingerX/slopeOfPathCentre) - ((double)bulletDestination[0].x/slopeOfPathCentre));
+        bulletDestination[0].x = (int)(((double)(fingerPosition.y - monsterBall.monsterPosition.y) + ((double)fingerPosition.x / slopeOfPathCentre) + (double)monsterBall.monsterPosition.x * slopeOfPathCorner)/(slopeOfPathCorner + 1.00/slopeOfPathCentre));
+        bulletDestination[0].y = (int)((double)fingerPosition.y + ((double)fingerPosition.x/slopeOfPathCentre) - ((double)bulletDestination[0].x/slopeOfPathCentre));
 
         /* Second Bullet: Between the central and first bullet. --------------------*/
-        bulletDestination[1].x = (bulletDestination[0].x + fingerX)/2;
-        bulletDestination[1].y = (bulletDestination[0].y + fingerY)/2;
+        bulletDestination[1].x = (bulletDestination[0].x + fingerPosition.x)/2;
+        bulletDestination[1].y = (bulletDestination[0].y + fingerPosition.y)/2;
 
         /* Third Bullet: Immediately near central bullet, with a lagging angle. ----*/
-        bulletDestination[2].x = (bulletDestination[1].x + fingerX)/2;
-        bulletDestination[2].y = (bulletDestination[1].y + fingerY)/2;
+        bulletDestination[2].x = (bulletDestination[1].x + fingerPosition.x)/2;
+        bulletDestination[2].y = (bulletDestination[1].y + fingerPosition.y)/2;
 
         /* Fourth Bullet: The Central Bullet. --------------------------------------*/
-        bulletDestination[3].x = fingerX;
-        bulletDestination[3].y = fingerY;
+        bulletDestination[3].x = fingerPosition.x;
+        bulletDestination[3].y = fingerPosition.y;
 
         /* Fifth Bullet: Immediately near central bullet, with a leading angle. ----*/
-        bulletDestination[4].x = (bulletDestination[3].x + fingerX)/2;
-        bulletDestination[4].y = (bulletDestination[3].y + fingerY)/2;
+        bulletDestination[4].x = (bulletDestination[3].x + fingerPosition.x)/2;
+        bulletDestination[4].y = (bulletDestination[3].y + fingerPosition.y)/2;
 
         /* Seventh Bullet: Making 60 degrees leading angle with the central bullet. */
-        bulletDestination[6].x = 2*fingerX - bulletDestination[0].x;
-        bulletDestination[6].y = 2*fingerY - bulletDestination[0].y;
+        bulletDestination[6].x = 2*fingerPosition.x - bulletDestination[0].x;
+        bulletDestination[6].y = 2*fingerPosition.y - bulletDestination[0].y;
 
         /* Sixth Bullet: Between the central and seventh bullet. -------------------*/
-        bulletDestination[5].x = (bulletDestination[6].x + fingerX)/2;
-        bulletDestination[5].y = (bulletDestination[6].y + fingerY)/2;
+        bulletDestination[5].x = (bulletDestination[6].x + fingerPosition.x)/2;
+        bulletDestination[5].y = (bulletDestination[6].y + fingerPosition.y)/2;
 
         /* Setting distance between the attack point of bullets and destination of bullets, to decide velocity components. */
         for(int i=0; i<7; i++) {
