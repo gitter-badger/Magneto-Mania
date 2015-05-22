@@ -5,64 +5,54 @@ import android.graphics.Color;
 import android.graphics.Paint;
 import android.graphics.Point;
 
-import java.util.Random;
+
 
 public class BulletFan {
 
     /******************************************** CLASS MEMBERS ********************************************/
-    /*These two Point arrays each store the coordinates of bullets,
-     * velocity components along the axes of the bullets. */
-    protected Point bulletPosition[] = new Point[7];
-    protected Point bulletDestination[] = new Point[7];
-    protected Point bulletVelocity[] = new Point[7];
+    protected Point     bulletPosition[]    = new Point[7];
+    protected Point     bulletDestination[] = new Point[7];
+    protected Point     bulletVelocity[]    = new Point[7];
 
-    protected double bulletDistance[] = new double[7];
-    protected double slopeOfPathCentre;
-    protected double slopeOfPathCorner;
+    protected double    bulletDistance[]    = new double[7];
+    protected double    slopeOfPathCentre;
+    protected double    slopeOfPathCorner;
 
-    protected double bulletsVelocity;
+    protected double    bulletsVelocity;
 
-    protected Paint bulletsPaint = new Paint();
+    protected Paint     bulletsPaint        = new Paint();
     protected final int bulletsRadius = 20;
     /**--------------------------------------------------------------------------------------------------**/
 
 
     /********************************************* CONSTRUCTOR *********************************************/
-    public BulletFan()
-    {
-        for(int i=0; i<7; i++)
-        {
+    public BulletFan() {
+        for(int i=0; i<7; i++) {
             this.bulletPosition[i]    = new Point(0,0);
             this.bulletDestination[i] = new Point(0,0);
             this.bulletVelocity[i]    = new Point(0,0);
         }
 
         for(int i=0; i<7; i++) {
-            this.bulletPosition[i].x = GameActivity.mScreenSize.x + 80;
-            this.bulletPosition[i].y = GameActivity.mScreenSize.y + 80;
-            this.bulletDistance[i] = 0;
+            this.bulletPosition[i].x  = GameActivity.mScreenSize.x + 80;
+            this.bulletPosition[i].y  = GameActivity.mScreenSize.y + 80;
+            this.bulletDistance[i]    = 0;
         }
 
         this.slopeOfPathCentre = 0;
         this.slopeOfPathCorner = 0;
-        this.bulletsVelocity = 0;
-
+        this.bulletsVelocity   = 0;
         bulletsPaint.setColor(Color.parseColor("#11FF22"));
     }
     /**--------------------------------------------------------------------------------------------------**/
 
 
-
-    /********************* METHOD WHICH FIXES DIRECTIONS AND VELOCITIES OF BULLETS ************************/
-    public void initBullets(MonsterBall monsterBall, int fingerX, int fingerY)
-    {
+    public void initBullets(MonsterBall monsterBall, int fingerX, int fingerY) {
 
         for(int i=0; i<7; i++) {
             bulletPosition[i].x = monsterBall.monsterPosition.x;
             bulletPosition[i].y = monsterBall.monsterPosition.y;
         }
-
-        /*Velocity and exhaust time is randomized for each attack. -----------------*/
         bulletsVelocity = 25;
 
         /*Setting slopeOfPath of central bullet and the extreme bullet. ------------*/
@@ -98,38 +88,32 @@ public class BulletFan {
         bulletDestination[5].x = (bulletDestination[6].x + fingerX)/2;
         bulletDestination[5].y = (bulletDestination[6].y + fingerY)/2;
 
-
         /* Setting distance between the attack point of bullets and destination of bullets, to decide velocity components. */
-        for(int i=0; i<7; i++)
-        {
+        for(int i=0; i<7; i++) {
             bulletVelocity[i] = Geometry.calcVelocityComponents(bulletDestination[i], monsterBall.monsterPosition, (int)bulletsVelocity);
         }
     }
-    /**--------------------------------------------------------------------------------------------------**/
 
 
-
-    /****************************** METHOD WHICH MAKES THE BULLETS MOVE  **********************************/
     public void setDirectionAndShoot() {
 
-        for(int i=0; i<7; i++)
-        {
+        for(int i=0; i<7; i++) {
             bulletPosition[i].x += bulletVelocity[i].x;
             bulletPosition[i].y += bulletVelocity[i].y;
         }
     }
-    /**--------------------------------------------------------------------------------------------------**/
 
-    public boolean didBulletGetTheFinger (Point fingerPosition)
-    {
+
+    public boolean didBulletGetTheFinger (Point fingerPosition) {
         int distance;
-        for (int i=0; i<7; i++)
-        {
+
+        for (int i=0; i<7; i++) {
             distance = Geometry.distance(bulletPosition[i], fingerPosition);
 
             if (distance < bulletsRadius)
-                return true;
+            return true;
         }
         return false;
     }
+
 }
