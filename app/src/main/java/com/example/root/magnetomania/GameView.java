@@ -31,6 +31,7 @@ public class GameView extends SurfaceView {
     private BulletFan[]     mFan             = new BulletFan[3];
     private HeatWave[]      mWave            = new HeatWave[5];
     private RectF[]         heatRect         = new RectF[5];
+    private LaserBeam       mBeam            = null;
 
     private Point           fingerPosition   = new Point(0,0);
     private Point           destinationPoint = new Point(0,0);
@@ -40,12 +41,15 @@ public class GameView extends SurfaceView {
     private int             rocketXhaustCount;
     private int             bulletFansTimeGap;
     private int             heatWaveTimeGap;
+    private int             laserBeamMoveCount;
 
     private boolean         monster_trick_time;
     private boolean         time_to_shoot_bullets;
     private boolean         bullets_on_screen;
     private boolean         time_for_some_heat;
     private boolean         heat_waves_on_screen;
+    private boolean         time_to_fire_laser;
+    private boolean         laser_beam_on_screen;
 
     private Random          random          = new Random();
 
@@ -72,17 +76,21 @@ public class GameView extends SurfaceView {
             this.heatRect[i] = new RectF();
             this.mWave[i]    = new HeatWave();
         }
+        this.mBeam                  = new LaserBeam(0);
 
         this.monsterSleepCount      = 1;
         this.rocketXhaustCount      = 1;
         this.bulletFansTimeGap      = 1;
         this.heatWaveTimeGap        = 1;
+        this.laserBeamMoveCount     = 1;
 
         this.monster_trick_time     = false;
         this.time_to_shoot_bullets  = false;
         this.bullets_on_screen      = false;
         this.time_for_some_heat     = false;
         this.heat_waves_on_screen   = false;
+        this.time_to_fire_laser     = false;
+        this.laser_beam_on_screen   = false;
 
         this.mHolder.addCallback(new SurfaceHolder.Callback() {
 
@@ -261,6 +269,37 @@ public class GameView extends SurfaceView {
                     destinationPoint = Geometry.setCoordinates(fingerPosition);
                 }
             }
+            else if (mBall.monsterAttackTrick == 5) {
+
+                monsterSleepCount = 1;
+
+                if(time_to_fire_laser) {
+                    mBeam.moveMonsterToCenter(mBall, initialPoint);
+
+                    if(mBall.monsterPosition.x == mScreenDimension.x/2 && mBall.monsterPosition.y == mScreenDimension.y/2) {
+                        time_to_fire_laser   = false;
+                        laser_beam_on_screen = true;
+                        laserBeamMoveCount   = 1;
+                    }
+                }
+
+                if(laser_beam_on_screen) {
+                    laserBeamMoveCount++;
+
+                    if(laserBeamMoveCount < 50) {
+                        mBeam.rotateBeam(0);
+                    }
+                    else {
+                        laser_beam_on_screen = false;
+                    }
+                }
+                else {
+                    mBall.monsterAttackTrick = 0;
+                    mBall.monsterVelocity = random.nextInt(20) + 15;
+                    mBall.monsterSleepTime = random.nextInt(10) + 5;
+                    destinationPoint = Geometry.setCoordinates(fingerPosition);
+                }
+            }
             else {
                 monsterSleepCount = 1;
 
@@ -327,6 +366,10 @@ public class GameView extends SurfaceView {
             mWave[4].drawHeatWave(canvas, heatRect[4], 30);
         }
 
+        if(mBeam != null && mBall.monsterAttackTrick == 5 && laserBeamMoveCount%2 == 1) {
+            canvas.drawLine((float)mScreenDimension.x/2, (float)mScreenDimension.y/2, (float)mBeam.laserDestination.x, (float)mBeam.laserDestination.y, mBeam.laserBeamPaint);
+        }
+
         canvas.drawCircle((float)mBall.monsterPosition.x, (float)mBall.monsterPosition.y,
                           (float)mBall.monsterRadius, mBall.monsterPaint);
     }
@@ -351,7 +394,7 @@ public class GameView extends SurfaceView {
     }
 
     public void randomizeTrajectory() {
-        mBall.monsterAttackTrick = random.nextInt(4) + 1;
+        mBall.monsterAttackTrick = random.nextInt(5) + 1;
 
         if(mBall.monsterAttackTrick == 2) {
             time_to_shoot_bullets = true;
@@ -361,6 +404,9 @@ public class GameView extends SurfaceView {
         }
         else if(mBall.monsterAttackTrick == 4) {
             time_for_some_heat = true;
+        }
+        else if(mBall.monsterAttackTrick == 5) {
+            time_to_fire_laser = true;
         }
     }
 
