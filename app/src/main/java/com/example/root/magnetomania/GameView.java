@@ -42,6 +42,7 @@ public class GameView extends SurfaceView {
     private int             bulletFansTimeGap;
     private int             heatWaveTimeGap;
     private int             laserBeamMoveCount;
+    private int             laserAlphaCount;
 
     private boolean         monster_trick_time;
     private boolean         time_to_shoot_bullets;
@@ -83,6 +84,7 @@ public class GameView extends SurfaceView {
         this.bulletFansTimeGap      = 1;
         this.heatWaveTimeGap        = 1;
         this.laserBeamMoveCount     = 1;
+        this.laserAlphaCount        = 1;
 
         this.monster_trick_time     = false;
         this.time_to_shoot_bullets  = false;
@@ -272,16 +274,20 @@ public class GameView extends SurfaceView {
             else if (mBall.monsterAttackTrick == 5) {
 
                 monsterSleepCount = 1;
+                laserAlphaCount = 30;
 
                 if(time_to_fire_laser) {
 
                     initialPoint = Geometry.setCoordinates(mBall.monsterPosition);
+                    laserAlphaCount+=50;
+                    mBeam.laserBeamPaint.setAlpha(laserAlphaCount);
                     mBeam.moveMonsterToCenter(mBall, initialPoint);
 
                     if(mBall.monsterPosition.x == mScreenDimension.x/2 && mBall.monsterPosition.y == mScreenDimension.y/2) {
                         time_to_fire_laser   = false;
                         laser_beam_on_screen = true;
                         laserBeamMoveCount   = 1;
+                        mBeam.laserBeamPaint.setAlpha(255);
                     }
                 }
                 else if(laser_beam_on_screen) {
@@ -367,8 +373,13 @@ public class GameView extends SurfaceView {
             mWave[4].drawHeatWave(canvas, heatRect[4], 30);
         }
 
-        if(mBeam != null && mBall.monsterAttackTrick == 5 && laserBeamMoveCount%2 == 1 && laser_beam_on_screen) {
-            canvas.drawLine((float)mScreenDimension.x/2, (float)mScreenDimension.y/2, (float)mBeam.laserDestination.x, (float)mBeam.laserDestination.y, mBeam.laserBeamPaint);
+        if(mBeam != null && mBall.monsterAttackTrick == 5) {
+            if(time_to_fire_laser) {
+                canvas.drawLine((float) mBeam.center.x, (float) mBeam.center.y, (float) mBeam.laserDestination.x, (float) mBeam.laserDestination.y, mBeam.laserBeamPaint);
+            }
+            else if (laserBeamMoveCount%2==1 && laser_beam_on_screen) {
+                canvas.drawLine((float) mBeam.center.x, (float) mBeam.center.y, (float) mBeam.laserDestination.x, (float) mBeam.laserDestination.y, mBeam.laserBeamPaint);
+            }
         }
 
         canvas.drawCircle((float)mBall.monsterPosition.x, (float)mBall.monsterPosition.y,

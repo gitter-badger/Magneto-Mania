@@ -34,6 +34,10 @@ public class LaserBeam {
                     break;
         }
         this.laserBeamPaint.setColor(Color.CYAN);
+        this.laserBeamPaint.setAlpha(0);
+        this.laserBeamPaint.setStrokeWidth(15);
+        this.laserBeamPaint.setStyle(Paint.Style.FILL_AND_STROKE);
+        this.laserBeamPaint.setStrokeCap(Paint.Cap.ROUND);
     }
 
 
