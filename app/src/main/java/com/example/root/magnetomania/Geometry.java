@@ -5,7 +5,7 @@ import android.graphics.Point;
 
 public class Geometry extends Point {
 
-
+    public static final Point center = new Point(GameActivity.mScreenSize.x/2, GameActivity.mScreenSize.y/2);
     public static Point setCoordinates(Point src) {
         Point point = new Point(0,0);
         point.x = src.x;
@@ -28,5 +28,16 @@ public class Geometry extends Point {
         mVelocityComponent.y = velocity * (a.y - b.y) / distance;  // velocity times sin(theta)
 
         return mVelocityComponent;
+    }
+
+
+    public static void moveMonsterToCenter(MonsterBall monsterBall, Point initialPoint) {
+        int distanceFromCenter = Geometry.distance(center, monsterBall.monsterPosition);
+        monsterBall.monsterVelocity = 5;
+
+        if(distanceFromCenter > 15)
+            monsterBall.attackFingerPosition(center, initialPoint);
+        else
+            monsterBall.monsterPosition = Geometry.setCoordinates(center);
     }
 }
