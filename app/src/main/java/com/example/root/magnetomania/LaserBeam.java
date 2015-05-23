@@ -9,46 +9,49 @@ import android.graphics.Point;
 public class LaserBeam {
 
     protected final Point center = new Point(GameActivity.mScreenSize.x/2, GameActivity.mScreenSize.y/2);
-    protected Point laserDestination = new Point(0,0);
+    protected double laserDestinationX;
+    protected double laserDestinationY;
     protected Paint laserBeamPaint   = new Paint();
 
 
-    public LaserBeam(int orientation) {
-
-        switch(orientation) {
-            case 0: this.laserDestination.set(2*center.x, 0);
-                    break;
-            case 1: this.laserDestination.set(center.x, 0);
-                    break;
-            case 2: this.laserDestination.set(0,0);
-                    break;
-            case 3: this.laserDestination.set(0, center.y);
-                    break;
-            case 4: this.laserDestination.set(0, 2*center.y);
-                    break;
-            case 5: this.laserDestination.set(center.x, 2*center.y);
-                    break;
-            case 6: this.laserDestination.set(2*center.x, 2*center.y);
-                    break;
-            case 7: this.laserDestination.set(2*center.x, center.y);
-                    break;
-        }
+    public LaserBeam() {
+        this.laserDestinationX = center.x;
+        this.laserDestinationY = center.y;
         this.laserBeamPaint.setColor(Color.CYAN);
         this.laserBeamPaint.setAlpha(0);
-        this.laserBeamPaint.setStrokeWidth(15);
+        this.laserBeamPaint.setStrokeWidth(30);
         this.laserBeamPaint.setStyle(Paint.Style.FILL_AND_STROKE);
         this.laserBeamPaint.setStrokeCap(Paint.Cap.ROUND);
     }
 
 
-    public void moveMonsterToCenter(MonsterBall monsterBall, Point initialPoint) {
-
-        int distanceFromCenter = Geometry.distance(center, monsterBall.monsterPosition);
-
-        if(distanceFromCenter > 15)
-        monsterBall.attackFingerPosition(center, initialPoint);
-        else
-        monsterBall.monsterPosition = Geometry.setCoordinates(center);
+    public void initLaserBeam(int orientation) {
+        switch(orientation) {
+            case 0: this.laserDestinationX = 2*center.x;
+                this.laserDestinationY = 0;
+                break;
+            case 1: this.laserDestinationX = center.x;
+                this.laserDestinationY = 0;
+                break;
+            case 2: this.laserDestinationX = 0;
+                this.laserDestinationY = 0;
+                break;
+            case 3: this.laserDestinationX = 0;
+                this.laserDestinationY = center.y;
+                break;
+            case 4: this.laserDestinationX = 0;
+                this.laserDestinationY = 2*center.y;
+                break;
+            case 5: this.laserDestinationX = center.x;
+                this.laserDestinationY = 2*center.y;
+                break;
+            case 6: this.laserDestinationX = 2*center.x;
+                this.laserDestinationY = 2*center.y;
+                break;
+            case 7: this.laserDestinationX = 2*center.x;
+                this.laserDestinationY = center.y;
+                break;
+        }
     }
 
 
@@ -56,16 +59,16 @@ public class LaserBeam {
 
         switch(orientation) {
             case 0:
-            case 1: laserDestination.x -= GameActivity.mScreenSize.x/100;
+            case 1: laserDestinationX -= (double)GameActivity.mScreenSize.x/50.0;
                     break;
             case 2:
-            case 3: laserDestination.y += GameActivity.mScreenSize.y/100;
+            case 3: laserDestinationY += (double)GameActivity.mScreenSize.y/50.0;
                     break;
             case 4:
-            case 5: laserDestination.x += GameActivity.mScreenSize.x/100;
+            case 5: laserDestinationX += (double)GameActivity.mScreenSize.x/50.0;
                     break;
             case 6:
-            case 7: laserDestination.y -= GameActivity.mScreenSize.y/100;
+            case 7: laserDestinationY -= (double)GameActivity.mScreenSize.y/50.0;
                     break;
         }
     }

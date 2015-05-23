@@ -31,7 +31,7 @@ public class GameView extends SurfaceView {
     private BulletFan[]     mFan             = new BulletFan[3];
     private HeatWave[]      mWave            = new HeatWave[5];
     private RectF[]         heatRect         = new RectF[5];
-    private LaserBeam       mBeam            = null;
+    private LaserBeam[]     mBeam            = new LaserBeam[8];
 
     private Point           fingerPosition   = new Point(0,0);
     private Point           destinationPoint = new Point(0,0);
@@ -77,7 +77,10 @@ public class GameView extends SurfaceView {
             this.heatRect[i] = new RectF();
             this.mWave[i]    = new HeatWave();
         }
-        this.mBeam                  = new LaserBeam(0);
+
+        for(int i=0; i<8; i++) {
+            this.mBeam[i] = new LaserBeam();
+        }
 
         this.monsterSleepCount      = 1;
         this.rocketXhaustCount      = 1;
@@ -274,27 +277,43 @@ public class GameView extends SurfaceView {
             else if (mBall.monsterAttackTrick == 5) {
 
                 monsterSleepCount = 1;
-                laserAlphaCount = 30;
+                laserAlphaCount = 10;
 
                 if(time_to_fire_laser) {
 
                     initialPoint = Geometry.setCoordinates(mBall.monsterPosition);
-                    laserAlphaCount+=50;
-                    mBeam.laserBeamPaint.setAlpha(laserAlphaCount);
-                    mBeam.moveMonsterToCenter(mBall, initialPoint);
+                    laserAlphaCount+=40;
+
+                    for(int i=0; i<8; i++) {
+                        mBeam[i].initLaserBeam(i);
+                        mBeam[i].laserBeamPaint.setAlpha(laserAlphaCount);
+                    }
+
+                    Geometry.moveMonsterToCenter(mBall, initialPoint);
 
                     if(mBall.monsterPosition.x == mScreenDimension.x/2 && mBall.monsterPosition.y == mScreenDimension.y/2) {
                         time_to_fire_laser   = false;
                         laser_beam_on_screen = true;
                         laserBeamMoveCount   = 1;
-                        mBeam.laserBeamPaint.setAlpha(255);
+
+                        for(int i=0; i<8; i++) {
+                            mBeam[i].laserBeamPaint.setAlpha(255);
+                        }
                     }
                 }
                 else if(laser_beam_on_screen) {
                     laserBeamMoveCount++;
 
-                    if(laserBeamMoveCount < 50) {
-                        mBeam.rotateBeam(0);
+                    if(laserBeamMoveCount < 200) {
+                        if(laserBeamMoveCount % 25 == 0) {
+                            for(int i=0; i<8; i++) {
+                                mBeam[i].initLaserBeam(i);
+                            }
+                        }
+
+                        for(int i=0; i<8; i++) {
+                            mBeam[i].rotateBeam(i);
+                        }
                     }
                     else {
                         laser_beam_on_screen = false;
@@ -375,10 +394,14 @@ public class GameView extends SurfaceView {
 
         if(mBeam != null && mBall.monsterAttackTrick == 5) {
             if(time_to_fire_laser) {
-                canvas.drawLine((float) mBeam.center.x, (float) mBeam.center.y, (float) mBeam.laserDestination.x, (float) mBeam.laserDestination.y, mBeam.laserBeamPaint);
+                for(int i = 0; i < 8; i++) {
+                    canvas.drawLine((float) mBeam[i].center.x, (float) mBeam[i].center.y, (float) mBeam[i].laserDestinationX, (float) mBeam[i].laserDestinationY, mBeam[i].laserBeamPaint);
+                }
             }
             else if (laserBeamMoveCount%2==1 && laser_beam_on_screen) {
-                canvas.drawLine((float) mBeam.center.x, (float) mBeam.center.y, (float) mBeam.laserDestination.x, (float) mBeam.laserDestination.y, mBeam.laserBeamPaint);
+                for(int i = 0; i < 8; i++) {
+                    canvas.drawLine((float) mBeam[i].center.x, (float) mBeam[i].center.y, (float) mBeam[i].laserDestinationX, (float) mBeam[i].laserDestinationY, mBeam[i].laserBeamPaint);
+                }
             }
         }
 
