@@ -8,6 +8,7 @@ import android.graphics.Point;
 
 public class LaserBeam {
 
+    protected final Point center = new Point(GameActivity.mScreenSize.x/2, GameActivity.mScreenSize.y/2);
     protected Point laserDestination = new Point(0,0);
     protected Paint laserBeamPaint   = new Paint();
 
@@ -15,21 +16,21 @@ public class LaserBeam {
     public LaserBeam(int orientation) {
 
         switch(orientation) {
-            case 0: this.laserDestination.set(GameActivity.mScreenSize.x, 0);
+            case 0: this.laserDestination.set(2*center.x, 0);
                     break;
-            case 1: this.laserDestination.set(GameActivity.mScreenSize.x/2, 0);
+            case 1: this.laserDestination.set(center.x, 0);
                     break;
             case 2: this.laserDestination.set(0,0);
                     break;
-            case 3: this.laserDestination.set(0, GameActivity.mScreenSize.y/2);
+            case 3: this.laserDestination.set(0, center.y);
                     break;
-            case 4: this.laserDestination.set(0, GameActivity.mScreenSize.y);
+            case 4: this.laserDestination.set(0, 2*center.y);
                     break;
-            case 5: this.laserDestination.set(GameActivity.mScreenSize.x/2, GameActivity.mScreenSize.y);
+            case 5: this.laserDestination.set(center.x, 2*center.y);
                     break;
-            case 6: this.laserDestination.set(GameActivity.mScreenSize.x, GameActivity.mScreenSize.y);
+            case 6: this.laserDestination.set(2*center.x, 2*center.y);
                     break;
-            case 7: this.laserDestination.set(GameActivity.mScreenSize.x, GameActivity.mScreenSize.y);
+            case 7: this.laserDestination.set(2*center.x, center.y);
                     break;
         }
         this.laserBeamPaint.setColor(Color.CYAN);
@@ -37,10 +38,10 @@ public class LaserBeam {
 
 
     public void moveMonsterToCenter(MonsterBall monsterBall, Point initialPoint) {
-        Point center = new Point(GameActivity.mScreenSize.x/2, GameActivity.mScreenSize.y/2);
+
         int distanceFromCenter = Geometry.distance(center, monsterBall.monsterPosition);
 
-        if(distanceFromCenter > 4)
+        if(distanceFromCenter > 15)
         monsterBall.attackFingerPosition(center, initialPoint);
         else
         monsterBall.monsterPosition = Geometry.setCoordinates(center);

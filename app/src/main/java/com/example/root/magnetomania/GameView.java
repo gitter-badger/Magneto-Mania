@@ -274,6 +274,8 @@ public class GameView extends SurfaceView {
                 monsterSleepCount = 1;
 
                 if(time_to_fire_laser) {
+
+                    initialPoint = Geometry.setCoordinates(mBall.monsterPosition);
                     mBeam.moveMonsterToCenter(mBall, initialPoint);
 
                     if(mBall.monsterPosition.x == mScreenDimension.x/2 && mBall.monsterPosition.y == mScreenDimension.y/2) {
@@ -282,8 +284,7 @@ public class GameView extends SurfaceView {
                         laserBeamMoveCount   = 1;
                     }
                 }
-
-                if(laser_beam_on_screen) {
+                else if(laser_beam_on_screen) {
                     laserBeamMoveCount++;
 
                     if(laserBeamMoveCount < 50) {
@@ -366,7 +367,7 @@ public class GameView extends SurfaceView {
             mWave[4].drawHeatWave(canvas, heatRect[4], 30);
         }
 
-        if(mBeam != null && mBall.monsterAttackTrick == 5 && laserBeamMoveCount%2 == 1) {
+        if(mBeam != null && mBall.monsterAttackTrick == 5 && laserBeamMoveCount%2 == 1 && laser_beam_on_screen) {
             canvas.drawLine((float)mScreenDimension.x/2, (float)mScreenDimension.y/2, (float)mBeam.laserDestination.x, (float)mBeam.laserDestination.y, mBeam.laserBeamPaint);
         }
 
