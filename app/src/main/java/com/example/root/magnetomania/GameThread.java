@@ -4,7 +4,7 @@ package com.example.root.magnetomania;
 import android.graphics.Canvas;
 
 public class GameThread extends Thread {
-    static final long FPS = 30;
+    private long FPS = 30;
     private boolean running=false;
 
     private Canvas mGameCanvas;
@@ -21,7 +21,9 @@ public class GameThread extends Thread {
         this.running = running;
     }
 
-
+    public void setFPS(int FPS) {
+        this.FPS = FPS;
+    }
 
     @Override
     public void run()

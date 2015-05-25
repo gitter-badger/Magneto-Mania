@@ -33,7 +33,7 @@ public class Geometry extends Point {
 
     public static void moveMonsterToCenter(MonsterBall monsterBall, Point initialPoint) {
         int distanceFromCenter = Geometry.distance(center, monsterBall.monsterPosition);
-        monsterBall.monsterVelocity = 5;
+        monsterBall.monsterVelocity = 15;
 
         if(distanceFromCenter > 15)
             monsterBall.attackFingerPosition(center, initialPoint);

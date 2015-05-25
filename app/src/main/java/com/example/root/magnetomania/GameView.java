@@ -4,6 +4,8 @@ import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Point;
@@ -26,7 +28,7 @@ public class GameView extends SurfaceView {
     public boolean          is_game_started;
     public boolean          is_game_over;
 
-    private MonsterBall     mBall            = new MonsterBall();
+    private MonsterBall     mBall            = new MonsterBall(this);
     private MagnetRocket    mRocket          = new MagnetRocket();
     private BulletFan[]     mFan             = new BulletFan[3];
     private HeatWave[]      mWave            = new HeatWave[5];
@@ -407,6 +409,7 @@ public class GameView extends SurfaceView {
 
         canvas.drawCircle((float)mBall.monsterPosition.x, (float)mBall.monsterPosition.y,
                           (float)mBall.monsterRadius, mBall.monsterPaint);
+        mBall.drawBandOnMonsterBall(canvas);
     }
 
     @SuppressLint("ClickableViewAccessibility")
@@ -430,6 +433,7 @@ public class GameView extends SurfaceView {
 
     public void randomizeTrajectory() {
         mBall.monsterAttackTrick = random.nextInt(5) + 1;
+        mThread.setFPS(30);
 
         if(mBall.monsterAttackTrick == 2) {
             time_to_shoot_bullets = true;
@@ -443,6 +447,10 @@ public class GameView extends SurfaceView {
         else if(mBall.monsterAttackTrick == 5) {
             time_to_fire_laser = true;
         }
+        else {
+            mThread.setFPS(100);
+        }
+
     }
 
     public void tryGameOver() {
