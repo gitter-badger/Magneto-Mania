@@ -28,7 +28,7 @@ public class GameView extends SurfaceView {
     public boolean          is_game_started;
     public boolean          is_game_over;
 
-    private MonsterBall     mBall            = new MonsterBall(this);
+    private MonsterBall     mBall            = new MonsterBall();
     private MagnetRocket    mRocket          = new MagnetRocket();
     private BulletFan[]     mFan             = new BulletFan[3];
     private HeatWave[]      mWave            = new HeatWave[5];
@@ -54,6 +54,7 @@ public class GameView extends SurfaceView {
     private boolean         time_to_fire_laser;
     private boolean         laser_beam_on_screen;
 
+    private SpriteAnimation animation       = new SpriteAnimation(this);
     private Random          random          = new Random();
 
     /**---------------------------------------------------------------------------------------------------**/
@@ -407,9 +408,7 @@ public class GameView extends SurfaceView {
             }
         }
 
-        canvas.drawCircle((float)mBall.monsterPosition.x, (float)mBall.monsterPosition.y,
-                          (float)mBall.monsterRadius, mBall.monsterPaint);
-        mBall.drawBandOnMonsterBall(canvas);
+        animation.drawMonsterBall(mBall, canvas);
     }
 
     @SuppressLint("ClickableViewAccessibility")
