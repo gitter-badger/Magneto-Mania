@@ -48,6 +48,8 @@ public class MagnetRocket {
 
             rocketPosition.x += rVelocityComponent.x;
             rocketPosition.y += rVelocityComponent.y;
+
+        SpriteAnimation.iteratorIncrement();
     }
 
 

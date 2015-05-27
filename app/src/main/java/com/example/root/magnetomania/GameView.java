@@ -378,8 +378,7 @@ public class GameView extends SurfaceView {
         }
 
         if(mRocket != null && mBall.monsterAttackTrick == 3) {
-            canvas.drawCircle((float) mRocket.rocketPosition.x, (float) mRocket.rocketPosition.y,
-                    (float) mRocket.rocketRadius, mRocket.rocketPaint);
+            animation.drawMagnetRocket(mRocket, canvas, fingerPosition);
         }
 
         if(mWave != null && mBall.monsterAttackTrick == 4) {
