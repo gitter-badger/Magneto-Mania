@@ -3,9 +3,7 @@ package com.example.root.magnetomania;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
-import android.graphics.Matrix;
 import android.graphics.Point;
-import android.graphics.PorterDuff;
 import android.graphics.Rect;
 
 
@@ -34,6 +32,9 @@ public class SpriteAnimation {
     private final int mRocketUnitsonSheet = 8;
 
     private static int spriteSheetIterator= 0;
+
+    private Rect fromSheet = new Rect();
+    private Rect toDisplay = new Rect();
     /**--------------------------------------------------------------------------------------------------**/
 
 
@@ -75,27 +76,27 @@ public class SpriteAnimation {
         int srcX = (mBallIterator % M_BALL_BMP_COLS)* spriteUnitCoreBody.x;
         int srcY = (mBallIterator  / M_BALL_BMP_COLS)* spriteUnitCoreBody.y;
 
-        Rect src = new Rect(srcX, srcY, srcX + spriteUnitCoreBody.x, srcY +spriteUnitCoreBody.y);
-        Rect dst = new Rect(monsterBall.monsterPosition.x - monsterBall.monsterRadius,
-                            monsterBall.monsterPosition.y - monsterBall.monsterRadius,
-                            monsterBall.monsterPosition.x + monsterBall.monsterRadius,
-                            monsterBall.monsterPosition.y + monsterBall.monsterRadius);
+        fromSheet.set(srcX, srcY, srcX + spriteUnitCoreBody.x, srcY + spriteUnitCoreBody.y);
+        toDisplay.set(monsterBall.monsterPosition.x - monsterBall.monsterRadius,
+                monsterBall.monsterPosition.y - monsterBall.monsterRadius,
+                monsterBall.monsterPosition.x + monsterBall.monsterRadius,
+                monsterBall.monsterPosition.y + monsterBall.monsterRadius);
 
-        canvas.drawBitmap(mBallCoreBodyBmp, src, dst, null);
+        canvas.drawBitmap(mBallCoreBodyBmp, fromSheet, toDisplay, null);
 
         srcX = (mBallIterator % M_BALL_BMP_COLS)* spriteUnitLeftRing.x;
         srcY = (mBallIterator / M_BALL_BMP_COLS)* spriteUnitLeftRing.y;
 
-        src = new Rect(srcX, srcY, srcX + spriteUnitLeftRing.x, srcY +spriteUnitLeftRing.y);
+        fromSheet.set(srcX, srcY, srcX + spriteUnitLeftRing.x, srcY + spriteUnitLeftRing.y);
        
-        canvas.drawBitmap(mBallLeftRingBmp, src, dst, null);
+        canvas.drawBitmap(mBallLeftRingBmp, fromSheet, toDisplay, null);
 
         srcX = (mBallIterator % M_BALL_BMP_COLS)* spriteUnitRiteRing.x;
         srcY = (mBallIterator / M_BALL_BMP_COLS)* spriteUnitRiteRing.y;
 
-        src = new Rect(srcX, srcY, srcX + spriteUnitRiteRing.x, srcY +spriteUnitRiteRing.y);
+        fromSheet.set(srcX, srcY, srcX + spriteUnitRiteRing.x, srcY + spriteUnitRiteRing.y);
 
-        canvas.drawBitmap(mBallRiteRingBmp, src, dst, null);
+        canvas.drawBitmap(mBallRiteRingBmp, fromSheet, toDisplay, null);
     }
 
 
@@ -106,19 +107,18 @@ public class SpriteAnimation {
         int srcX = (mRocketIterator % ROCKET_BMP_COLS)* spriteUnitRocket.x;
         int srcY = (mRocketIterator / ROCKET_BMP_COLS)* spriteUnitRocket.y;
 
-        Rect src = new Rect(srcX, srcY, srcX + spriteUnitRocket.x, srcY +spriteUnitRocket.y);
-        Rect dst = new Rect(magnetRocket.rocketPosition.x - magnetRocket.rocketRadius,
+        fromSheet.set(srcX, srcY, srcX + spriteUnitRocket.x, srcY + spriteUnitRocket.y);
+        toDisplay.set(magnetRocket.rocketPosition.x - magnetRocket.rocketRadius,
                 magnetRocket.rocketPosition.y - magnetRocket.rocketRadius - 10,
                 magnetRocket.rocketPosition.x + magnetRocket.rocketRadius,
                 magnetRocket.rocketPosition.y + magnetRocket.rocketRadius + 10);
 
+        float angleFromSpriteToFinger = (float)Math.atan2((double)fingerPosition.y - magnetRocket.rocketPosition.y, (double)fingerPosition.x - magnetRocket.rocketPosition.x);
+
         canvas.save();
-        canvas.rotate((float)Math.atan((double)fingerPosition.y - magnetRocket.rocketPosition.y/(double)fingerPosition.x - magnetRocket.rocketPosition.x), (float)magnetRocket.rocketPosition.x - Geometry.center.x, (float)magnetRocket.rocketPosition.y - Geometry.center.y);
+        canvas.rotate(angleFromSpriteToFinger*180/(float)Math.PI + 90, (float) magnetRocket.rocketPosition.x, (float) magnetRocket.rocketPosition.y);
 
-        canvas.drawBitmap(mRocketBmp, src, dst, null);
+        canvas.drawBitmap(mRocketBmp, fromSheet, toDisplay, null);
         canvas.restore();
-
-        canvas.drawColor(0, PorterDuff.Mode.CLEAR);
-        canvas.drawBitmap(mRocketBmp, src, dst, null);
     }
 }
