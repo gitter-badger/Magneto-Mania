@@ -19,6 +19,7 @@ public class MonsterBall {
 
     protected int monsterSleepTime;
     protected int monsterAttackTrick;
+    protected int monsterTrickSetDecider;
     /**--------------------------------------------------------------------------------------------------**/
 
 
@@ -36,6 +37,7 @@ public class MonsterBall {
         this.monsterSleepTime = random.nextInt(10) + 10;
 
         this.monsterAttackTrick = 0;
+        this.monsterTrickSetDecider = 0;
         monsterPaint.setColor(Color.parseColor("#FFFFFF"));
     }
     /**--------------------------------------------------------------------------------------------------**/

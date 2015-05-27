@@ -150,38 +150,60 @@ public class GameView extends SurfaceView {
                     }
                     else {
                         mBall.monsterAttackTrick = 0;
+                        mThread.setFPS(100);
                         monster_trick_time = true;
                     }
                     monsterSleepCount++;
                     mBall.monsterSleepTime = 0;
                 }
             }
-            else if(mBall.monsterAttackTrick == 3) {
+            else if(mBall.monsterTrickSetDecider == 0 && mBall.monsterAttackTrick == 1) {
                 monsterSleepCount = 1;
 
-                /*** Condition p game over when finger touches the rocket. ***/
-                /***/   is_game_over = mRocket.didRocketGetTheFinger(fingerPosition);
-                /***/   if(is_game_over)
-                /***/   tryGameOver();
+                if(time_for_some_heat) {
+                    time_for_some_heat = false;
+                    heat_waves_on_screen = true;
+                    heatWaveTimeGap = 1;
 
-                if(rocketXhaustCount <= mRocket.rocketXhaustTime) {
-                    mRocket.rocketTrackFinger(fingerPosition);
-                    rocketXhaustCount++;
+                    for(int i=0; i<5; i++) {
+                        mWave[i].initHeatWave(mBall);
+                    }
+                }
+
+                if(heat_waves_on_screen) {
+                    heatWaveTimeGap++;
+                    heatRect[0] = mWave[0].setHeatWaveSize(mBall.monsterPosition);
+
+                    if(heatWaveTimeGap > 12)
+                        heatRect[1] = mWave[1].setHeatWaveSize(mBall.monsterPosition);
+
+                    if(heatWaveTimeGap > 24)
+                        heatRect[2] = mWave[2].setHeatWaveSize(mBall.monsterPosition);
+
+                    if(heatWaveTimeGap > 36)
+                        heatRect[3] = mWave[3].setHeatWaveSize(mBall.monsterPosition);
+
+                    if(heatWaveTimeGap > 48)
+                        heatRect[4] = mWave[4].setHeatWaveSize(mBall.monsterPosition);
+
+                    for(int i=0; i<5; i++) {
+                        /*** Condition of game over when finger touches the heat wave. ***/
+                        /***/is_game_over = mWave[i].didHeatWaveBurnTheFinger(fingerPosition, (i+1)%2);
+                        /***/if (is_game_over)
+                        /***/ tryGameOver();
+                    }
+
+                    if(mWave[4].heatWaveRadius > 3*mScreenDimension.y/2)
+                        heat_waves_on_screen = false;
                 }
                 else {
-                    rocketXhaustCount = 1;
-                    mRocket.rocketPosition.x = mScreenDimension.x + 80;
-                    mRocket.rocketPosition.y = mScreenDimension.y + 80;
-                    mRocket.rocketXhaustTime = 0;
-
                     mBall.monsterAttackTrick = 0;
                     mBall.monsterVelocity = random.nextInt(20) + 15;
                     mBall.monsterSleepTime = random.nextInt(10) + 5;
                     destinationPoint = Geometry.setCoordinates(fingerPosition);
                 }
             }
-            else if(mBall.monsterAttackTrick == 2) {
-
+            else if(mBall.monsterTrickSetDecider == 0 && mBall.monsterAttackTrick == 2) {
                 monsterSleepCount = 1;
 
                 for(int i=0; i<3; i++) {
@@ -209,17 +231,17 @@ public class GameView extends SurfaceView {
                     mFan[0].setDirectionAndShoot();
 
                     if(bulletFansTimeGap>5)
-                    mFan[1].setDirectionAndShoot();
+                        mFan[1].setDirectionAndShoot();
 
                     if(bulletFansTimeGap>10)
-                    mFan[2].setDirectionAndShoot();
+                        mFan[2].setDirectionAndShoot();
 
                     int howManyBulletsOnScreen = 0;
 
                     for(int i=0; i<3; i++) {
                         for(int j=0; j<7; j++) {
                             if ((mFan[i].bulletPosition[j].x >= mScreenDimension.x-10 || mFan[i].bulletPosition[j].x <= 10) &&
-                                (mFan[i].bulletPosition[j].y >= mScreenDimension.y-10 || mFan[i].bulletPosition[j].y <= 10))
+                                    (mFan[i].bulletPosition[j].y >= mScreenDimension.y-10 || mFan[i].bulletPosition[j].y <= 10))
                                 howManyBulletsOnScreen++;
                         }
                     }
@@ -234,55 +256,7 @@ public class GameView extends SurfaceView {
                     destinationPoint         = Geometry.setCoordinates(fingerPosition);
                 }
             }
-            else if(mBall.monsterAttackTrick == 4) {
-
-                monsterSleepCount = 1;
-
-                if(time_for_some_heat) {
-                    time_for_some_heat = false;
-                    heat_waves_on_screen = true;
-                    heatWaveTimeGap = 1;
-
-                    for(int i=0; i<5; i++) {
-                        mWave[i].initHeatWave(mBall);
-                    }
-                }
-
-                if(heat_waves_on_screen) {
-                    heatWaveTimeGap++;
-                    heatRect[0] = mWave[0].setHeatWaveSize(mBall.monsterPosition);
-
-                    if(heatWaveTimeGap > 12)
-                    heatRect[1] = mWave[1].setHeatWaveSize(mBall.monsterPosition);
-
-                    if(heatWaveTimeGap > 24)
-                    heatRect[2] = mWave[2].setHeatWaveSize(mBall.monsterPosition);
-
-                    if(heatWaveTimeGap > 36)
-                    heatRect[3] = mWave[3].setHeatWaveSize(mBall.monsterPosition);
-
-                    if(heatWaveTimeGap > 48)
-                    heatRect[4] = mWave[4].setHeatWaveSize(mBall.monsterPosition);
-
-                    for(int i=0; i<5; i++) {
-                        /*** Condition of game over when finger touches the heat wave. ***/
-                        /***/is_game_over = mWave[i].didHeatWaveBurnTheFinger(fingerPosition, (i+1)%2);
-                        /***/if (is_game_over)
-                        /***/ tryGameOver();
-                    }
-
-                    if(mWave[4].heatWaveRadius > 3*mScreenDimension.y/2)
-                        heat_waves_on_screen = false;
-                }
-                else {
-                    mBall.monsterAttackTrick = 0;
-                    mBall.monsterVelocity = random.nextInt(20) + 15;
-                    mBall.monsterSleepTime = random.nextInt(10) + 5;
-                    destinationPoint = Geometry.setCoordinates(fingerPosition);
-                }
-            }
-            else if (mBall.monsterAttackTrick == 5) {
-
+            else if (mBall.monsterTrickSetDecider == 1 && mBall.monsterAttackTrick == 1) {
                 monsterSleepCount = 1;
                 laserAlphaCount = 10;
 
@@ -333,6 +307,30 @@ public class GameView extends SurfaceView {
                     destinationPoint = Geometry.setCoordinates(fingerPosition);
                 }
             }
+            else if(mBall.monsterTrickSetDecider == 2 && mBall.monsterAttackTrick == 2) {
+                monsterSleepCount = 1;
+
+                /*** Condition p game over when finger touches the rocket. ***/
+                /***/   is_game_over = mRocket.didRocketGetTheFinger(fingerPosition);
+                /***/   if(is_game_over)
+                /***/   tryGameOver();
+
+                if(rocketXhaustCount <= mRocket.rocketXhaustTime) {
+                    mRocket.rocketTrackFinger(fingerPosition);
+                    rocketXhaustCount++;
+                }
+                else {
+                    rocketXhaustCount = 1;
+                    mRocket.rocketPosition.x = mScreenDimension.x + 80;
+                    mRocket.rocketPosition.y = mScreenDimension.y + 80;
+                    mRocket.rocketXhaustTime = 0;
+
+                    mBall.monsterAttackTrick = 0;
+                    mBall.monsterVelocity = random.nextInt(20) + 15;
+                    mBall.monsterSleepTime = random.nextInt(10) + 5;
+                    destinationPoint = Geometry.setCoordinates(fingerPosition);
+                }
+            }
             else {
                 monsterSleepCount = 1;
 
@@ -368,7 +366,24 @@ public class GameView extends SurfaceView {
 
         canvas.drawColor(Color.BLACK);
 
-        if(mFan != null && mBall.monsterAttackTrick == 2) {
+        if(mWave != null && mBall.monsterTrickSetDecider == 0 && mBall.monsterAttackTrick == 1) {
+
+            mWave[0].drawHeatWave(canvas, heatRect[0], 30);
+
+            if(heatWaveTimeGap > 12)
+                mWave[1].drawHeatWave(canvas, heatRect[1], 0);
+
+            if(heatWaveTimeGap > 24)
+                mWave[2].drawHeatWave(canvas, heatRect[2], 30);
+
+            if(heatWaveTimeGap > 36)
+                mWave[3].drawHeatWave(canvas, heatRect[3], 0);
+
+            if(heatWaveTimeGap > 48)
+                mWave[4].drawHeatWave(canvas, heatRect[4], 30);
+        }
+
+        if(mFan != null && mBall.monsterTrickSetDecider == 0 && mBall.monsterAttackTrick == 2) {
             for(int i=0; i<7; i++) {
                 for (int j = 0; j < 3; j++) {
                     canvas.drawCircle((float) mFan[j].bulletPosition[i].x, (float) mFan[j].bulletPosition[i].y,
@@ -377,28 +392,7 @@ public class GameView extends SurfaceView {
             }
         }
 
-        if(mRocket != null && mBall.monsterAttackTrick == 3) {
-            animation.drawMagnetRocket(mRocket, canvas, fingerPosition);
-        }
-
-        if(mWave != null && mBall.monsterAttackTrick == 4) {
-
-            mWave[0].drawHeatWave(canvas, heatRect[0], 30);
-
-            if(heatWaveTimeGap > 12)
-            mWave[1].drawHeatWave(canvas, heatRect[1], 0);
-
-            if(heatWaveTimeGap > 24)
-            mWave[2].drawHeatWave(canvas, heatRect[2], 30);
-
-            if(heatWaveTimeGap > 36)
-            mWave[3].drawHeatWave(canvas, heatRect[3], 0);
-
-            if(heatWaveTimeGap > 48)
-            mWave[4].drawHeatWave(canvas, heatRect[4], 30);
-        }
-
-        if(mBeam != null && mBall.monsterAttackTrick == 5) {
+        if(mBeam != null && mBall.monsterTrickSetDecider == 1 && mBall.monsterAttackTrick == 1) {
             if(time_to_fire_laser) {
                 for(int i = 0; i < 8; i++) {
                     canvas.drawLine((float) mBeam[i].center.x, (float) mBeam[i].center.y, (float) mBeam[i].laserDestinationX, (float) mBeam[i].laserDestinationY, mBeam[i].laserBeamPaint);
@@ -409,6 +403,10 @@ public class GameView extends SurfaceView {
                     canvas.drawLine((float) mBeam[i].center.x, (float) mBeam[i].center.y, (float) mBeam[i].laserDestinationX, (float) mBeam[i].laserDestinationY, mBeam[i].laserBeamPaint);
                 }
             }
+        }
+
+        if(mRocket != null && mBall.monsterTrickSetDecider == 2 && mBall.monsterAttackTrick == 2) {
+            animation.drawMagnetRocket(mRocket, canvas, fingerPosition);
         }
 
         animation.drawMonsterBall(mBall, canvas);
@@ -437,26 +435,36 @@ public class GameView extends SurfaceView {
     }
 
     public void randomizeTrajectory() {
-        mBall.monsterAttackTrick = random.nextInt(5) + 1;
-        mThread.setFPS(30);
+        mBall.monsterTrickSetDecider = ++mBall.monsterTrickSetDecider % 3;
+        mBall.monsterAttackTrick     = random.nextInt(2) + 1;
 
-        if(mBall.monsterAttackTrick == 2) {
-            time_to_shoot_bullets = true;
-        }
-        else if(mBall.monsterAttackTrick == 3) {
-            mRocket.initRocket(mBall);
-            mThread.setFPS(40);
-        }
-        else if(mBall.monsterAttackTrick == 4) {
-            time_for_some_heat = true;
-        }
-        else if(mBall.monsterAttackTrick == 5) {
-            time_to_fire_laser = true;
-        }
-        else {
-            mThread.setFPS(100);
-        }
+        mThread.setFPS(35);
 
+        if(mBall.monsterTrickSetDecider == 0) {
+            if(mBall.monsterAttackTrick == 1) {
+                time_for_some_heat = true;
+            }
+            else if(mBall.monsterAttackTrick == 2) {
+                time_to_shoot_bullets = true;
+            }
+        }
+        else if(mBall.monsterTrickSetDecider == 1) {
+            if(mBall.monsterAttackTrick == 1) {
+                time_to_fire_laser = true;
+            }
+            else if(mBall.monsterAttackTrick == 2) {
+                mThread.setFPS(100);
+            }
+        }
+        else if(mBall.monsterTrickSetDecider == 2) {
+            if(mBall.monsterAttackTrick == 1) {
+                // bomb
+            }
+            else if(mBall.monsterAttackTrick == 2) {
+                mRocket.initRocket(mBall);
+                mThread.setFPS(40);
+            }
+        }
     }
 
     public void tryGameOver() {
