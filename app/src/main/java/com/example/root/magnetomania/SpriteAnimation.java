@@ -106,37 +106,19 @@ public class SpriteAnimation {
         int srcX = (mRocketIterator % ROCKET_BMP_COLS)* spriteUnitRocket.x;
         int srcY = (mRocketIterator / ROCKET_BMP_COLS)* spriteUnitRocket.y;
 
-        /*
-        canvas.save();
-
-        canvas.scale((float)2*magnetRocket.rocketRadius / spriteUnitRocket.x, (float)2*magnetRocket.rocketRadius / spriteUnitRocket.y);
-        canvas.rotate((float)Math.asin((double)fingerPosition.y - magnetRocket.rocketPosition.y / Geometry.distance(fingerPosition, magnetRocket.rocketPosition)));
-        canvas.translate((float)magnetRocket.rocketPosition.x - Geometry.center.x, (float)magnetRocket.rocketPosition.y - Geometry.center.y);
-        */
-
         Rect src = new Rect(srcX, srcY, srcX + spriteUnitRocket.x, srcY +spriteUnitRocket.y);
         Rect dst = new Rect(magnetRocket.rocketPosition.x - magnetRocket.rocketRadius,
                 magnetRocket.rocketPosition.y - magnetRocket.rocketRadius - 10,
                 magnetRocket.rocketPosition.x + magnetRocket.rocketRadius,
                 magnetRocket.rocketPosition.y + magnetRocket.rocketRadius + 10);
 
-        /*
-        Bitmap srcRocket = Bitmap.createBitmap(mRocketBmp, srcX, srcY, spriteUnitRocket.x, spriteUnitRocket.y);
-        Matrix dst = new Matrix();
+        canvas.save();
+        canvas.rotate((float)Math.atan((double)fingerPosition.y - magnetRocket.rocketPosition.y/(double)fingerPosition.x - magnetRocket.rocketPosition.x), (float)magnetRocket.rocketPosition.x - Geometry.center.x, (float)magnetRocket.rocketPosition.y - Geometry.center.y);
 
-        dst.postScale((float)2*magnetRocket.rocketRadius / spriteUnitRocket.x, (float)2*magnetRocket.rocketRadius / spriteUnitRocket.y);
-        dst.postRotate((float)Math.asin((double)fingerPosition.y - magnetRocket.rocketPosition.y / Geometry.distance(fingerPosition, magnetRocket.rocketPosition)));
-
-        Bitmap dstRocket = Bitmap.createBitmap(srcRocket, 0, 0, srcRocket.getWidth(), srcRocket.getHeight(), dst, true);
-        */
-
-        /*
         canvas.drawBitmap(mRocketBmp, src, dst, null);
         canvas.restore();
 
         canvas.drawColor(0, PorterDuff.Mode.CLEAR);
-        */
-
         canvas.drawBitmap(mRocketBmp, src, dst, null);
     }
 }
