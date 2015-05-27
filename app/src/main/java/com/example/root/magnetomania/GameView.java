@@ -57,6 +57,8 @@ public class GameView extends SurfaceView {
     private SpriteAnimation animation       = new SpriteAnimation(this);
     private Random          random          = new Random();
 
+    private Point           pFingerPosition = new Point(0,0);
+    private double          Score;
     /**---------------------------------------------------------------------------------------------------**/
 
 
@@ -99,6 +101,8 @@ public class GameView extends SurfaceView {
         this.heat_waves_on_screen   = false;
         this.time_to_fire_laser     = false;
         this.laser_beam_on_screen   = false;
+
+        this.Score                  = 0.0;
 
         this.mHolder.addCallback(new SurfaceHolder.Callback() {
 
@@ -375,7 +379,7 @@ public class GameView extends SurfaceView {
 
         if(mRocket != null && mBall.monsterAttackTrick == 3) {
             canvas.drawCircle((float) mRocket.rocketPosition.x, (float) mRocket.rocketPosition.y,
-                              (float) mRocket.rocketRadius, mRocket.rocketPaint);
+                    (float) mRocket.rocketRadius, mRocket.rocketPaint);
         }
 
         if(mWave != null && mBall.monsterAttackTrick == 4) {
@@ -409,6 +413,7 @@ public class GameView extends SurfaceView {
         }
 
         animation.drawMonsterBall(mBall, canvas);
+        canvas.drawText(Integer.toString((int) Score), 5, 5, mBall.monsterPaint);
     }
 
     @SuppressLint("ClickableViewAccessibility")
@@ -417,16 +422,18 @@ public class GameView extends SurfaceView {
 
         switch(event.getAction()) {
             case MotionEvent.ACTION_DOWN: is_game_started = true;
-                                          break;
+                break;
 
             case MotionEvent.ACTION_UP:   is_game_over = true;
-                                          tryGameOver();
-                                          break;
+                tryGameOver();
+                break;
 
-            case MotionEvent.ACTION_MOVE: fingerPosition.x = (int)event.getX();
-                                          fingerPosition.y = (int)event.getY();
-                                          break;
-            }
+            case MotionEvent.ACTION_MOVE: pFingerPosition  = Geometry.setCoordinates(fingerPosition);
+                fingerPosition.x = (int)event.getX();
+                fingerPosition.y = (int)event.getY();
+                Score+=Geometry.distanceForScore(fingerPosition, pFingerPosition)/10.0;
+                break;
+        }
         return true;
     }
 
@@ -439,6 +446,7 @@ public class GameView extends SurfaceView {
         }
         else if(mBall.monsterAttackTrick == 3) {
             mRocket.initRocket(mBall);
+            mThread.setFPS(40);
         }
         else if(mBall.monsterAttackTrick == 4) {
             time_for_some_heat = true;
@@ -466,6 +474,7 @@ public class GameView extends SurfaceView {
     void gameOver() throws InterruptedException {
         mThread.setRunning(false);
         Intent intent = new Intent(mContext, GameOverActivity.class);
+        intent.putExtra("Your Score:", Score);
         mContext.startActivity(intent);
         ((Activity)mContext).finish();
     }

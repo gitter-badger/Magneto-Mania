@@ -19,6 +19,10 @@ public class Geometry extends Point {
         return (int)Math.sqrt((a.x - b.x)*(a.x - b.x) + (a.y - b.y)*(a.y - b.y));
     }
 
+    public static double distanceForScore(Point a, Point b) {
+        return (int)Math.sqrt((a.x - b.x)*(a.x - b.x) + (a.y - b.y)*(a.y - b.y));
+    }
+
 
     public static Point calcVelocityComponents(Point a, Point b, int velocity) {
         int distance = Geometry.distance(a, b);
