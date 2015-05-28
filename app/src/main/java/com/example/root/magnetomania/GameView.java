@@ -310,19 +310,26 @@ public class GameView extends SurfaceView {
             else if(mBall.monsterTrickSetDecider == 2 && mBall.monsterAttackTrick == 1) {
                 monsterSleepCount = 1;
 
+                for(int i=0; i<3; i++) {
+                    /*** Conditon of game over when finger touches the bomb. ***/
+                    /***/is_game_over = mBomb[i].didFingerBecameVictimOfBombBlast();
+                    /***/if (is_game_over)
+                    /***/ tryGameOver();
+                }
+
                 if(time_to_plant_bombs) {
                     bombPlantCount++;
                     mBall.attackFingerPosition();
+
                     for(int i=0; i<3; i++) {
                         if(bombPlantCount > 10*(i+1) && !mBomb[i].is_bomb_planted) {
                             mBomb[i].initTimeBomb(mBall);
-                            mBomb[i].is_bomb_planted = true;
-                        }
-                        else if(mBomb[i].is_bomb_planted) {
-                            mBomb[i].tickTockCountDown();
                         }
                         else if(mBomb[i].timeBombCounter <= 0) {
                             mBomb[i].increaseBombExplosion();
+                        }
+                        else if(mBomb[i].is_bomb_planted) {
+                            mBomb[i].tickTockCountDown();
                         }
                     }
 
@@ -343,6 +350,10 @@ public class GameView extends SurfaceView {
                         if (mBomb[0].is_bomb_planted && mBomb[1].is_bomb_planted && mBomb[2].is_bomb_planted) {
                             time_to_plant_bombs = false;
                             bomb_residue_on_screen = true;
+
+                            for(int i=0; i<3; i++) {
+                                mBomb[i].is_bomb_planted = false;
+                            }
                         }
                     }
                 }
@@ -360,7 +371,7 @@ public class GameView extends SurfaceView {
                 }
                 else {
                     for(int i=0; i<3; i++) {
-                        mBomb[i].bombPosition.set(GameActivity.mScreenSize.x + 30, GameActivity.mScreenSize.y + 30);
+                        mBomb[i].bombPosition.set(GameActivity.mScreenSize.x + 100, GameActivity.mScreenSize.y + 100);
                         mBomb[i].bombCurrentRadius = mBomb[i].bombInitialRadius;
                     }
                     bombPlantCount = 1;
@@ -372,7 +383,7 @@ public class GameView extends SurfaceView {
             else if(mBall.monsterTrickSetDecider == 2 && mBall.monsterAttackTrick == 2) {
                 monsterSleepCount = 1;
 
-                /*** Condition p game over when finger touches the rocket. ***/
+                /*** Condition of game over when finger touches the rocket. ***/
                 /***/   is_game_over = mRocket.didRocketGetTheFinger();
                 /***/   if(is_game_over)
                 /***/   tryGameOver();

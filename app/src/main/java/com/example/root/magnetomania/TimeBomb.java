@@ -14,8 +14,8 @@ public class TimeBomb {
     protected Paint bombPaint = new Paint();
 
     protected final int bombInitialRadius     = 15;
-    protected final int bombExplosionRadius   = 150;
-    protected final int explosionIncreaseRate = 15;
+    protected final int bombExplosionRadius   = 85;
+    protected final int explosionIncreaseRate = 10;
 
     protected int bombCurrentRadius;
     protected int timeBombCounter;
@@ -38,7 +38,8 @@ public class TimeBomb {
     public void initTimeBomb(MonsterBall monsterBall) {
         bombPosition      = Geometry.setCoordinates(monsterBall.monsterPosition);
         bombCurrentRadius = bombInitialRadius;
-        timeBombCounter   = 15;
+        timeBombCounter   = 20;
+        is_bomb_planted   = true;
     }
 
 
@@ -48,16 +49,14 @@ public class TimeBomb {
 
 
     public void increaseBombExplosion () {
-        bombCurrentRadius += explosionIncreaseRate;
+        if(bombCurrentRadius < bombExplosionRadius) {
+            bombCurrentRadius += explosionIncreaseRate;
+        }
     }
 
 
-    public boolean didFingerBecameVictimOfBombBlast(Point fingerPosition) {
-        int distance = Geometry.distance(fingerPosition, bombPosition);
-
-        if (distance < bombCurrentRadius)
-            return true;
-        else
-            return false;
+    public boolean didFingerBecameVictimOfBombBlast() {
+        int distance = Geometry.distance(GameView.fingerPosition, bombPosition);
+        return distance < bombCurrentRadius;
     }
 }
