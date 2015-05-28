@@ -4,8 +4,6 @@ import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Point;
@@ -34,6 +32,7 @@ public class GameView extends SurfaceView {
     private HeatWave[]      mWave            = new HeatWave[5];
     private RectF[]         heatRect         = new RectF[5];
     private LaserBeam[]     mBeam            = new LaserBeam[8];
+    private TimeBomb[]      mBomb            = new TimeBomb[3];
 
     private Point           fingerPosition   = new Point(0,0);
     private Point           destinationPoint = new Point(0,0);
@@ -45,6 +44,7 @@ public class GameView extends SurfaceView {
     private int             heatWaveTimeGap;
     private int             laserBeamMoveCount;
     private int             laserAlphaCount;
+    private int             bombPlantCount;
 
     private boolean         monster_trick_time;
     private boolean         time_to_shoot_bullets;
@@ -53,6 +53,8 @@ public class GameView extends SurfaceView {
     private boolean         heat_waves_on_screen;
     private boolean         time_to_fire_laser;
     private boolean         laser_beam_on_screen;
+    private boolean         time_to_plant_bombs;
+    private boolean         bomb_residue_on_screen;
 
     private SpriteAnimation animation       = new SpriteAnimation(this);
     private Random          random          = new Random();
@@ -87,12 +89,17 @@ public class GameView extends SurfaceView {
             this.mBeam[i] = new LaserBeam();
         }
 
+        for(int i=0; i<3; i++) {
+            this.mBomb[i] = new TimeBomb();
+        }
+
         this.monsterSleepCount      = 1;
         this.rocketXhaustCount      = 1;
         this.bulletFansTimeGap      = 1;
         this.heatWaveTimeGap        = 1;
         this.laserBeamMoveCount     = 1;
         this.laserAlphaCount        = 1;
+        this.bombPlantCount         = 1;
 
         this.monster_trick_time     = false;
         this.time_to_shoot_bullets  = false;
@@ -101,6 +108,8 @@ public class GameView extends SurfaceView {
         this.heat_waves_on_screen   = false;
         this.time_to_fire_laser     = false;
         this.laser_beam_on_screen   = false;
+        this.time_to_plant_bombs    = false;
+        this.bomb_residue_on_screen = false;
 
         this.Score                  = 0.0;
 
@@ -307,6 +316,70 @@ public class GameView extends SurfaceView {
                     destinationPoint = Geometry.setCoordinates(fingerPosition);
                 }
             }
+            else if(mBall.monsterTrickSetDecider == 2 && mBall.monsterAttackTrick == 1) {
+                monsterSleepCount = 1;
+
+                if(time_to_plant_bombs) {
+                    bombPlantCount++;
+                    mBall.attackFingerPosition(destinationPoint, initialPoint);
+                    for(int i=0; i<3; i++) {
+                        if(bombPlantCount > 10*(i+1) && !mBomb[i].is_bomb_planted) {
+                            mBomb[i].initTimeBomb(mBall);
+                            mBomb[i].is_bomb_planted = true;
+                        }
+                        else if(mBomb[i].is_bomb_planted) {
+                            mBomb[i].tickTockCountDown();
+                        }
+                        else if(mBomb[i].timeBombCounter <= 0) {
+                            mBomb[i].increaseBombExplosion();
+                        }
+                    }
+
+                    if (mBall.monsterPosition.x >= mScreenDimension.x || mBall.monsterPosition.x <= 0 ||
+                            mBall.monsterPosition.y >= mScreenDimension.y || mBall.monsterPosition.y <= 0) {
+
+                        // For preventing glitchy movement at the boundary.
+                        if (mBall.monsterPosition.x > mScreenDimension.x) {
+                            mBall.monsterPosition.x = mScreenDimension.x;
+                        } else if (mBall.monsterPosition.x < 0) {
+                            mBall.monsterPosition.x = 0;
+                        } else if (mBall.monsterPosition.y > mScreenDimension.y) {
+                            mBall.monsterPosition.y = mScreenDimension.y;
+                        } else if (mBall.monsterPosition.y < 0) {
+                            mBall.monsterPosition.y = 0;
+                        }
+
+                        if (mBomb[0].is_bomb_planted && mBomb[1].is_bomb_planted && mBomb[2].is_bomb_planted) {
+                            time_to_plant_bombs = false;
+                            bomb_residue_on_screen = true;
+                        }
+                    }
+                }
+                else if(bomb_residue_on_screen) {
+                    for(int i=0; i<3; i++) {
+                        if(mBomb[i].timeBombCounter > 0) {
+                            mBomb[i].tickTockCountDown();
+                        }
+                        else {
+                            mBomb[i].increaseBombExplosion();
+                            if(mBomb[2].bombCurrentRadius == mBomb[2].bombExplosionRadius)
+                                bomb_residue_on_screen = false;
+                        }
+                    }
+                }
+                else {
+                    for(int i=0; i<3; i++) {
+                        mBomb[i].bombPosition.set(mScreenDimension.x + 30, mScreenDimension.y + 30);
+                        mBomb[i].bombCurrentRadius = mBomb[i].bombInitialRadius;
+                    }
+                    bombPlantCount = 1;
+
+                    mBall.monsterAttackTrick = 0;
+                    mBall.monsterVelocity = random.nextInt(20) + 15;
+                    mBall.monsterSleepTime = random.nextInt(10) + 5;
+                    destinationPoint = Geometry.setCoordinates(fingerPosition);
+                }
+            }
             else if(mBall.monsterTrickSetDecider == 2 && mBall.monsterAttackTrick == 2) {
                 monsterSleepCount = 1;
 
@@ -335,7 +408,7 @@ public class GameView extends SurfaceView {
                 monsterSleepCount = 1;
 
                 if (mBall.monsterPosition.x >= mScreenDimension.x || mBall.monsterPosition.x <= 0 ||
-                    mBall.monsterPosition.y >= mScreenDimension.y || mBall.monsterPosition.y <= 0) {
+                        mBall.monsterPosition.y >= mScreenDimension.y || mBall.monsterPosition.y <= 0) {
 
                     // For preventing glitchy movement at the boundary.
                     if (mBall.monsterPosition.x > mScreenDimension.x) {
@@ -387,21 +460,27 @@ public class GameView extends SurfaceView {
             for(int i=0; i<7; i++) {
                 for (int j = 0; j < 3; j++) {
                     canvas.drawCircle((float) mFan[j].bulletPosition[i].x, (float) mFan[j].bulletPosition[i].y,
-                                      (float) mFan[j].bulletsRadius, mFan[j].bulletsPaint);
+                            (float) mFan[j].bulletsRadius, mFan[j].bulletsPaint);
                 }
             }
         }
 
         if(mBeam != null && mBall.monsterTrickSetDecider == 1 && mBall.monsterAttackTrick == 1) {
             if(time_to_fire_laser) {
-                for(int i = 0; i < 8; i++) {
+                for(int i=0; i<8; i++) {
                     canvas.drawLine((float) mBeam[i].center.x, (float) mBeam[i].center.y, (float) mBeam[i].laserDestinationX, (float) mBeam[i].laserDestinationY, mBeam[i].laserBeamPaint);
                 }
             }
             else if (laserBeamMoveCount%2==1 && laser_beam_on_screen) {
-                for(int i = 0; i < 8; i++) {
+                for(int i=0; i<8; i++) {
                     canvas.drawLine((float) mBeam[i].center.x, (float) mBeam[i].center.y, (float) mBeam[i].laserDestinationX, (float) mBeam[i].laserDestinationY, mBeam[i].laserBeamPaint);
                 }
+            }
+        }
+
+        if(mBomb != null && mBall.monsterTrickSetDecider == 2 && mBall.monsterAttackTrick == 1) {
+            for(int i=0; i<3; i++) {
+                canvas.drawCircle(mBomb[i].bombPosition.x, mBomb[i].bombPosition.y, mBomb[i].bombCurrentRadius, mBomb[i].bombPaint);
             }
         }
 
@@ -418,14 +497,17 @@ public class GameView extends SurfaceView {
     public boolean onTouchEvent(MotionEvent event) {
 
         switch(event.getAction()) {
-            case MotionEvent.ACTION_DOWN: is_game_started = true;
+            case MotionEvent.ACTION_DOWN:
+                is_game_started = true;
                 break;
 
-            case MotionEvent.ACTION_UP:   is_game_over = true;
+            case MotionEvent.ACTION_UP:
+                is_game_over = true;
                 tryGameOver();
                 break;
 
-            case MotionEvent.ACTION_MOVE: pFingerPosition  = Geometry.setCoordinates(fingerPosition);
+            case MotionEvent.ACTION_MOVE:
+                pFingerPosition = Geometry.setCoordinates(fingerPosition);
                 fingerPosition.x = (int)event.getX();
                 fingerPosition.y = (int)event.getY();
                 Score+=Geometry.distanceForScore(fingerPosition, pFingerPosition)/10.0;
@@ -458,7 +540,9 @@ public class GameView extends SurfaceView {
         }
         else if(mBall.monsterTrickSetDecider == 2) {
             if(mBall.monsterAttackTrick == 1) {
-                // bomb
+                time_to_plant_bombs = true;
+                initialPoint        = Geometry.setCoordinates(mBall.monsterPosition);
+                destinationPoint    = Geometry.setCoordinates(fingerPosition);
             }
             else if(mBall.monsterAttackTrick == 2) {
                 mRocket.initRocket(mBall);

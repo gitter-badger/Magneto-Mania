@@ -19,6 +19,7 @@ public class TimeBomb {
 
     protected int bombCurrentRadius;
     protected int timeBombCounter;
+    protected boolean is_bomb_planted;
     /**--------------------------------------------------------------------------------------------------**/
 
 
@@ -27,6 +28,7 @@ public class TimeBomb {
         this.bombPosition.x = GameActivity.mScreenSize.x + 30;
         this.bombPosition.y = GameActivity.mScreenSize.y + 30;
 
+        this.is_bomb_planted = false;
         this.bombCurrentRadius = 0;
         bombPaint.setColor(Color.parseColor("#1100DD"));
     }
