@@ -20,12 +20,13 @@ public class MonsterBall {
     protected int monsterSleepTime;
     protected int monsterAttackTrick;
     protected int monsterTrickSetDecider;
+
+    protected Random random = new Random();
     /**--------------------------------------------------------------------------------------------------**/
 
 
     /********************************************* CONSTRUCTOR *********************************************/
     public MonsterBall() {
-        Random random = new Random();
 
         this.monsterPosition.y = random.nextInt(GameActivity.mScreenSize.y + 1);
         this.monsterPosition.x = random.nextInt(2);
@@ -43,8 +44,8 @@ public class MonsterBall {
     /**--------------------------------------------------------------------------------------------------**/
 
 
-    public void attackFingerPosition(Point destinationPoint, Point initialPoint) {
-        Point mVelocityComponent = Geometry.calcVelocityComponents(destinationPoint, initialPoint, monsterVelocity);
+    public void attackFingerPosition() {
+        Point mVelocityComponent = Geometry.calcVelocityComponents(GameView.destinationPoint, GameView.initialPoint, monsterVelocity);
 
             monsterPosition.x += mVelocityComponent.x;
             monsterPosition.y += mVelocityComponent.y;
@@ -53,13 +54,38 @@ public class MonsterBall {
     }
 
 
-    public boolean didMonsterGetTheFinger (Point fingerPosition) {
-        int distance = Geometry.distance(fingerPosition, monsterPosition);
+    public void prepareForSleepAndAttack() {
+        if (monsterPosition.x >= GameActivity.mScreenSize.x || monsterPosition.x <= 0 ||
+            monsterPosition.y >= GameActivity.mScreenSize.y || monsterPosition.y <= 0) {
 
-        if (distance < this.monsterRadius)
-            return true;
-        else
-            return false;
+            // For preventing glitchy movement at the boundary.
+            if (monsterPosition.x > GameActivity.mScreenSize.x) {
+                monsterPosition.x = GameActivity.mScreenSize.x;
+            }
+            else if (monsterPosition.x < 0) {
+                monsterPosition.x = 0;
+            }
+            else if (monsterPosition.y > GameActivity.mScreenSize.y) {
+                monsterPosition.y = GameActivity.mScreenSize.y;
+            }
+            else if (monsterPosition.y < 0) {
+                monsterPosition.y = 0;
+            }
+
+            GameView.destinationPoint = Geometry.setCoordinates(GameView.fingerPosition);
+            GameView.initialPoint     = Geometry.setCoordinates(monsterPosition);
+
+            monsterAttackTrick = 0;
+            monsterVelocity  = random.nextInt(20) + 15;
+            monsterSleepTime = random.nextInt(10) + 5;
+        }
+    }
+
+
+    public boolean didMonsterGetTheFinger() {
+        int distance = Geometry.distance(GameView.fingerPosition, monsterPosition);
+
+        return distance < this.monsterRadius;
     }
 
 }

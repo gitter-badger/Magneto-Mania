@@ -35,13 +35,16 @@ public class Geometry extends Point {
     }
 
 
-    public static void moveMonsterToCenter(MonsterBall monsterBall, Point initialPoint) {
+    public static void moveMonsterToCenter(MonsterBall monsterBall) {
         int distanceFromCenter = Geometry.distance(center, monsterBall.monsterPosition);
         monsterBall.monsterVelocity = 15;
 
-        if(distanceFromCenter > 15)
-            monsterBall.attackFingerPosition(center, initialPoint);
-        else
+        if(distanceFromCenter > 15) {
+            GameView.destinationPoint = Geometry.setCoordinates(center);
+            monsterBall.attackFingerPosition();
+        }
+        else {
             monsterBall.monsterPosition = Geometry.setCoordinates(center);
+        }
     }
 }

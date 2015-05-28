@@ -43,8 +43,8 @@ public class MagnetRocket {
     }
 
 
-    public void rocketTrackFinger(Point fingerPosition) {
-        Point rVelocityComponent = Geometry.calcVelocityComponents(fingerPosition, rocketPosition, rocketVelocity);
+    public void rocketTrackFinger() {
+        Point rVelocityComponent = Geometry.calcVelocityComponents(GameView.fingerPosition, rocketPosition, rocketVelocity);
 
             rocketPosition.x += rVelocityComponent.x;
             rocketPosition.y += rVelocityComponent.y;
@@ -53,8 +53,8 @@ public class MagnetRocket {
     }
 
 
-    public boolean didRocketGetTheFinger (Point fingerPosition) {
-        int distance = Geometry.distance(fingerPosition, rocketPosition);
+    public boolean didRocketGetTheFinger () {
+        int distance = Geometry.distance(GameView.fingerPosition, rocketPosition);
 
         if (distance < this.rocketRadius)
             return true;

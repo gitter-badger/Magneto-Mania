@@ -47,7 +47,7 @@ public class BulletFan {
     /**--------------------------------------------------------------------------------------------------**/
 
 
-    public void initBullets(MonsterBall monsterBall, Point fingerPosition) {
+    public void initBullets(MonsterBall monsterBall) {
 
         for(int i=0; i<7; i++) {
             bulletPosition[i] = Geometry.setCoordinates(monsterBall.monsterPosition);
@@ -55,37 +55,37 @@ public class BulletFan {
         bulletsVelocity = 25;
 
         /*Setting slopeOfPath of central bullet and the extreme bullet. ------------*/
-        slopeOfPathCentre = ((double)(fingerPosition.y - monsterBall.monsterPosition.y))/((double)(fingerPosition.y - monsterBall.monsterPosition.x));
+        slopeOfPathCentre = ((double)(GameView.destinationPoint.y - monsterBall.monsterPosition.y))/((double)(GameView.destinationPoint.y - monsterBall.monsterPosition.x));
         slopeOfPathCorner = (slopeOfPathCentre + 1.73205) / (1.0 - 1.73205*slopeOfPathCentre);
 
 
         /* First Bullet: Making 60 degrees lagging angle with the central bullet. --*/
-        bulletDestination[0].x = (int)(((double)(fingerPosition.y - monsterBall.monsterPosition.y) + ((double)fingerPosition.x / slopeOfPathCentre) + (double)monsterBall.monsterPosition.x * slopeOfPathCorner)/(slopeOfPathCorner + 1.00/slopeOfPathCentre));
-        bulletDestination[0].y = (int)((double)fingerPosition.y + ((double)fingerPosition.x/slopeOfPathCentre) - ((double)bulletDestination[0].x/slopeOfPathCentre));
+        bulletDestination[0].x = (int)(((double)(GameView.destinationPoint.y - monsterBall.monsterPosition.y) + ((double)GameView.destinationPoint.x / slopeOfPathCentre) + (double)monsterBall.monsterPosition.x * slopeOfPathCorner)/(slopeOfPathCorner + 1.00/slopeOfPathCentre));
+        bulletDestination[0].y = (int)((double)GameView.destinationPoint.y + ((double)GameView.destinationPoint.x/slopeOfPathCentre) - ((double)bulletDestination[0].x/slopeOfPathCentre));
 
         /* Second Bullet: Between the central and first bullet. --------------------*/
-        bulletDestination[1].x = (bulletDestination[0].x + fingerPosition.x)/2;
-        bulletDestination[1].y = (bulletDestination[0].y + fingerPosition.y)/2;
+        bulletDestination[1].x = (bulletDestination[0].x + GameView.destinationPoint.x)/2;
+        bulletDestination[1].y = (bulletDestination[0].y + GameView.destinationPoint.y)/2;
 
         /* Third Bullet: Immediately near central bullet, with a lagging angle. ----*/
-        bulletDestination[2].x = (bulletDestination[1].x + fingerPosition.x)/2;
-        bulletDestination[2].y = (bulletDestination[1].y + fingerPosition.y)/2;
+        bulletDestination[2].x = (bulletDestination[1].x + GameView.destinationPoint.x)/2;
+        bulletDestination[2].y = (bulletDestination[1].y + GameView.destinationPoint.y)/2;
 
         /* Fourth Bullet: The Central Bullet. --------------------------------------*/
-        bulletDestination[3].x = fingerPosition.x;
-        bulletDestination[3].y = fingerPosition.y;
+        bulletDestination[3].x = GameView.destinationPoint.x;
+        bulletDestination[3].y = GameView.destinationPoint.y;
 
         /* Fifth Bullet: Immediately near central bullet, with a leading angle. ----*/
-        bulletDestination[4].x = (bulletDestination[3].x + fingerPosition.x)/2;
-        bulletDestination[4].y = (bulletDestination[3].y + fingerPosition.y)/2;
+        bulletDestination[4].x = (bulletDestination[3].x + GameView.destinationPoint.x)/2;
+        bulletDestination[4].y = (bulletDestination[3].y + GameView.destinationPoint.y)/2;
 
         /* Seventh Bullet: Making 60 degrees leading angle with the central bullet. */
-        bulletDestination[6].x = 2*fingerPosition.x - bulletDestination[0].x;
-        bulletDestination[6].y = 2*fingerPosition.y - bulletDestination[0].y;
+        bulletDestination[6].x = 2*GameView.destinationPoint.x - bulletDestination[0].x;
+        bulletDestination[6].y = 2*GameView.destinationPoint.y - bulletDestination[0].y;
 
         /* Sixth Bullet: Between the central and seventh bullet. -------------------*/
-        bulletDestination[5].x = (bulletDestination[6].x + fingerPosition.x)/2;
-        bulletDestination[5].y = (bulletDestination[6].y + fingerPosition.y)/2;
+        bulletDestination[5].x = (bulletDestination[6].x + GameView.destinationPoint.x)/2;
+        bulletDestination[5].y = (bulletDestination[6].y + GameView.destinationPoint.y)/2;
 
         /* Setting distance between the attack point of bullets and destination of bullets, to decide velocity components. */
         for(int i=0; i<7; i++) {
@@ -103,11 +103,11 @@ public class BulletFan {
     }
 
 
-    public boolean didBulletGetTheFinger (Point fingerPosition) {
+    public boolean didBulletGetTheFinger() {
         int distance;
 
         for (int i=0; i<7; i++) {
-            distance = Geometry.distance(bulletPosition[i], fingerPosition);
+            distance = Geometry.distance(bulletPosition[i], GameView.fingerPosition);
 
             if (distance < bulletsRadius)
             return true;

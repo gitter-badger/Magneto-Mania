@@ -56,30 +56,30 @@ public class HeatWave {
     }
 
 
-    public boolean didHeatWaveBurnTheFinger (Point fingerPosition, int waveType) {
-        int distance = Geometry.distance(fingerPosition, heatCenter);
+    public boolean didHeatWaveBurnTheFinger (int waveType) {
+        int distance = Geometry.distance(GameView.fingerPosition, heatCenter);
         
-        double slope = (double)(fingerPosition.y - heatCenter.y) / (double)(fingerPosition.x - heatCenter.x);
+        double slope = (double)(GameView.fingerPosition.y - heatCenter.y) / (double)(GameView.fingerPosition.x - heatCenter.x);
         double tan30 = 0.57735;
         double tan60 = 1.73205;
 
         if (distance <= heatWaveRadius+3 && distance >= heatWaveRadius-9) {
             if(waveType == 1) {
-                if(fingerPosition.x > heatCenter.x && fingerPosition.y > heatCenter.y) {
+                if(GameView.fingerPosition.x > heatCenter.x && GameView.fingerPosition.y > heatCenter.y) {
                     if(slope > tan30 && slope < tan60)
                         return true;
                 }
-                else if(fingerPosition.x < heatCenter.x && fingerPosition.y > heatCenter.y) {
+                else if(GameView.fingerPosition.x < heatCenter.x && GameView.fingerPosition.y > heatCenter.y) {
                     if(slope < -tan60)
                         return true;
                     if(slope > -tan30 && slope < 0)
                         return true;
                 }
-                else if(fingerPosition.x < heatCenter.x && fingerPosition.y < heatCenter.y) {
+                else if(GameView.fingerPosition.x < heatCenter.x && GameView.fingerPosition.y < heatCenter.y) {
                     if(slope > tan30 && slope < tan60)
                         return true;
                 }
-                else if(fingerPosition.x > heatCenter.x && fingerPosition.y < heatCenter.y) {
+                else if(GameView.fingerPosition.x > heatCenter.x && GameView.fingerPosition.y < heatCenter.y) {
                     if(slope < -tan60)
                         return true;
                     if(slope > -tan30 && slope < 0)
@@ -87,23 +87,23 @@ public class HeatWave {
                 }
             }
             else {
-                if(fingerPosition.x > heatCenter.x && fingerPosition.y > heatCenter.y) {
+                if(GameView.fingerPosition.x > heatCenter.x && GameView.fingerPosition.y > heatCenter.y) {
                     if(slope > 0 && slope < tan30)
                         return true;
                     if(slope > tan60)
                         return true;
                 }
-                else if(fingerPosition.x < heatCenter.x && fingerPosition.y > heatCenter.y) {
+                else if(GameView.fingerPosition.x < heatCenter.x && GameView.fingerPosition.y > heatCenter.y) {
                     if(slope < -tan30 && slope > -tan60)
                         return true;
                 }
-                else if(fingerPosition.x < heatCenter.x && fingerPosition.y < heatCenter.y) {
+                else if(GameView.fingerPosition.x < heatCenter.x && GameView.fingerPosition.y < heatCenter.y) {
                     if(slope > 0 && slope < tan30)
                         return true;
                     if(slope > tan60)
                         return true;
                 }
-                else if(fingerPosition.x > heatCenter.x && fingerPosition.y < heatCenter.y) {
+                else if(GameView.fingerPosition.x > heatCenter.x && GameView.fingerPosition.y < heatCenter.y) {
                     if(slope < -tan30 && slope > -tan60)
                         return true;
                 }
