@@ -8,7 +8,6 @@ import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Point;
 import android.graphics.RectF;
-import android.util.Log;
 import android.view.MotionEvent;
 import android.view.SurfaceHolder;
 import android.view.SurfaceView;
@@ -59,7 +58,7 @@ public class GameView extends SurfaceView {
     private Random          random          = new Random();
 
     private Point           pFingerPosition = new Point(0,0);
-    private double          Score;
+    public static double    Score;
     /**---------------------------------------------------------------------------------------------------**/
 
 
@@ -509,8 +508,6 @@ public class GameView extends SurfaceView {
         mBall.monsterTrickSetDecider = ++mBall.monsterTrickSetDecider % 3;
         mBall.monsterAttackTrick     = random.nextInt(2) + 1;
 
-        mThread.setFPS(35);
-
         if(mBall.monsterTrickSetDecider == 0) {
             if(mBall.monsterAttackTrick == 1) {
                 time_for_some_heat = true;
@@ -524,7 +521,7 @@ public class GameView extends SurfaceView {
                 time_to_fire_laser = true;
             }
             else if(mBall.monsterAttackTrick == 2) {
-                mThread.setFPS(100);
+                mThread.setFPS(50);
             }
         }
         else if(mBall.monsterTrickSetDecider == 2) {

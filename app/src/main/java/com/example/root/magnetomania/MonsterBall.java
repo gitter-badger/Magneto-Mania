@@ -15,7 +15,7 @@ public class MonsterBall {
     protected int monsterVelocity;
 
     protected Paint monsterPaint = new Paint();
-    protected final int monsterRadius = 100;
+    protected final int monsterRadius = (int)(Math.sqrt(Geometry.area(GameActivity.mScreenSize)/ (12*Math.PI)));
 
     protected int monsterSleepTime;
     protected int monsterAttackTrick;
@@ -34,8 +34,8 @@ public class MonsterBall {
         if(this.monsterPosition.x == 1)
         this.monsterPosition.x = GameActivity.mScreenSize.x;
 
-        this.monsterVelocity = random.nextInt(10) + 15;
-        this.monsterSleepTime = random.nextInt(10) + 10;
+        this.monsterVelocity = random.nextInt(20) + 10 + (int)(GameView.Score / 100);
+        this.monsterSleepTime = random.nextInt(15) + 15;
 
         this.monsterAttackTrick = 0;
         this.monsterTrickSetDecider = 0;
@@ -76,8 +76,8 @@ public class MonsterBall {
             GameView.initialPoint     = Geometry.setCoordinates(monsterPosition);
 
             monsterAttackTrick = 0;
-            monsterVelocity  = random.nextInt(20) + 15;
-            monsterSleepTime = random.nextInt(10) + 5;
+            monsterVelocity  = random.nextInt(20) + 10 + (int)(GameView.Score / 100);
+            monsterSleepTime = random.nextInt(15) + 15;
         }
     }
 
