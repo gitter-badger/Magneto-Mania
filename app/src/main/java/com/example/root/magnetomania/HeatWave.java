@@ -23,7 +23,7 @@ public class HeatWave {
     public HeatWave() {
         this.heatCenter.x = GameActivity.mScreenSize.x + 80;
         this.heatCenter.y = GameActivity.mScreenSize.y + 80;
-        this.heatWaveVelocity = 12;
+        this.heatWaveVelocity = 6;
         this.heatWaveRadius = 0;
         this.heatWavePaint.setColor(Color.YELLOW);
     }
@@ -33,6 +33,7 @@ public class HeatWave {
     public void initHeatWave(MonsterBall monsterBall) {
         heatCenter = Geometry.setCoordinates(monsterBall.monsterPosition);
         heatWaveRadius = 0;
+        heatWaveVelocity = 6 + (int)(GameView.Score / 500);
     }
 
 
@@ -63,7 +64,7 @@ public class HeatWave {
         double tan30 = 0.57735;
         double tan60 = 1.73205;
 
-        if (distance <= heatWaveRadius+3 && distance >= heatWaveRadius-9) {
+        if (distance <= heatWaveRadius && distance >= heatWaveRadius-2) {
             if(waveType == 1) {
                 if(GameView.fingerPosition.x > heatCenter.x && GameView.fingerPosition.y > heatCenter.y) {
                     if(slope > tan30 && slope < tan60)

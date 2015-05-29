@@ -176,28 +176,28 @@ public class GameView extends SurfaceView {
                     }
                 }
 
+                for(int i=0; i<5; i++) {
+                    /*** Condition of game over when finger touches the heat wave. ***/
+                    /***/is_game_over = mWave[i].didHeatWaveBurnTheFinger((i+1)%2);
+                    /***/if (is_game_over)
+                    /***/ tryGameOver();
+                }
+
                 if(heat_waves_on_screen) {
                     heatWaveTimeGap++;
                     heatRect[0] = mWave[0].setHeatWaveSize(mBall.monsterPosition);
 
-                    if(heatWaveTimeGap > 12)
+                    if(heatWaveTimeGap > 20)
                         heatRect[1] = mWave[1].setHeatWaveSize(mBall.monsterPosition);
 
-                    if(heatWaveTimeGap > 24)
+                    if(heatWaveTimeGap > 40)
                         heatRect[2] = mWave[2].setHeatWaveSize(mBall.monsterPosition);
 
-                    if(heatWaveTimeGap > 36)
+                    if(heatWaveTimeGap > 60)
                         heatRect[3] = mWave[3].setHeatWaveSize(mBall.monsterPosition);
 
-                    if(heatWaveTimeGap > 48)
+                    if(heatWaveTimeGap > 80)
                         heatRect[4] = mWave[4].setHeatWaveSize(mBall.monsterPosition);
-
-                    for(int i=0; i<5; i++) {
-                        /*** Condition of game over when finger touches the heat wave. ***/
-                        /***/is_game_over = mWave[i].didHeatWaveBurnTheFinger((i+1)%2);
-                        /***/if (is_game_over)
-                        /***/ tryGameOver();
-                    }
 
                     if(mWave[4].heatWaveRadius > 3*GameActivity.mScreenSize.y/2)
                         heat_waves_on_screen = false;
@@ -401,11 +401,6 @@ public class GameView extends SurfaceView {
                     mRocket.rocketXhaustTime = 0;
 
                     mBall.prepareForSleepAndAttack();
-                    Log.i("monsterPosition.x", ""+mBall.monsterPosition.x);
-                    Log.i("mScreenSize.x", ""+GameActivity.mScreenSize.x);
-                    Log.i("mScreenSize.y", ""+GameActivity.mScreenSize.y);
-                    Log.i("monsterPosition.y", ""+mBall.monsterPosition.y);
-                    Log.i("monsterSleepTime", ""+mBall.monsterSleepTime);
                     mBall.attackFingerPosition();
                 }
             }
@@ -425,16 +420,16 @@ public class GameView extends SurfaceView {
 
             mWave[0].drawHeatWave(canvas, heatRect[0], 30);
 
-            if(heatWaveTimeGap > 12)
+            if(heatWaveTimeGap > 20)
                 mWave[1].drawHeatWave(canvas, heatRect[1], 0);
 
-            if(heatWaveTimeGap > 24)
+            if(heatWaveTimeGap > 40)
                 mWave[2].drawHeatWave(canvas, heatRect[2], 30);
 
-            if(heatWaveTimeGap > 36)
+            if(heatWaveTimeGap > 60)
                 mWave[3].drawHeatWave(canvas, heatRect[3], 0);
 
-            if(heatWaveTimeGap > 48)
+            if(heatWaveTimeGap > 80)
                 mWave[4].drawHeatWave(canvas, heatRect[4], 30);
         }
 
@@ -504,6 +499,13 @@ public class GameView extends SurfaceView {
                 }
                 if(fingerPosition.y > GameActivity.mScreenSize.y -15) {
                     fingerPosition.y = GameActivity.mScreenSize.y - 15;
+                }
+
+                for(int i=0; i<5; i++) {
+                    /*** Condition of game over when finger touches the heat wave. ***/
+                    /***/is_game_over = mWave[i].didHeatWaveBurnTheFinger((i+1)%2);
+                    /***/if (is_game_over)
+                    /***/ tryGameOver();
                 }
 
                 Score+=Geometry.distanceForScore(fingerPosition, pFingerPosition)/10.0;
