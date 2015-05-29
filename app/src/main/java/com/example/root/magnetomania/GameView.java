@@ -8,6 +8,7 @@ import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Point;
 import android.graphics.RectF;
+import android.util.Log;
 import android.view.MotionEvent;
 import android.view.SurfaceHolder;
 import android.view.SurfaceView;
@@ -156,7 +157,6 @@ public class GameView extends SurfaceView {
                     }
                     else {
                         mBall.monsterAttackTrick = 0;
-                        mThread.setFPS(100);
                         monster_trick_time = true;
                     }
                     monsterSleepCount++;
@@ -302,8 +302,11 @@ public class GameView extends SurfaceView {
                     }
                 }
                 else {
+                    if (mBall.monsterPosition.x <= GameActivity.mScreenSize.x || mBall.monsterPosition.x <= 0 ||
+                        mBall.monsterPosition.y <= GameActivity.mScreenSize.y || mBall.monsterPosition.y <= 0) {
+                        mBall.attackFingerPosition();
+                    }
                     mBall.prepareForSleepAndAttack();
-                    mBall.attackFingerPosition();
                 }
             }
             else if(mBall.monsterTrickSetDecider == 2 && mBall.monsterAttackTrick == 1) {
@@ -398,6 +401,11 @@ public class GameView extends SurfaceView {
                     mRocket.rocketXhaustTime = 0;
 
                     mBall.prepareForSleepAndAttack();
+                    Log.i("monsterPosition.x", ""+mBall.monsterPosition.x);
+                    Log.i("mScreenSize.x", ""+GameActivity.mScreenSize.x);
+                    Log.i("mScreenSize.y", ""+GameActivity.mScreenSize.y);
+                    Log.i("monsterPosition.y", ""+mBall.monsterPosition.y);
+                    Log.i("monsterSleepTime", ""+mBall.monsterSleepTime);
                     mBall.attackFingerPosition();
                 }
             }
@@ -462,7 +470,7 @@ public class GameView extends SurfaceView {
             canvas.drawCircle((float)mRocket.rocketPosition.x, (float)mRocket.rocketPosition.y, (float)mRocket.rocketRadius, mRocket.rocketPaint);
         }
 
-        canvas.drawCircle((float)mBall.monsterPosition.x, (float) mBall.monsterPosition.y, (float)mBall.monsterRadius, mBall.monsterPaint);
+        canvas.drawCircle((float) mBall.monsterPosition.x, (float) mBall.monsterPosition.y, (float) mBall.monsterRadius, mBall.monsterPaint);
         canvas.drawText(Integer.toString((int) Score), 5, 5, mBall.monsterPaint);
     }
 
@@ -532,7 +540,6 @@ public class GameView extends SurfaceView {
             }
             else if(mBall.monsterAttackTrick == 2) {
                 mRocket.initRocket(mBall);
-                mThread.setFPS(40);
             }
         }
     }

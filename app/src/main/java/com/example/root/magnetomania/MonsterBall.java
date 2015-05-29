@@ -12,10 +12,10 @@ public class MonsterBall {
 
     /******************************************** CLASS MEMBERS ********************************************/
     protected Point monsterPosition = new Point(0,0);
-    protected int monsterVelocity;
+    protected double monsterVelocity;
 
     protected Paint monsterPaint = new Paint();
-    protected final int monsterRadius = (int)(Math.sqrt(Geometry.area(GameActivity.mScreenSize)/ (12*Math.PI)));
+    protected final int monsterRadius = (int)(Math.sqrt(Geometry.area(GameActivity.mScreenSize) / (12 * Math.PI)));
 
     protected int monsterSleepTime;
     protected int monsterAttackTrick;
@@ -34,7 +34,7 @@ public class MonsterBall {
         if(this.monsterPosition.x == 1)
         this.monsterPosition.x = GameActivity.mScreenSize.x;
 
-        this.monsterVelocity = random.nextInt(20) + 10 + (int)(GameView.Score / 100);
+        this.monsterVelocity = random.nextInt(20) + 15 + (int)(GameView.Score / 500);
         this.monsterSleepTime = random.nextInt(15) + 15;
 
         this.monsterAttackTrick = 0;
@@ -45,8 +45,9 @@ public class MonsterBall {
 
 
     public void attackFingerPosition() {
-        Point mVelocityComponent = Geometry.calcVelocityComponents(GameView.destinationPoint, GameView.initialPoint, monsterVelocity);
+        Point mVelocityComponent = Geometry.calcVelocityComponents(GameView.destinationPoint, GameView.initialPoint, (int)monsterVelocity);
 
+            monsterVelocity   -= 0.05;
             monsterPosition.x += mVelocityComponent.x;
             monsterPosition.y += mVelocityComponent.y;
 
@@ -55,8 +56,8 @@ public class MonsterBall {
 
 
     public void prepareForSleepAndAttack() {
-        if (monsterPosition.x >= GameActivity.mScreenSize.x || monsterPosition.x <= 0 ||
-            monsterPosition.y >= GameActivity.mScreenSize.y || monsterPosition.y <= 0) {
+        if (monsterPosition.x >= GameActivity.mScreenSize.x-20 || monsterPosition.x <= 20 ||
+            monsterPosition.y >= GameActivity.mScreenSize.y-20 || monsterPosition.y <= 20) {
 
             // For preventing glitchy movement at the boundary.
             if (monsterPosition.x > GameActivity.mScreenSize.x) {
