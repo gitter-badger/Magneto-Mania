@@ -144,8 +144,10 @@ public class GameView extends SurfaceView {
         if(is_game_started) {
             /*** Condition of game over when finger touches the monster ball. ***/
             /***/   is_game_over = mBall.didMonsterGetTheFinger();
-            /***/   if(is_game_over)
-            /***/   tryGameOver();
+            /***/   if(is_game_over) {
+            /***/       tryGameOver();
+            /***/       System.exit(0);
+            }
 
             if(monsterSleepCount <= mBall.monsterSleepTime) {
                 monsterSleepCount++;
@@ -176,12 +178,6 @@ public class GameView extends SurfaceView {
                     }
                 }
 
-                for(int i=0; i<5; i++) {
-                    /*** Condition of game over when finger touches the heat wave. ***/
-                    /***/is_game_over = mWave[i].didHeatWaveBurnTheFinger((i+1)%2);
-                    /***/if (is_game_over)
-                    /***/ tryGameOver();
-                }
 
                 if(heat_waves_on_screen) {
                     heatWaveTimeGap++;
@@ -213,8 +209,10 @@ public class GameView extends SurfaceView {
                 for(int i=0; i<3; i++) {
                     /*** Conditon of game over when finger touches the bullet. ***/
                     /***/is_game_over = mFan[i].didBulletGetTheFinger();
-                    /***/if (is_game_over)
-                    /***/ tryGameOver();
+                    /***/if (is_game_over) {
+                    /***/    tryGameOver();
+                    /***/    System.exit(0);
+                    }
                 }
 
                 if(time_to_shoot_bullets) {
@@ -315,8 +313,10 @@ public class GameView extends SurfaceView {
                 for(int i=0; i<3; i++) {
                     /*** Conditon of game over when finger touches the bomb. ***/
                     /***/is_game_over = mBomb[i].didFingerBecameVictimOfBombBlast();
-                    /***/if (is_game_over)
-                    /***/ tryGameOver();
+                    /***/if (is_game_over) {
+                    /***/   tryGameOver();
+                    /***/   System.exit(0);
+                    }
                 }
 
                 if(time_to_plant_bombs) {
@@ -386,9 +386,11 @@ public class GameView extends SurfaceView {
                 monsterSleepCount = 1;
 
                 /*** Condition of game over when finger touches the rocket. ***/
-                /***/   is_game_over = mRocket.didRocketGetTheFinger();
-                /***/   if(is_game_over)
-                /***/   tryGameOver();
+                /***/is_game_over = mRocket.didRocketGetTheFinger();
+                /***/if(is_game_over) {
+                /***/    tryGameOver();
+                /***/    System.exit(0);
+                     }
 
                 if(rocketXhaustCount <= mRocket.rocketXhaustTime) {
                     mRocket.rocketTrackFinger();
@@ -401,6 +403,7 @@ public class GameView extends SurfaceView {
                     mRocket.rocketXhaustTime = 0;
 
                     mBall.prepareForSleepAndAttack();
+                    mBall.monsterSleepTime = random.nextInt(15) + 15;
                     mBall.attackFingerPosition();
                 }
             }
@@ -504,8 +507,10 @@ public class GameView extends SurfaceView {
                 for(int i=0; i<5; i++) {
                     /*** Condition of game over when finger touches the heat wave. ***/
                     /***/is_game_over = mWave[i].didHeatWaveBurnTheFinger((i+1)%2);
-                    /***/if (is_game_over)
-                    /***/ tryGameOver();
+                    /***/if (is_game_over) {
+                    /***/   tryGameOver();
+                    /***/   System.exit(0);
+                    }
                 }
 
                 Score+=Geometry.distanceForScore(fingerPosition, pFingerPosition)/10.0;

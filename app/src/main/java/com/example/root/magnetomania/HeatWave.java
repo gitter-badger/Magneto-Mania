@@ -64,7 +64,7 @@ public class HeatWave {
         double tan30 = 0.57735;
         double tan60 = 1.73205;
 
-        if (distance <= heatWaveRadius && distance >= heatWaveRadius-2) {
+        if (distance <= heatWaveRadius && distance >= heatWaveRadius-3) {
             if(waveType == 1) {
                 if(GameView.fingerPosition.x > heatCenter.x && GameView.fingerPosition.y > heatCenter.y) {
                     if(slope > tan30 && slope < tan60)

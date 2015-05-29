@@ -56,8 +56,8 @@ public class MonsterBall {
 
 
     public void prepareForSleepAndAttack() {
-        if (monsterPosition.x >= GameActivity.mScreenSize.x-20 || monsterPosition.x <= 20 ||
-            monsterPosition.y >= GameActivity.mScreenSize.y-20 || monsterPosition.y <= 20) {
+        if (monsterPosition.x >= GameActivity.mScreenSize.x-5 || monsterPosition.x <= 5 ||
+            monsterPosition.y >= GameActivity.mScreenSize.y-5 || monsterPosition.y <= 5) {
 
             // For preventing glitchy movement at the boundary.
             if (monsterPosition.x > GameActivity.mScreenSize.x) {
