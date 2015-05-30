@@ -232,28 +232,31 @@ public class GameView extends SurfaceView {
                     bulletFansTimeGap++;
                     mFan[0].setDirectionAndShoot();
 
-                    if(bulletFansTimeGap>5)
+                    if(bulletFansTimeGap>7)
                         mFan[1].setDirectionAndShoot();
 
-                    if(bulletFansTimeGap>10)
+                    if(bulletFansTimeGap>14)
                         mFan[2].setDirectionAndShoot();
 
                     int howManyBulletsOnScreen = 0;
 
                     for(int i=0; i<3; i++) {
-                        for(int j=0; j<7; j++) {
-                            if ((mFan[i].bulletPosition[j].x >= GameActivity.mScreenSize.x-10 || mFan[i].bulletPosition[j].x <= 10) &&
-                                (mFan[i].bulletPosition[j].y >= GameActivity.mScreenSize.y-10 || mFan[i].bulletPosition[j].y <= 10))
+                        for (int j = 0; j < 7; j++) {
+                            if (mFan[i].bulletPosition[j].x >= GameActivity.mScreenSize.x+25 || mFan[i].bulletPosition[j].x <= -25 ||
+                                mFan[i].bulletPosition[j].y >= GameActivity.mScreenSize.y+25 || mFan[i].bulletPosition[j].y <= -25) {
                                 howManyBulletsOnScreen++;
+                            }
                         }
                     }
 
-                    if(howManyBulletsOnScreen >= 16)
+                    if(howManyBulletsOnScreen == 21) {
                         bullets_on_screen = false;
+                    }
                 }
                 else {
                     mBall.prepareForSleepAndAttack();
-                    mBall.attackFingerPosition();
+                    mBall.monsterSleepTime = random.nextInt(15) + 15;
+
                 }
             }
             else if (mBall.monsterTrickSetDecider == 1 && mBall.monsterAttackTrick == 1) {

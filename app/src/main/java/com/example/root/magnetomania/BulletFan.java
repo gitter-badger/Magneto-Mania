@@ -21,7 +21,7 @@ public class BulletFan {
     protected double    bulletsVelocity;
 
     protected Paint     bulletsPaint        = new Paint();
-    protected final int bulletsRadius = 20;
+    protected final int bulletsRadius = (int)(Math.sqrt(Geometry.area(GameActivity.mScreenSize) / (300 * Math.PI)));
     /**--------------------------------------------------------------------------------------------------**/
 
 
@@ -52,43 +52,62 @@ public class BulletFan {
         for(int i=0; i<7; i++) {
             bulletPosition[i] = Geometry.setCoordinates(monsterBall.monsterPosition);
         }
-        bulletsVelocity = 25;
+        bulletsVelocity = 20;
 
         /*Setting slopeOfPath of central bullet and the extreme bullet. ------------*/
         slopeOfPathCentre = ((double)(GameView.destinationPoint.y - monsterBall.monsterPosition.y))/((double)(GameView.destinationPoint.y - monsterBall.monsterPosition.x));
         slopeOfPathCorner = (slopeOfPathCentre + 1.73205) / (1.0 - 1.73205*slopeOfPathCentre);
 
 
-        /* First Bullet: Making 60 degrees lagging angle with the central bullet. --*/
+        /* First(index 0) Bullet: Making 60 degrees lagging angle with the central bullet. --*/
         bulletDestination[0].x = (int)(((double)(GameView.destinationPoint.y - monsterBall.monsterPosition.y) + ((double)GameView.destinationPoint.x / slopeOfPathCentre) + (double)monsterBall.monsterPosition.x * slopeOfPathCorner)/(slopeOfPathCorner + 1.00/slopeOfPathCentre));
         bulletDestination[0].y = (int)((double)GameView.destinationPoint.y + ((double)GameView.destinationPoint.x/slopeOfPathCentre) - ((double)bulletDestination[0].x/slopeOfPathCentre));
 
-        /* Second Bullet: Between the central and first bullet. --------------------*/
-        bulletDestination[1].x = (bulletDestination[0].x + GameView.destinationPoint.x)/2;
-        bulletDestination[1].y = (bulletDestination[0].y + GameView.destinationPoint.y)/2;
-
-        /* Third Bullet: Immediately near central bullet, with a lagging angle. ----*/
-        bulletDestination[2].x = (bulletDestination[1].x + GameView.destinationPoint.x)/2;
-        bulletDestination[2].y = (bulletDestination[1].y + GameView.destinationPoint.y)/2;
-
-        /* Fourth Bullet: The Central Bullet. --------------------------------------*/
+        /* Fourth(index 3) Bullet: The Central Bullet. --------------------------------------*/
         bulletDestination[3].x = GameView.destinationPoint.x;
         bulletDestination[3].y = GameView.destinationPoint.y;
 
-        /* Fifth Bullet: Immediately near central bullet, with a leading angle. ----*/
-        bulletDestination[4].x = (bulletDestination[3].x + GameView.destinationPoint.x)/2;
-        bulletDestination[4].y = (bulletDestination[3].y + GameView.destinationPoint.y)/2;
-
-        /* Seventh Bullet: Making 60 degrees leading angle with the central bullet. */
+        /* Seventh(index 6) Bullet: Making 60 degrees leading angle with the central bullet. */
         bulletDestination[6].x = 2*GameView.destinationPoint.x - bulletDestination[0].x;
         bulletDestination[6].y = 2*GameView.destinationPoint.y - bulletDestination[0].y;
 
-        /* Sixth Bullet: Between the central and seventh bullet. -------------------*/
-        bulletDestination[5].x = (bulletDestination[6].x + GameView.destinationPoint.x)/2;
-        bulletDestination[5].y = (bulletDestination[6].y + GameView.destinationPoint.y)/2;
+        /* Second(index 1) Bullet: Between the central and first bullet. --------------------*/
+        bulletDestination[1].x = (bulletDestination[0].x + bulletDestination[3].x)/3;
+        bulletDestination[1].y = (bulletDestination[0].y + bulletDestination[3].y)/3;
+
+        /* Sixth(index 5) Bullet: Between the central and seventh bullet. -------------------*/
+        bulletDestination[5].x = (bulletDestination[6].x + bulletDestination[3].x)/3;
+        bulletDestination[5].y = (bulletDestination[6].y + bulletDestination[3].y)/3;
+
+        int distance01 = Geometry.distance(bulletDestination[0], bulletDestination[1]);
+        int distance31 = Geometry.distance(bulletDestination[3], bulletDestination[1]);
+
+        /* Third(index 2) Bullet: Immediately near central bullet, with a lagging angle. ----*/
+        if(distance01 > distance31) {
+            bulletDestination[2].x = (bulletDestination[0].x + bulletDestination[1].x)/2;
+            bulletDestination[2].y = (bulletDestination[0].y + bulletDestination[1].y)/2;
+        }
+        else {
+            bulletDestination[2].x = (bulletDestination[3].x + bulletDestination[1].x)/2;
+            bulletDestination[2].y = (bulletDestination[3].y + bulletDestination[1].y)/2;
+        }
+
+        int distance65 = Geometry.distance(bulletDestination[6], bulletDestination[5]);
+        int distance35 = Geometry.distance(bulletDestination[3], bulletDestination[5]);
+
+        /* Fifth(index 4) Bullet: Immediately near central bullet, with a leading angle. ----*/
+        if(distance65 > distance35) {
+            bulletDestination[4].x = (bulletDestination[6].x + bulletDestination[5].x)/2;
+            bulletDestination[4].y = (bulletDestination[6].y + bulletDestination[5].y)/2;
+        }
+        else {
+            bulletDestination[4].x = (bulletDestination[3].x + bulletDestination[5].x)/2;
+            bulletDestination[4].y = (bulletDestination[3].y + bulletDestination[5].y)/2;
+        }
+
 
         /* Setting distance between the attack point of bullets and destination of bullets, to decide velocity components. */
-        for(int i=0; i<7; i++) {
+        for(int i = 0; i < 7; i++) {
             bulletVelocity[i] = Geometry.calcVelocityComponents(bulletDestination[i], monsterBall.monsterPosition, (int)bulletsVelocity);
         }
     }
