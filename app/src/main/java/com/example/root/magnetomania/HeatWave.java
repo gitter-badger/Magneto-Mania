@@ -5,7 +5,7 @@ import android.graphics.Color;
 import android.graphics.Paint;
 import android.graphics.Point;
 import android.graphics.RectF;
-
+import android.util.Log;
 
 
 public class HeatWave {
@@ -60,57 +60,22 @@ public class HeatWave {
     public boolean didHeatWaveBurnTheFinger (int waveType) {
         int distance = Geometry.distance(GameView.fingerPosition, heatCenter);
         
-        double slope = (double)(GameView.fingerPosition.y - heatCenter.y) / (double)(GameView.fingerPosition.x - heatCenter.x);
-        double tan30 = 0.57735;
-        double tan60 = 1.73205;
+        double angle = Math.atan2((double)(GameView.fingerPosition.y - heatCenter.y), (double)(GameView.fingerPosition.x - heatCenter.x))*180/Math.PI;
+
+        Log.i("distance", ""+distance);
+        Log.i("radius", ""+heatWaveRadius);
+        Log.i("angle",""+angle);
 
         if (distance <= heatWaveRadius && distance >= heatWaveRadius-3) {
             if(waveType == 1) {
-                if(GameView.fingerPosition.x > heatCenter.x && GameView.fingerPosition.y > heatCenter.y) {
-                    if(slope > tan30 && slope < tan60)
-                        return true;
-                }
-                else if(GameView.fingerPosition.x < heatCenter.x && GameView.fingerPosition.y > heatCenter.y) {
-                    if(slope < -tan60)
-                        return true;
-                    if(slope > -tan30 && slope < 0)
-                        return true;
-                }
-                else if(GameView.fingerPosition.x < heatCenter.x && GameView.fingerPosition.y < heatCenter.y) {
-                    if(slope > tan30 && slope < tan60)
-                        return true;
-                }
-                else if(GameView.fingerPosition.x > heatCenter.x && GameView.fingerPosition.y < heatCenter.y) {
-                    if(slope < -tan60)
-                        return true;
-                    if(slope > -tan30 && slope < 0)
-                        return true;
-                }
+                return ((angle > 30 && angle < 60)  || (angle > 90  && angle < 120) || (angle > 150  && angle < 180) ||
+                        (angle < 0  && angle > -30) || (angle < -60 && angle > -90) || (angle < -120 && angle > -150));
             }
             else {
-                if(GameView.fingerPosition.x > heatCenter.x && GameView.fingerPosition.y > heatCenter.y) {
-                    if(slope > 0 && slope < tan30)
-                        return true;
-                    if(slope > tan60)
-                        return true;
-                }
-                else if(GameView.fingerPosition.x < heatCenter.x && GameView.fingerPosition.y > heatCenter.y) {
-                    if(slope < -tan30 && slope > -tan60)
-                        return true;
-                }
-                else if(GameView.fingerPosition.x < heatCenter.x && GameView.fingerPosition.y < heatCenter.y) {
-                    if(slope > 0 && slope < tan30)
-                        return true;
-                    if(slope > tan60)
-                        return true;
-                }
-                else if(GameView.fingerPosition.x > heatCenter.x && GameView.fingerPosition.y < heatCenter.y) {
-                    if(slope < -tan30 && slope > -tan60)
-                        return true;
-                }
+                return (angle > 0   && angle < 30)  || (angle > 60  && angle < 90)   || (angle > 120 && angle < 150) ||
+                       (angle < -30 && angle > -60) || (angle < -90 && angle > -120) || (angle < -150 && angle > -180);
             }
         }
         return false;
     }
-
 }

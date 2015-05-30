@@ -504,12 +504,14 @@ public class GameView extends SurfaceView {
                     fingerPosition.y = GameActivity.mScreenSize.y - 15;
                 }
 
-                for(int i=0; i<5; i++) {
-                    /*** Condition of game over when finger touches the heat wave. ***/
-                    /***/is_game_over = mWave[i].didHeatWaveBurnTheFinger((i+1)%2);
-                    /***/if (is_game_over) {
-                    /***/   tryGameOver();
-                    /***/   System.exit(0);
+                if(mWave != null && mBall.monsterTrickSetDecider == 0 && mBall.monsterAttackTrick == 1) {
+                    for (int i = 0; i < 5; i++) {
+                        /*** Condition of game over when finger touches the heat wave. ***/
+                        /***/is_game_over = mWave[i].didHeatWaveBurnTheFinger((i + 1) % 2);
+                        /***/if (is_game_over) {
+                        /***/   tryGameOver();
+                        /***/   System.exit(0);
+                        }
                     }
                 }
 
