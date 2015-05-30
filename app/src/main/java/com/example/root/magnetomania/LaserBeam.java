@@ -72,4 +72,12 @@ public class LaserBeam {
                     break;
         }
     }
+
+
+    public boolean didLaserBeamPenetrateTheFinger() {
+        int destinationToCenterAngle = (int)(Math.atan2(laserDestinationY - center.y, laserDestinationX - center.x)*180/Math.PI);
+        int fingerToCenterAngle = (int)(Math.atan2(GameView.fingerPosition.y - center.y, GameView.fingerPosition.x - center.x)*180/Math.PI);
+
+        return (fingerToCenterAngle < destinationToCenterAngle + 3 && fingerToCenterAngle > destinationToCenterAngle - 3);
+    }
 }

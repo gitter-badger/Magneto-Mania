@@ -284,7 +284,7 @@ public class GameView extends SurfaceView {
                 else if(laser_beam_on_screen) {
                     laserBeamMoveCount++;
 
-                    if(laserBeamMoveCount < 200) {
+                    if(laserBeamMoveCount < 175) {
                         if(laserBeamMoveCount % 25 == 0) {
                             for(int i=0; i<8; i++) {
                                 mBeam[i].initLaserBeam(i);
@@ -508,6 +508,17 @@ public class GameView extends SurfaceView {
                     for (int i = 0; i < 5; i++) {
                         /*** Condition of game over when finger touches the heat wave. ***/
                         /***/is_game_over = mWave[i].didHeatWaveBurnTheFinger((i + 1) % 2);
+                        /***/if (is_game_over) {
+                        /***/   tryGameOver();
+                        /***/   System.exit(0);
+                        }
+                    }
+                }
+
+                if(mBeam != null && mBall.monsterTrickSetDecider == 1 && mBall.monsterAttackTrick == 1 && laser_beam_on_screen) {
+                    for (int i = 0; i < 8; i++) {
+                        /*** Condition of game over when finger touches the laser beam. ***/
+                        /***/is_game_over = mBeam[i].didLaserBeamPenetrateTheFinger();
                         /***/if (is_game_over) {
                         /***/   tryGameOver();
                         /***/   System.exit(0);

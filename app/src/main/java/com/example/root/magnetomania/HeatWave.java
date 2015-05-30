@@ -59,12 +59,7 @@ public class HeatWave {
 
     public boolean didHeatWaveBurnTheFinger (int waveType) {
         int distance = Geometry.distance(GameView.fingerPosition, heatCenter);
-        
-        double angle = Math.atan2((double)(GameView.fingerPosition.y - heatCenter.y), (double)(GameView.fingerPosition.x - heatCenter.x))*180/Math.PI;
-
-        Log.i("distance", ""+distance);
-        Log.i("radius", ""+heatWaveRadius);
-        Log.i("angle",""+angle);
+        int angle = (int)(Math.atan2((double)(GameView.fingerPosition.y - heatCenter.y), (double)(GameView.fingerPosition.x - heatCenter.x))*180/Math.PI);
 
         if (distance <= heatWaveRadius && distance >= heatWaveRadius-3) {
             if(waveType == 1) {
