@@ -13,9 +13,9 @@ public class TimeBomb {
 
     protected Paint bombPaint = new Paint();
 
-    protected final int bombInitialRadius     = 15;
-    protected final int bombExplosionRadius   = 85;
-    protected final int explosionIncreaseRate = 10;
+    protected int bombInitialRadius     = (int)(Math.sqrt(Geometry.area(GameActivity.mScreenSize) / (300 * Math.PI)));
+    protected int bombExplosionRadius   = (int)(Math.sqrt(Geometry.area(GameActivity.mScreenSize) / (3 * Math.PI)));
+    protected int explosionIncreaseRate = 5;
 
     protected int bombCurrentRadius;
     protected int timeBombCounter;
@@ -30,7 +30,8 @@ public class TimeBomb {
 
         this.is_bomb_planted = false;
         this.bombCurrentRadius = 0;
-        bombPaint.setColor(Color.parseColor("#1100DD"));
+        bombPaint.setColor(Color.parseColor("#0033EE"));
+        bombPaint.setAlpha(255);
     }
     /**--------------------------------------------------------------------------------------------------**/
 
@@ -40,6 +41,8 @@ public class TimeBomb {
         bombCurrentRadius = bombInitialRadius;
         timeBombCounter   = 20;
         is_bomb_planted   = true;
+        bombPaint.setAlpha(255);
+        bombExplosionRadius= (int)(Math.sqrt(Geometry.area(GameActivity.mScreenSize) / (3 * Math.PI)));
     }
 
 
@@ -51,7 +54,17 @@ public class TimeBomb {
     public void increaseBombExplosion () {
         if(bombCurrentRadius < bombExplosionRadius) {
             bombCurrentRadius += explosionIncreaseRate;
+            int alpha = bombPaint.getAlpha();
+            alpha -= 5;
+            bombPaint.setAlpha(alpha);
         }
+        else {
+            bombCurrentRadius = 0;
+            bombPosition.set(GameActivity.mScreenSize.x - 100, GameActivity.mScreenSize.y - 100);
+            bombExplosionRadius = 0;
+
+        }
+
     }
 
 

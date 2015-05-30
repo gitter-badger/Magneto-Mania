@@ -31,7 +31,7 @@ public class GameView extends SurfaceView {
     private HeatWave[]      mWave            = new HeatWave[5];
     private RectF[]         heatRect         = new RectF[5];
     private LaserBeam[]     mBeam            = new LaserBeam[8];
-    private TimeBomb[]      mBomb            = new TimeBomb[3];
+    private TimeBomb[]      mBomb            = new TimeBomb[2];
 
     public static Point     fingerPosition   = new Point(0,0);
     public static Point     destinationPoint = new Point(0,0);
@@ -87,7 +87,7 @@ public class GameView extends SurfaceView {
             this.mBeam[i] = new LaserBeam();
         }
 
-        for(int i=0; i<3; i++) {
+        for(int i=0; i<2; i++) {
             this.mBomb[i] = new TimeBomb();
         }
 
@@ -313,20 +313,11 @@ public class GameView extends SurfaceView {
             else if(mBall.monsterTrickSetDecider == 2 && mBall.monsterAttackTrick == 1) {
                 monsterSleepCount = 1;
 
-                for(int i=0; i<3; i++) {
-                    /*** Conditon of game over when finger touches the bomb. ***/
-                    /***/is_game_over = mBomb[i].didFingerBecameVictimOfBombBlast();
-                    /***/if (is_game_over) {
-                    /***/   tryGameOver();
-                    /***/   System.exit(0);
-                    }
-                }
-
                 if(time_to_plant_bombs) {
                     bombPlantCount++;
                     mBall.attackFingerPosition();
 
-                    for(int i=0; i<3; i++) {
+                    for(int i = 0; i < 2; i++) {
                         if(bombPlantCount > 10*(i+1) && !mBomb[i].is_bomb_planted) {
                             mBomb[i].initTimeBomb(mBall);
                         }
@@ -352,30 +343,30 @@ public class GameView extends SurfaceView {
                             mBall.monsterPosition.y = 0;
                         }
 
-                        if (mBomb[0].is_bomb_planted && mBomb[1].is_bomb_planted && mBomb[2].is_bomb_planted) {
+                        if (mBomb[0].is_bomb_planted && mBomb[1].is_bomb_planted) {
                             time_to_plant_bombs = false;
                             bomb_residue_on_screen = true;
 
-                            for(int i=0; i<3; i++) {
+                            for(int i = 0; i < 2; i++) {
                                 mBomb[i].is_bomb_planted = false;
                             }
                         }
                     }
                 }
                 else if(bomb_residue_on_screen) {
-                    for(int i=0; i<3; i++) {
+                    for(int i = 0; i < 2; i++) {
                         if(mBomb[i].timeBombCounter > 0) {
                             mBomb[i].tickTockCountDown();
                         }
                         else {
                             mBomb[i].increaseBombExplosion();
-                            if(mBomb[2].bombCurrentRadius == mBomb[2].bombExplosionRadius)
+                            if(mBomb[1].bombCurrentRadius == mBomb[1].bombExplosionRadius)
                                 bomb_residue_on_screen = false;
                         }
                     }
                 }
                 else {
-                    for(int i=0; i<3; i++) {
+                    for(int i = 0; i < 2; i++) {
                         mBomb[i].bombPosition.set(GameActivity.mScreenSize.x + 100, GameActivity.mScreenSize.y + 100);
                         mBomb[i].bombCurrentRadius = mBomb[i].bombInitialRadius;
                     }
@@ -462,7 +453,7 @@ public class GameView extends SurfaceView {
         }
 
         if(mBomb != null && mBall.monsterTrickSetDecider == 2 && mBall.monsterAttackTrick == 1) {
-            for(int i=0; i<3; i++) {
+            for(int i=0; i<2; i++) {
                 canvas.drawCircle(mBomb[i].bombPosition.x, mBomb[i].bombPosition.y, mBomb[i].bombCurrentRadius, mBomb[i].bombPaint);
             }
         }
@@ -529,6 +520,17 @@ public class GameView extends SurfaceView {
                     }
                 }
 
+                if(mBomb != null && mBall.monsterTrickSetDecider == 2 && mBall.monsterAttackTrick == 1) {
+                    for (int i = 0; i < 2; i++) {
+                        /*** Conditon of game over when finger touches the bomb. ***/
+                        /***/is_game_over = mBomb[i].didFingerBecameVictimOfBombBlast();
+                        /***/if (is_game_over) {
+                        /***/   tryGameOver();
+                        /***/   System.exit(0);
+                        }
+                    }
+                }
+
                 Score+=Geometry.distanceForScore(fingerPosition, pFingerPosition)/10.0;
                 break;
         }
@@ -536,8 +538,8 @@ public class GameView extends SurfaceView {
     }
 
     public void randomizeTrajectory() {
-        mBall.monsterTrickSetDecider = ++mBall.monsterTrickSetDecider % 3;
-        mBall.monsterAttackTrick     = random.nextInt(2) + 1;
+        mBall.monsterTrickSetDecider = 2; // ++mBall.monsterTrickSetDecider % 3;
+        mBall.monsterAttackTrick     = 1; // random.nextInt(2) + 1;
 
         if(mBall.monsterTrickSetDecider == 0) {
             if(mBall.monsterAttackTrick == 1) {
