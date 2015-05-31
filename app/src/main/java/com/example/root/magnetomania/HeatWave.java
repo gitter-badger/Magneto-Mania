@@ -33,7 +33,7 @@ public class HeatWave {
     public void initHeatWave(MonsterBall monsterBall) {
         heatCenter = Geometry.setCoordinates(monsterBall.monsterPosition);
         heatWaveRadius = 0;
-        heatWaveVelocity = 6 + (int)(GameView.Score / 500);
+        heatWaveVelocity = 6;
     }
 
 
@@ -61,7 +61,7 @@ public class HeatWave {
         int distance = Geometry.distance(GameView.fingerPosition, heatCenter);
         int angle = (int)(Math.atan2((double)(GameView.fingerPosition.y - heatCenter.y), (double)(GameView.fingerPosition.x - heatCenter.x))*180/Math.PI);
 
-        if (distance <= heatWaveRadius && distance >= heatWaveRadius-3) {
+        if (distance <= heatWaveRadius+3 && distance >= heatWaveRadius-3) {
             if(waveType == 1) {
                 return ((angle > 30 && angle < 60)  || (angle > 90  && angle < 120) || (angle > 150  && angle < 180) ||
                         (angle < 0  && angle > -30) || (angle < -60 && angle > -90) || (angle < -120 && angle > -150));

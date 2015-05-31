@@ -60,6 +60,12 @@ public class GameView extends SurfaceView {
 
     private Point           pFingerPosition = new Point(0,0);
     public static double    Score;
+
+    //These variables are for multi-touch disabling.
+    private static final int INVALID_POINTER_ID = -1;
+    private int mActivePointerId = INVALID_POINTER_ID;
+    float x, y, mPosX, mPosY, mLastTouchX, mLastTouchY;
+
     /**---------------------------------------------------------------------------------------------------**/
 
 
@@ -468,78 +474,121 @@ public class GameView extends SurfaceView {
 
     @SuppressLint("ClickableViewAccessibility")
     @Override
-    public boolean onTouchEvent(MotionEvent event) {
+    public boolean onTouchEvent(MotionEvent ev) {
+        final int action = ev.getAction();
 
-        switch(event.getAction()) {
+        switch (action & MotionEvent.ACTION_MASK) {
             case MotionEvent.ACTION_DOWN:
+                x = ev.getX();
+                y = ev.getY();
+
+                mPosX = x;
+                mPosY = y;
+
+                mLastTouchX = x;
+                mLastTouchY = y;
+                mActivePointerId = ev.getPointerId(0);
                 is_game_started = true;
                 break;
 
             case MotionEvent.ACTION_UP:
+                mActivePointerId = INVALID_POINTER_ID;
                 is_game_over = true;
                 tryGameOver();
                 break;
 
             case MotionEvent.ACTION_MOVE:
-                pFingerPosition = Geometry.setCoordinates(fingerPosition);
-                fingerPosition.x = (int)event.getX();
-                fingerPosition.y = (int)event.getY();
+                int pointerIndex = ev.findPointerIndex(mActivePointerId);
+                x = ev.getX(pointerIndex);
+                y = ev.getY(pointerIndex);
 
-                if(fingerPosition.x < 15) {
+                final float dx = x - mLastTouchX;
+                final float dy = y - mLastTouchY;
+
+                mPosX += dx;
+                mPosY += dy;
+
+                mLastTouchX = x;
+                mLastTouchY = y;
+
+                invalidate();
+
+                pFingerPosition = Geometry.setCoordinates(fingerPosition);
+                fingerPosition.x = (int) ev.getX();
+                fingerPosition.y = (int) ev.getY();
+
+                if (fingerPosition.x < 15) {
                     fingerPosition.x = 15;
                 }
-                if(fingerPosition.y < 15) {
+                if (fingerPosition.y < 15) {
                     fingerPosition.y = 15;
                 }
-                if(fingerPosition.x > GameActivity.mScreenSize.x -15) {
+                if (fingerPosition.x > GameActivity.mScreenSize.x - 15) {
                     fingerPosition.x = GameActivity.mScreenSize.x - 15;
                 }
-                if(fingerPosition.y > GameActivity.mScreenSize.y -15) {
+                if (fingerPosition.y > GameActivity.mScreenSize.y - 15) {
                     fingerPosition.y = GameActivity.mScreenSize.y - 15;
                 }
 
-                if(mWave != null && mBall.monsterTrickSetDecider == 0 && mBall.monsterAttackTrick == 1) {
+                if (mWave != null && mBall.monsterTrickSetDecider == 0 && mBall.monsterAttackTrick == 1) {
                     for (int i = 0; i < 5; i++) {
                         /*** Condition of game over when finger touches the heat wave. ***/
                         /***/is_game_over = mWave[i].didHeatWaveBurnTheFinger((i + 1) % 2);
                         /***/if (is_game_over) {
-                        /***/   tryGameOver();
-                        /***/   System.exit(0);
+                            /***/tryGameOver();
+                            /***/System.exit(0);
                         }
                     }
                 }
 
-                if(mBeam != null && mBall.monsterTrickSetDecider == 1 && mBall.monsterAttackTrick == 1 && laser_beam_on_screen) {
+                if (mBeam != null && mBall.monsterTrickSetDecider == 1 && mBall.monsterAttackTrick == 1 && laser_beam_on_screen) {
                     for (int i = 0; i < 8; i++) {
                         /*** Condition of game over when finger touches the laser beam. ***/
                         /***/is_game_over = mBeam[i].didLaserBeamPenetrateTheFinger();
                         /***/if (is_game_over) {
-                        /***/   tryGameOver();
-                        /***/   System.exit(0);
+                            /***/tryGameOver();
+                            /***/System.exit(0);
                         }
                     }
                 }
 
-                if(mBomb != null && mBall.monsterTrickSetDecider == 2 && mBall.monsterAttackTrick == 1) {
+                if (mBomb != null && mBall.monsterTrickSetDecider == 2 && mBall.monsterAttackTrick == 1) {
                     for (int i = 0; i < 2; i++) {
                         /*** Conditon of game over when finger touches the bomb. ***/
                         /***/is_game_over = mBomb[i].didFingerBecameVictimOfBombBlast();
                         /***/if (is_game_over) {
-                        /***/   tryGameOver();
-                        /***/   System.exit(0);
+                            /***/tryGameOver();
+                            /***/System.exit(0);
                         }
                     }
                 }
+                Score += Geometry.distanceForScore(fingerPosition, pFingerPosition) / 10.0;
+                break;
 
-                Score+=Geometry.distanceForScore(fingerPosition, pFingerPosition)/10.0;
+            case MotionEvent.ACTION_CANCEL:
+                mActivePointerId = INVALID_POINTER_ID;
+                break;
+
+            case MotionEvent.ACTION_POINTER_UP:
+
+                pointerIndex = (action & MotionEvent.ACTION_POINTER_INDEX_MASK)
+                        >> MotionEvent.ACTION_POINTER_INDEX_SHIFT;
+                final int pointerId = ev.getPointerId(pointerIndex);
+
+                if (pointerId == mActivePointerId) {
+                    final int newPointerIndex = pointerIndex == 0 ? 1 : 0;
+                    mLastTouchX = ev.getX(newPointerIndex);
+                    mLastTouchY = ev.getY(newPointerIndex);
+                    mActivePointerId = ev.getPointerId(newPointerIndex);
+                }
                 break;
         }
         return true;
     }
 
     public void randomizeTrajectory() {
-        mBall.monsterTrickSetDecider = 2; // ++mBall.monsterTrickSetDecider % 3;
-        mBall.monsterAttackTrick     = 1; // random.nextInt(2) + 1;
+        mBall.monsterTrickSetDecider = ++mBall.monsterTrickSetDecider % 3;
+        mBall.monsterAttackTrick     = random.nextInt(2) + 1;
 
         if(mBall.monsterTrickSetDecider == 0) {
             if(mBall.monsterAttackTrick == 1) {
