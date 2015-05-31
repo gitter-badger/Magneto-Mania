@@ -18,12 +18,12 @@ import java.util.Random;
 public class GameView extends SurfaceView {
 
     /******************************************** CLASS MEMBERS ********************************************/
-    private SurfaceHolder   mHolder;
-    private GameThread      mThread          = null;
-    private Context         mContext;
+    private SurfaceHolder       mHolder;
+    public static GameThread   mThread          = null;
+    public static Context      mContext;
 
-    public boolean          is_game_started;
-    public boolean          is_game_over;
+    public static boolean   is_game_started;
+    public static boolean   is_game_over;
 
     private MonsterBall     mBall            = new MonsterBall();
     private MagnetRocket    mRocket          = new MagnetRocket();
@@ -618,7 +618,7 @@ public class GameView extends SurfaceView {
         }
     }
 
-    public void tryGameOver() {
+    public static void tryGameOver() {
         if(is_game_over) {
             try {
                 gameOver();
@@ -629,7 +629,7 @@ public class GameView extends SurfaceView {
         }
     }
 
-    void gameOver() throws InterruptedException {
+    static void gameOver() throws InterruptedException {
         mThread.setRunning(false);
         Intent intent = new Intent(mContext, GameOverActivity.class);
         intent.putExtra("Your Score:", Score);

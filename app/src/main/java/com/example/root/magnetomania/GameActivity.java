@@ -1,6 +1,7 @@
 package com.example.root.magnetomania;
 
 import android.app.Activity;
+import android.content.Context;
 import android.content.pm.ActivityInfo;
 import android.graphics.Point;
 import android.os.Bundle;
@@ -28,4 +29,16 @@ public class GameActivity extends Activity {
         setContentView(new GameView(this));
     }
 
+    @Override
+    protected void onPause() {
+        super.onPause();
+        GameView.is_game_over = true;
+        GameView.mThread.setRunning(false);
+    }
+    
+    @Override
+    protected void onResume() {
+        super.onResume();
+        GameView.tryGameOver();
+    }
 }
