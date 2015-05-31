@@ -1,4 +1,4 @@
-package com.example.root.magnetomania;
+package com.sdsmdg.kd.magnetomania;
 
 import android.app.Activity;
 import android.content.Context;
@@ -35,7 +35,7 @@ public class GameActivity extends Activity {
         GameView.is_game_over = true;
         GameView.mThread.setRunning(false);
     }
-    
+
     @Override
     protected void onResume() {
         super.onResume();

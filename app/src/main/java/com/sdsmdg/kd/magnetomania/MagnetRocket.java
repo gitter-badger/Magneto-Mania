@@ -1,8 +1,9 @@
-package com.example.root.magnetomania;
+package com.sdsmdg.kd.magnetomania;
 
 import android.graphics.Color;
 import android.graphics.Paint;
 import android.graphics.Point;
+
 import java.util.Random;
 
 

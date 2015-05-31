@@ -1,4 +1,4 @@
-package com.example.root.magnetomania;
+package com.sdsmdg.kd.magnetomania;
 
 import android.annotation.SuppressLint;
 import android.app.Activity;

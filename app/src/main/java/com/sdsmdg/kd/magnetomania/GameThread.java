@@ -1,4 +1,4 @@
-package com.example.root.magnetomania;
+package com.sdsmdg.kd.magnetomania;
 
 
 import android.graphics.Canvas;
