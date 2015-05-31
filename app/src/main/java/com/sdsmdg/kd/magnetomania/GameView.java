@@ -33,7 +33,7 @@ public class GameView extends SurfaceView {
     private RectF[]         heatRect         = new RectF[5];
     private LaserBeam[]     mBeam            = new LaserBeam[8];
     private TimeBomb[]      mBomb            = new TimeBomb[2];
-    private BoomerangTwister mTwister        = new BoomerangTwister();
+    private BoomerangTwister[] mTwister      = new BoomerangTwister[5];
 
     public static Point     fingerPosition   = new Point(0,0);
     public static Point     destinationPoint = new Point(0,0);
@@ -46,6 +46,7 @@ public class GameView extends SurfaceView {
     private int             laserBeamMoveCount;
     private int             laserAlphaCount;
     private int             bombPlantCount;
+    private int             twisterTimeGap;
 
     private boolean         monster_trick_time;
     private boolean         time_to_shoot_bullets;
@@ -92,6 +93,7 @@ public class GameView extends SurfaceView {
         for(int i=0; i<5; i++) {
             this.heatRect[i] = new RectF();
             this.mWave[i]    = new HeatWave();
+            this.mTwister[i] = new BoomerangTwister();
         }
 
         for(int i=0; i<8; i++) {
@@ -109,6 +111,7 @@ public class GameView extends SurfaceView {
         this.laserBeamMoveCount     = 1;
         this.laserAlphaCount        = 1;
         this.bombPlantCount         = 1;
+        this.twisterTimeGap         = 1;
 
         this.monster_trick_time     = false;
         this.time_to_shoot_bullets  = false;
@@ -395,21 +398,46 @@ public class GameView extends SurfaceView {
                 monsterSleepCount = 1;
 
                 if(time_for_some_twisters) {
-                    mTwister.initTwister(mBall);
-                    time_for_some_twisters = false;
-                    twisters_on_screen     = true;
+                    twisterTimeGap++;
+
+                    for(int i = 0; i < 5; i++) {
+                        if(twisterTimeGap > 10*(i+1) && !mTwister[i].is_twister_thrown) {
+                            mTwister[i].initTwister(mBall);
+                            mTwister[i].is_twister_thrown = true;
+                        }
+                        else if(mTwister[i].is_twister_thrown) {
+                            mTwister[i].attackTowardsFinger();
+                        }
+                    }
+
+                    if(mTwister[4].is_twister_thrown) {
+                        time_for_some_twisters = false;
+                        twisters_on_screen = true;
+                    }
                 }
                 else if(twisters_on_screen) {
-                    mTwister.attackTowardsFinger();
-                    if ((mTwister.twisterPosition.x >= GameActivity.mScreenSize.x + 25 || mTwister.twisterPosition.x <= -25 ||
-                            mTwister.twisterPosition.y >= GameActivity.mScreenSize.y + 25 || mTwister.twisterPosition.y <= -25) &&
-                            mTwister.twisterVelocity < -(mTwister.twisterVelocityMaxMagnitude)) {
+                    twisterTimeGap++;
+
+                    for(int i = 0; i < 5; i++) {
+                        if (twisterTimeGap > 10*(i+1)) {
+                            mTwister[i].attackTowardsFinger();
+                        }
+                    }
+
+                    if ((mTwister[4].twisterPosition.x >= GameActivity.mScreenSize.x + 25 || mTwister[4].twisterPosition.x <= -25 ||
+                         mTwister[4].twisterPosition.y >= GameActivity.mScreenSize.y + 25 || mTwister[4].twisterPosition.y <= -25) &&
+                         mTwister[4].twisterVelocity < -(mTwister[4].twisterVelocityMaxMagnitude)) {
                         twisters_on_screen = false;
                     }
                 }
                 else {
-                    mTwister.twisterPosition.x = GameActivity.mScreenSize.x + 180;
-                    mTwister.twisterPosition.y = GameActivity.mScreenSize.y + 180;
+                    twisterTimeGap = 1;
+
+                    for(int i = 0; i < 5; i++) {
+                        mTwister[i].twisterPosition.x = GameActivity.mScreenSize.x + 180;
+                        mTwister[i].twisterPosition.y = GameActivity.mScreenSize.y + 180;
+                        mTwister[i].is_twister_thrown = false;
+                    }
 
                     mBall.prepareForSleepAndAttack();
                     mBall.monsterSleepTime = random.nextInt(15) + 15;
@@ -499,8 +527,10 @@ public class GameView extends SurfaceView {
         }
 
         if(mTwister != null && mBall.monsterTrickSetDecider == 2 && mBall.monsterAttackTrick == 1) {
-            canvas.drawCircle((float)mTwister.twisterPosition.x, (float)mTwister.twisterPosition.y,
-                    (float)mTwister.twisterRadius, mTwister.twisterPaint);
+            for(int i=0; i<5; i++) {
+                canvas.drawCircle((float) mTwister[i].twisterPosition.x, (float) mTwister[i].twisterPosition.y,
+                        (float) mTwister[i].twisterRadius, mTwister[i].twisterPaint);
+            }
         }
 
         if(mRocket != null && mBall.monsterTrickSetDecider == 2 && mBall.monsterAttackTrick == 2) {
