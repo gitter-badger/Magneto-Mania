@@ -621,7 +621,7 @@ public class GameView extends SurfaceView {
                     }
                 }
 
-                if (mBomb != null && mBall.monsterTrickSetDecider == 2 && mBall.monsterAttackTrick == 1) {
+                if (mBomb != null && mBall.monsterTrickSetDecider == 1 && mBall.monsterAttackTrick == 2) {
                     for (int i = 0; i < 2; i++) {
                         /*** Conditon of game over when finger touches the bomb. ***/
                         /***/is_game_over = mBomb[i].didFingerBecameVictimOfBombBlast();
@@ -631,6 +631,18 @@ public class GameView extends SurfaceView {
                         }
                     }
                 }
+
+                if (mTwister != null && mBall.monsterTrickSetDecider == 2 && mBall.monsterAttackTrick == 1) {
+                    for (int i = 0; i < 5; i++) {
+                        /*** Conditon of game over when finger touches the boomerang. ***/
+                        /***/is_game_over = mTwister[i].didTwisterCaptureTheFinger();
+                        /***/if (is_game_over) {
+                            /***/tryGameOver();
+                            /***/System.exit(0);
+                        }
+                    }
+                }
+
                 Score += Geometry.distanceForScore(fingerPosition, pFingerPosition) / 10.0;
                 break;
 

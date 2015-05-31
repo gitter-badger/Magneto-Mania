@@ -31,6 +31,7 @@ public class BoomerangTwister {
         this.twisterVelocity = 20;
         this.twisterVelocityMaxMagnitude = 20;
         this.twisterPaint.setColor(Color.parseColor("#FFAA00"));
+        this.twisterPaint.setAlpha(150);
     }
     /**--------------------------------------------------------------------------------------------------**/
 
@@ -39,8 +40,8 @@ public class BoomerangTwister {
         Random random = new Random();
 
         twisterPosition               = Geometry.setCoordinates(monsterBall.monsterPosition);
-        twisterVelocity               = random.nextInt(5) + 15 + (int)(GameView.Score / 1000);
-        twisterVelocityMaxMagnitude   = random.nextInt(5) + 15 + (int)(GameView.Score / 1000);
+        twisterVelocity               = random.nextInt(5) + 20 + (int)(GameView.Score / 1000);
+        twisterVelocityMaxMagnitude   = random.nextInt(5) + 20 + (int)(GameView.Score / 1000);
         twisterDestination            = Geometry.setCoordinates(GameView.fingerPosition);
         is_twister_thrown             = true;
     }
