@@ -6,5 +6,16 @@
     <string name="play">PLAY</string>
     <string name="title_activity_game">GameActivity</string>
     <string name="title_activity_game_over">GameOverActivity</string>
-    <string name="GameOverMessage">Game over! This page will be decorated soon, for now press back and play again!</string>
+    <string name="GameOverMessage">GAME OVER. Press back button and play again!</string>
+    <string name="title">Magneto Mania</string>
+    <string name="instructions">Instructions for Alpha Testers</string>
+    <string name="firstIns"><![CDATA[-> There is one big monsterball in the game, which will target your finger and attack with various weapons, you have to dodge them all, and play without lifting your finger. Anything you touch, the game will be over.]]></string>
+    <string name="secondIns"><![CDATA[-> Right now these are just circles in the game so here is the list, which circle is what:]]></string>
+    <string name="thirdIns"><![CDATA[-> Big white one: Main monsterball.]]></string>
+    <string name="fourthIns"><![CDATA[-> Red: rocket, and Green: Bullets.]]></string>
+    <string name="fifthIns"><![CDATA[-> Blue: bombs, Yellow: heat waves, Cyan: laser beams]]></string>
+    <string name="last">I haven\'t worked on this fancy stuff, so it is temporary, don\'t mind it, just look for bugs in the gameplay. Mail me bugs, suggestions, problems: karandesai281196@gmail.com</string>
+    <string name="finalIns">And please use the mentioned terminology for explaining the bug, for better understanding.</string>
+    <string name="ExtraMessage">Once again, these extra things other than the GameView are still untouched, and I will work on it, once the basic game play is properly set up without bugs. keep calm and play again. ;) Do mention the bugs...</string>
+    <string name="yourScore">Here is your score. Well done, for starters, you will need to control the force, to match the power of the Sith!</string>
 </resources>

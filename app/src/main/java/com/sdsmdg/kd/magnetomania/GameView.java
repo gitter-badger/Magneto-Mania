@@ -6,6 +6,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.graphics.Canvas;
 import android.graphics.Color;
+import android.graphics.Paint;
 import android.graphics.Point;
 import android.graphics.RectF;
 import android.util.Log;
@@ -60,6 +61,7 @@ public class GameView extends SurfaceView {
 
     private Point           pFingerPosition = new Point(0,0);
     public static double    Score;
+    private Paint           scorePaint      = new Paint();
 
     //These variables are for multi-touch disabling.
     private static final int INVALID_POINTER_ID = -1;
@@ -73,12 +75,12 @@ public class GameView extends SurfaceView {
     public GameView(Context context) {
         super(context);
 
-        this.mHolder                = this.getHolder();
-        this.mThread                = new GameThread(this);
-        this.mContext               = getContext();
+        mHolder                = this.getHolder();
+        mThread                = new GameThread(this);
+        mContext               = getContext();
         
-        this.is_game_started        = false;
-        this.is_game_over           = false;
+        is_game_started        = false;
+        is_game_over           = false;
 
         for(int i=0; i<3; i++) {
             this.mFan[i]     = new BulletFan();
@@ -115,7 +117,9 @@ public class GameView extends SurfaceView {
         this.time_to_plant_bombs    = false;
         this.bomb_residue_on_screen = false;
 
-        this.Score                  = 0.0;
+        Score                       = 0.0;
+        this.scorePaint.setColor(Color.LTGRAY);
+        this.scorePaint.setTextSize(20);
 
         this.mHolder.addCallback(new SurfaceHolder.Callback() {
 
@@ -324,7 +328,7 @@ public class GameView extends SurfaceView {
                     mBall.attackFingerPosition();
 
                     for(int i = 0; i < 2; i++) {
-                        if(bombPlantCount > 10*(i+1) && !mBomb[i].is_bomb_planted) {
+                        if(bombPlantCount > 7*(i+1) && !mBomb[i].is_bomb_planted) {
                             mBomb[i].initTimeBomb(mBall);
                         }
                         else if(mBomb[i].timeBombCounter <= 0) {
@@ -469,7 +473,7 @@ public class GameView extends SurfaceView {
         }
 
         canvas.drawCircle((float) mBall.monsterPosition.x, (float) mBall.monsterPosition.y, (float) mBall.monsterRadius, mBall.monsterPaint);
-        canvas.drawText(Integer.toString((int) Score), 5, 5, mBall.monsterPaint);
+        canvas.drawText(Integer.toString((int) Score), 20, 20, scorePaint);
     }
 
     @SuppressLint("ClickableViewAccessibility")
