@@ -328,31 +328,6 @@ public class GameView extends SurfaceView {
             else if(mBall.monsterTrickSetDecider == 1 && mBall.monsterAttackTrick == 2) {
                 monsterSleepCount = 1;
 
-                if(time_for_some_twisters) {
-                    mTwister.initTwister(mBall);
-                    time_for_some_twisters = false;
-                    twisters_on_screen     = true;
-                }
-                else if(twisters_on_screen) {
-                    mTwister.attackTowardsFinger();
-                    if ((mTwister.twisterPosition.x >= GameActivity.mScreenSize.x + 25 || mTwister.twisterPosition.x <= -25 ||
-                        mTwister.twisterPosition.y >= GameActivity.mScreenSize.y + 25 || mTwister.twisterPosition.y <= -25) &&
-                        mTwister.twisterVelocity < -(mTwister.twisterVelocityMaxMagnitude)) {
-                        twisters_on_screen = false;
-                    }
-                }
-                else {
-                    mTwister.twisterPosition.x = GameActivity.mScreenSize.x + 180;
-                    mTwister.twisterPosition.y = GameActivity.mScreenSize.y + 180;
-
-                    mBall.prepareForSleepAndAttack();
-                    mBall.monsterSleepTime = random.nextInt(15) + 15;
-                    mBall.attackFingerPosition();
-                }
-            }
-            else if(mBall.monsterTrickSetDecider == 2 && mBall.monsterAttackTrick == 1) {
-                monsterSleepCount = 1;
-
                 if(time_to_plant_bombs) {
                     bombPlantCount++;
                     mBall.attackFingerPosition();
@@ -413,6 +388,31 @@ public class GameView extends SurfaceView {
                     bombPlantCount = 1;
 
                     mBall.prepareForSleepAndAttack();
+                    mBall.attackFingerPosition();
+                }
+            }
+            else if(mBall.monsterTrickSetDecider == 2 && mBall.monsterAttackTrick == 1) {
+                monsterSleepCount = 1;
+
+                if(time_for_some_twisters) {
+                    mTwister.initTwister(mBall);
+                    time_for_some_twisters = false;
+                    twisters_on_screen     = true;
+                }
+                else if(twisters_on_screen) {
+                    mTwister.attackTowardsFinger();
+                    if ((mTwister.twisterPosition.x >= GameActivity.mScreenSize.x + 25 || mTwister.twisterPosition.x <= -25 ||
+                            mTwister.twisterPosition.y >= GameActivity.mScreenSize.y + 25 || mTwister.twisterPosition.y <= -25) &&
+                            mTwister.twisterVelocity < -(mTwister.twisterVelocityMaxMagnitude)) {
+                        twisters_on_screen = false;
+                    }
+                }
+                else {
+                    mTwister.twisterPosition.x = GameActivity.mScreenSize.x + 180;
+                    mTwister.twisterPosition.y = GameActivity.mScreenSize.y + 180;
+
+                    mBall.prepareForSleepAndAttack();
+                    mBall.monsterSleepTime = random.nextInt(15) + 15;
                     mBall.attackFingerPosition();
                 }
             }
@@ -492,15 +492,15 @@ public class GameView extends SurfaceView {
             }
         }
 
-            if(mTwister != null && mBall.monsterTrickSetDecider == 1 && mBall.monsterAttackTrick == 2) {
-                canvas.drawCircle((float)mTwister.twisterPosition.x, (float)mTwister.twisterPosition.y,
-                                  (float)mTwister.twisterRadius, mTwister.twisterPaint);
-            }
-
-            if(mBomb != null && mBall.monsterTrickSetDecider == 2 && mBall.monsterAttackTrick == 1) {
+        if(mBomb != null && mBall.monsterTrickSetDecider == 1 && mBall.monsterAttackTrick == 2) {
             for(int i=0; i<2; i++) {
                 canvas.drawCircle(mBomb[i].bombPosition.x, mBomb[i].bombPosition.y, mBomb[i].bombCurrentRadius, mBomb[i].bombPaint);
             }
+        }
+
+        if(mTwister != null && mBall.monsterTrickSetDecider == 2 && mBall.monsterAttackTrick == 1) {
+            canvas.drawCircle((float)mTwister.twisterPosition.x, (float)mTwister.twisterPosition.y,
+                    (float)mTwister.twisterRadius, mTwister.twisterPaint);
         }
 
         if(mRocket != null && mBall.monsterTrickSetDecider == 2 && mBall.monsterAttackTrick == 2) {
@@ -643,14 +643,14 @@ public class GameView extends SurfaceView {
                 time_to_fire_laser = true;
             }
             else if(mBall.monsterAttackTrick == 2) {
-                time_for_some_twisters = true;
+                time_to_plant_bombs = true;
+                initialPoint        = Geometry.setCoordinates(mBall.monsterPosition);
+                destinationPoint    = Geometry.setCoordinates(fingerPosition);
             }
         }
         else if(mBall.monsterTrickSetDecider == 2) {
             if(mBall.monsterAttackTrick == 1) {
-                time_to_plant_bombs = true;
-                initialPoint        = Geometry.setCoordinates(mBall.monsterPosition);
-                destinationPoint    = Geometry.setCoordinates(fingerPosition);
+                time_for_some_twisters = true;
             }
             else if(mBall.monsterAttackTrick == 2) {
                 mRocket.initRocket(mBall);

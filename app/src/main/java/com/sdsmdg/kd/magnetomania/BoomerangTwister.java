@@ -42,7 +42,7 @@ public class BoomerangTwister {
     public void attackTowardsFinger() {
         Point mVelocityComponent = Geometry.calcVelocityComponents(GameView.destinationPoint, GameView.initialPoint, (int)twisterVelocity);
 
-        twisterVelocity   -= 0.5;
+        twisterVelocity   -= 0.25;
         twisterPosition.x += mVelocityComponent.x;
         twisterPosition.y += mVelocityComponent.y;
     }
