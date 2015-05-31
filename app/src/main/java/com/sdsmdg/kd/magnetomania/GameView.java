@@ -33,6 +33,7 @@ public class GameView extends SurfaceView {
     private RectF[]         heatRect         = new RectF[5];
     private LaserBeam[]     mBeam            = new LaserBeam[8];
     private TimeBomb[]      mBomb            = new TimeBomb[2];
+    private BoomerangTwister[] mTwister      = new BoomerangTwister[5];
 
     public static Point     fingerPosition   = new Point(0,0);
     public static Point     destinationPoint = new Point(0,0);
@@ -45,6 +46,7 @@ public class GameView extends SurfaceView {
     private int             laserBeamMoveCount;
     private int             laserAlphaCount;
     private int             bombPlantCount;
+    private int             twisterTimeGap;
 
     private boolean         monster_trick_time;
     private boolean         time_to_shoot_bullets;
@@ -55,6 +57,8 @@ public class GameView extends SurfaceView {
     private boolean         laser_beam_on_screen;
     private boolean         time_to_plant_bombs;
     private boolean         bomb_residue_on_screen;
+    private boolean         time_for_some_twisters;
+    private boolean         twisters_on_screen;
 
     private SpriteAnimation animation       = new SpriteAnimation(this);
     private Random          random          = new Random();
@@ -89,6 +93,7 @@ public class GameView extends SurfaceView {
         for(int i=0; i<5; i++) {
             this.heatRect[i] = new RectF();
             this.mWave[i]    = new HeatWave();
+            this.mTwister[i] = new BoomerangTwister();
         }
 
         for(int i=0; i<8; i++) {
@@ -106,6 +111,7 @@ public class GameView extends SurfaceView {
         this.laserBeamMoveCount     = 1;
         this.laserAlphaCount        = 1;
         this.bombPlantCount         = 1;
+        this.twisterTimeGap         = 1;
 
         this.monster_trick_time     = false;
         this.time_to_shoot_bullets  = false;
@@ -116,6 +122,8 @@ public class GameView extends SurfaceView {
         this.laser_beam_on_screen   = false;
         this.time_to_plant_bombs    = false;
         this.bomb_residue_on_screen = false;
+        this.time_for_some_twisters = false;
+        this.twisters_on_screen     = false;
 
         Score                       = 0.0;
         this.scorePaint.setColor(Color.LTGRAY);
@@ -320,7 +328,7 @@ public class GameView extends SurfaceView {
                     mBall.prepareForSleepAndAttack();
                 }
             }
-            else if(mBall.monsterTrickSetDecider == 2 && mBall.monsterAttackTrick == 1) {
+            else if(mBall.monsterTrickSetDecider == 1 && mBall.monsterAttackTrick == 2) {
                 monsterSleepCount = 1;
 
                 if(time_to_plant_bombs) {
@@ -383,6 +391,56 @@ public class GameView extends SurfaceView {
                     bombPlantCount = 1;
 
                     mBall.prepareForSleepAndAttack();
+                    mBall.attackFingerPosition();
+                }
+            }
+            else if(mBall.monsterTrickSetDecider == 2 && mBall.monsterAttackTrick == 1) {
+                monsterSleepCount = 1;
+
+                if(time_for_some_twisters) {
+                    twisterTimeGap++;
+
+                    for(int i = 0; i < 5; i++) {
+                        if(twisterTimeGap > 10*(i+1) && !mTwister[i].is_twister_thrown) {
+                            mTwister[i].initTwister(mBall);
+                            mTwister[i].is_twister_thrown = true;
+                        }
+                        else if(mTwister[i].is_twister_thrown) {
+                            mTwister[i].attackTowardsFinger();
+                        }
+                    }
+
+                    if(mTwister[4].is_twister_thrown) {
+                        time_for_some_twisters = false;
+                        twisters_on_screen = true;
+                    }
+                }
+                else if(twisters_on_screen) {
+                    twisterTimeGap++;
+
+                    for(int i = 0; i < 5; i++) {
+                        if (twisterTimeGap > 10*(i+1)) {
+                            mTwister[i].attackTowardsFinger();
+                        }
+                    }
+
+                    if ((mTwister[4].twisterPosition.x >= GameActivity.mScreenSize.x + 25 || mTwister[4].twisterPosition.x <= -25 ||
+                         mTwister[4].twisterPosition.y >= GameActivity.mScreenSize.y + 25 || mTwister[4].twisterPosition.y <= -25) &&
+                         mTwister[4].twisterVelocity < -(mTwister[4].twisterVelocityMaxMagnitude)) {
+                        twisters_on_screen = false;
+                    }
+                }
+                else {
+                    twisterTimeGap = 1;
+
+                    for(int i = 0; i < 5; i++) {
+                        mTwister[i].twisterPosition.x = GameActivity.mScreenSize.x + 180;
+                        mTwister[i].twisterPosition.y = GameActivity.mScreenSize.y + 180;
+                        mTwister[i].is_twister_thrown = false;
+                    }
+
+                    mBall.prepareForSleepAndAttack();
+                    mBall.monsterSleepTime = random.nextInt(15) + 15;
                     mBall.attackFingerPosition();
                 }
             }
@@ -462,9 +520,16 @@ public class GameView extends SurfaceView {
             }
         }
 
-        if(mBomb != null && mBall.monsterTrickSetDecider == 2 && mBall.monsterAttackTrick == 1) {
+        if(mBomb != null && mBall.monsterTrickSetDecider == 1 && mBall.monsterAttackTrick == 2) {
             for(int i=0; i<2; i++) {
                 canvas.drawCircle(mBomb[i].bombPosition.x, mBomb[i].bombPosition.y, mBomb[i].bombCurrentRadius, mBomb[i].bombPaint);
+            }
+        }
+
+        if(mTwister != null && mBall.monsterTrickSetDecider == 2 && mBall.monsterAttackTrick == 1) {
+            for(int i=0; i<5; i++) {
+                canvas.drawCircle((float) mTwister[i].twisterPosition.x, (float) mTwister[i].twisterPosition.y,
+                        (float) mTwister[i].twisterRadius, mTwister[i].twisterPaint);
             }
         }
 
@@ -556,7 +621,7 @@ public class GameView extends SurfaceView {
                     }
                 }
 
-                if (mBomb != null && mBall.monsterTrickSetDecider == 2 && mBall.monsterAttackTrick == 1) {
+                if (mBomb != null && mBall.monsterTrickSetDecider == 1 && mBall.monsterAttackTrick == 2) {
                     for (int i = 0; i < 2; i++) {
                         /*** Conditon of game over when finger touches the bomb. ***/
                         /***/is_game_over = mBomb[i].didFingerBecameVictimOfBombBlast();
@@ -566,6 +631,18 @@ public class GameView extends SurfaceView {
                         }
                     }
                 }
+
+                if (mTwister != null && mBall.monsterTrickSetDecider == 2 && mBall.monsterAttackTrick == 1) {
+                    for (int i = 0; i < 5; i++) {
+                        /*** Conditon of game over when finger touches the boomerang. ***/
+                        /***/is_game_over = mTwister[i].didTwisterCaptureTheFinger();
+                        /***/if (is_game_over) {
+                            /***/tryGameOver();
+                            /***/System.exit(0);
+                        }
+                    }
+                }
+
                 Score += Geometry.distanceForScore(fingerPosition, pFingerPosition) / 10.0;
                 break;
 
@@ -590,6 +667,7 @@ public class GameView extends SurfaceView {
         return true;
     }
 
+
     public void randomizeTrajectory() {
         mBall.monsterTrickSetDecider = ++mBall.monsterTrickSetDecider % 3;
         mBall.monsterAttackTrick     = random.nextInt(2) + 1;
@@ -607,20 +685,21 @@ public class GameView extends SurfaceView {
                 time_to_fire_laser = true;
             }
             else if(mBall.monsterAttackTrick == 2) {
-                mThread.setFPS(50);
+                time_to_plant_bombs = true;
+                initialPoint        = Geometry.setCoordinates(mBall.monsterPosition);
+                destinationPoint    = Geometry.setCoordinates(fingerPosition);
             }
         }
         else if(mBall.monsterTrickSetDecider == 2) {
             if(mBall.monsterAttackTrick == 1) {
-                time_to_plant_bombs = true;
-                initialPoint        = Geometry.setCoordinates(mBall.monsterPosition);
-                destinationPoint    = Geometry.setCoordinates(fingerPosition);
+                time_for_some_twisters = true;
             }
             else if(mBall.monsterAttackTrick == 2) {
                 mRocket.initRocket(mBall);
             }
         }
     }
+
 
     public static void tryGameOver() {
         if(is_game_over) {
@@ -632,6 +711,7 @@ public class GameView extends SurfaceView {
             }
         }
     }
+
 
     static void gameOver() throws InterruptedException {
         mThread.setRunning(false);
