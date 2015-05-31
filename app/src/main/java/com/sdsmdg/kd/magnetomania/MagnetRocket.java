@@ -47,9 +47,9 @@ public class MagnetRocket {
     public void rocketTrackFinger() {
         Point rVelocityComponent = Geometry.calcVelocityComponents(GameView.fingerPosition, rocketPosition, (int)rocketVelocity);
 
-            rocketVelocity   += 0.05;
-            rocketPosition.x += rVelocityComponent.x;
-            rocketPosition.y += rVelocityComponent.y;
+        rocketVelocity   += 0.05;
+        rocketPosition.x += rVelocityComponent.x;
+        rocketPosition.y += rVelocityComponent.y;
 
         SpriteAnimation.iteratorIncrement();
     }

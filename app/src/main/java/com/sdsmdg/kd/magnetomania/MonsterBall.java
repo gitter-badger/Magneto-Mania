@@ -32,7 +32,7 @@ public class MonsterBall {
         this.monsterPosition.x = random.nextInt(2);
 
         if(this.monsterPosition.x == 1)
-        this.monsterPosition.x = GameActivity.mScreenSize.x;
+            this.monsterPosition.x = GameActivity.mScreenSize.x;
 
         this.monsterVelocity = random.nextInt(20) + 15 + (int)(GameView.Score / 500);
         this.monsterSleepTime = random.nextInt(15) + 15;
@@ -47,9 +47,9 @@ public class MonsterBall {
     public void attackFingerPosition() {
         Point mVelocityComponent = Geometry.calcVelocityComponents(GameView.destinationPoint, GameView.initialPoint, (int)monsterVelocity);
 
-            monsterVelocity   -= 0.05;
-            monsterPosition.x += mVelocityComponent.x;
-            monsterPosition.y += mVelocityComponent.y;
+        monsterVelocity   -= 0.05;
+        monsterPosition.x += mVelocityComponent.x;
+        monsterPosition.y += mVelocityComponent.y;
 
         SpriteAnimation.iteratorIncrement();
     }
@@ -57,7 +57,7 @@ public class MonsterBall {
 
     public void prepareForSleepAndAttack() {
         if (monsterPosition.x >= GameActivity.mScreenSize.x-5 || monsterPosition.x <= 5 ||
-            monsterPosition.y >= GameActivity.mScreenSize.y-5 || monsterPosition.y <= 5) {
+                monsterPosition.y >= GameActivity.mScreenSize.y-5 || monsterPosition.y <= 5) {
 
             // For preventing glitchy movement at the boundary.
             if (monsterPosition.x > GameActivity.mScreenSize.x) {

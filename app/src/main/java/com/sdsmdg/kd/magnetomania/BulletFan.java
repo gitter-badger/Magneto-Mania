@@ -129,7 +129,7 @@ public class BulletFan {
             distance = Geometry.distance(bulletPosition[i], GameView.fingerPosition);
 
             if (distance < bulletsRadius)
-            return true;
+                return true;
         }
         return false;
     }

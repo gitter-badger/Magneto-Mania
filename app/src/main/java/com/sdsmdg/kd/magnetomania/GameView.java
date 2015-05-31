@@ -155,8 +155,8 @@ public class GameView extends SurfaceView {
             /*** Condition of game over when finger touches the monster ball. ***/
             /***/   is_game_over = mBall.didMonsterGetTheFinger();
             /***/   if(is_game_over) {
-            /***/       tryGameOver();
-            /***/       System.exit(0);
+                /***/       tryGameOver();
+                /***/       System.exit(0);
             }
 
             if(monsterSleepCount <= mBall.monsterSleepTime) {
@@ -220,8 +220,8 @@ public class GameView extends SurfaceView {
                     /*** Conditon of game over when finger touches the bullet. ***/
                     /***/is_game_over = mFan[i].didBulletGetTheFinger();
                     /***/if (is_game_over) {
-                    /***/    tryGameOver();
-                    /***/    System.exit(0);
+                        /***/    tryGameOver();
+                        /***/    System.exit(0);
                     }
                 }
 
@@ -253,7 +253,7 @@ public class GameView extends SurfaceView {
                     for(int i=0; i<3; i++) {
                         for (int j = 0; j < 7; j++) {
                             if (mFan[i].bulletPosition[j].x >= GameActivity.mScreenSize.x+25 || mFan[i].bulletPosition[j].x <= -25 ||
-                                mFan[i].bulletPosition[j].y >= GameActivity.mScreenSize.y+25 || mFan[i].bulletPosition[j].y <= -25) {
+                                    mFan[i].bulletPosition[j].y >= GameActivity.mScreenSize.y+25 || mFan[i].bulletPosition[j].y <= -25) {
                                 howManyBulletsOnScreen++;
                             }
                         }
@@ -314,7 +314,7 @@ public class GameView extends SurfaceView {
                 }
                 else {
                     if (mBall.monsterPosition.x <= GameActivity.mScreenSize.x || mBall.monsterPosition.x <= 0 ||
-                        mBall.monsterPosition.y <= GameActivity.mScreenSize.y || mBall.monsterPosition.y <= 0) {
+                            mBall.monsterPosition.y <= GameActivity.mScreenSize.y || mBall.monsterPosition.y <= 0) {
                         mBall.attackFingerPosition();
                     }
                     mBall.prepareForSleepAndAttack();
@@ -340,7 +340,7 @@ public class GameView extends SurfaceView {
                     }
 
                     if (mBall.monsterPosition.x >= GameActivity.mScreenSize.x || mBall.monsterPosition.x <= 0 ||
-                        mBall.monsterPosition.y >= GameActivity.mScreenSize.y || mBall.monsterPosition.y <= 0) {
+                            mBall.monsterPosition.y >= GameActivity.mScreenSize.y || mBall.monsterPosition.y <= 0) {
 
                         // For preventing glitchy movement at the boundary.
                         if (mBall.monsterPosition.x > GameActivity.mScreenSize.x) {
@@ -392,9 +392,9 @@ public class GameView extends SurfaceView {
                 /*** Condition of game over when finger touches the rocket. ***/
                 /***/is_game_over = mRocket.didRocketGetTheFinger();
                 /***/if(is_game_over) {
-                /***/    tryGameOver();
-                /***/    System.exit(0);
-                     }
+                    /***/    tryGameOver();
+                    /***/    System.exit(0);
+                }
 
                 if(rocketXhaustCount <= mRocket.rocketXhaustTime) {
                     mRocket.rocketTrackFinger();
