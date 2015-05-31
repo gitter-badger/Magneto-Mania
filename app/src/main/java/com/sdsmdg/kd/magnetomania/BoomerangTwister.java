@@ -12,9 +12,10 @@ public class BoomerangTwister {
     /******************************************** CLASS MEMBERS ********************************************/
     protected Point twisterPosition = new Point(0,0);
     protected double twisterVelocity;
+    protected double twisterVelocityMaxMagnitude;
 
     protected Paint twisterPaint = new Paint();
-    protected final int twisterRadius = (int)(Math.sqrt(Geometry.area(GameActivity.mScreenSize)/ (40*Math.PI)));
+    protected final int twisterRadius = (int)(Math.sqrt(Geometry.area(GameActivity.mScreenSize)/ (50*Math.PI)));
     /**---------------------------------------------------------------------------------------------------**/
 
 
@@ -22,8 +23,8 @@ public class BoomerangTwister {
     public BoomerangTwister() {
         this.twisterPosition.x = GameActivity.mScreenSize.x + 120;
         this.twisterPosition.y = GameActivity.mScreenSize.y + 120;
-        this.twisterVelocity = 0;
-
+        this.twisterVelocity = 20;
+        this.twisterVelocityMaxMagnitude = 20;
         this.twisterPaint.setColor(Color.parseColor("#FFAA00"));
     }
     /**--------------------------------------------------------------------------------------------------**/
@@ -32,16 +33,18 @@ public class BoomerangTwister {
     public void initTwister(MonsterBall monsterBall) {
         Random random = new Random();
 
-        twisterPosition   = Geometry.setCoordinates(monsterBall.monsterPosition);
-        twisterVelocity   = random.nextInt(10) + 20 + (int)(GameView.Score / 750);
+        twisterPosition               = Geometry.setCoordinates(monsterBall.monsterPosition);
+        twisterVelocity               = random.nextInt(10) + 15 + (int)(GameView.Score / 1000);
+        twisterVelocityMaxMagnitude   = random.nextInt(10) + 15 + (int)(GameView.Score / 1000);
     }
 
 
-    public void attackTowardsFinger(MonsterBall monsterBall) {
-        Point rVelocityComponent = Geometry.calcVelocityComponents(GameView.fingerPosition, twisterPosition, (int)twisterVelocity);
-        twisterVelocity   -= 0.1;
-        twisterPosition.x += rVelocityComponent.x;
-        twisterPosition.y += rVelocityComponent.y;
+    public void attackTowardsFinger() {
+        Point mVelocityComponent = Geometry.calcVelocityComponents(GameView.destinationPoint, GameView.initialPoint, (int)twisterVelocity);
+
+        twisterVelocity   -= 0.5;
+        twisterPosition.x += mVelocityComponent.x;
+        twisterPosition.y += mVelocityComponent.y;
     }
 
 

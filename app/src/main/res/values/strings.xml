@@ -16,6 +16,6 @@
     <string name="fifthIns"><![CDATA[-> Blue: bombs, Yellow: heat waves, Cyan: laser beams]]></string>
     <string name="last">I haven\'t worked on this fancy stuff, so it is temporary, don\'t mind it, just look for bugs in the gameplay. Mail me bugs, suggestions, problems: karandesai281196@gmail.com</string>
     <string name="finalIns">And please use the mentioned terminology for explaining the bug, for better understanding.</string>
-    <string name="ExtraMessage">That white monsterball IS nasty, isn't he? After all he is his Sith daddy's apprentice! Keep calm and play again. ;) Do mention the bugs…</string>
+    <string name="ExtraMessage">That white monsterball IS nasty, isn\'t he? After all he is his Sith daddy\'s apprentice! Keep calm and play again. ;) Do mention the bugs…</string>
     <string name="yourScore">Here is your score. Well done, for starters, may the force be with you!</string>
 </resources>
