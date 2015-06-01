@@ -28,7 +28,7 @@ public class HeatWave {
         this.heatWavePaint.setAlpha(10);
         this.heatWavePaint.setColor(Color.YELLOW);
         this.heatWavePaint.setStrokeWidth(20);
-        this.heatWavePaint.setStyle(Paint.Style.FILL_AND_STROKE);
+        this.heatWavePaint.setStyle(Paint.Style.STROKE);
         this.heatWavePaint.setStrokeCap(Paint.Cap.BUTT);
     }
     /**--------------------------------------------------------------------------------------------------**/

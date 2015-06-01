@@ -514,7 +514,7 @@ public class GameView extends SurfaceView {
                     canvas.drawLine((float) mBeam[i].center.x, (float) mBeam[i].center.y, (float) mBeam[i].laserDestinationX, (float) mBeam[i].laserDestinationY, mBeam[i].laserBeamPaint);
                 }
             }
-            else if (laserBeamMoveCount%2==1 && laser_beam_on_screen) {
+            else if (laser_beam_on_screen) {
                 for(int i=0; i<4; i++) {
                     canvas.drawLine((float) mBeam[i].center.x, (float) mBeam[i].center.y, (float) mBeam[i].laserDestinationX, (float) mBeam[i].laserDestinationY, mBeam[i].laserBeamPaint);
                 }
@@ -539,7 +539,7 @@ public class GameView extends SurfaceView {
         }
 
         canvas.drawCircle((float) mBall.monsterPosition.x, (float) mBall.monsterPosition.y, (float) mBall.monsterRadius, mBall.monsterPaint);
-        canvas.drawText(Integer.toString((int) Score), 20, 20, scorePaint);
+        canvas.drawText(Integer.toString((int) Score), 40, 40, scorePaint);
     }
 
     @SuppressLint("ClickableViewAccessibility")
