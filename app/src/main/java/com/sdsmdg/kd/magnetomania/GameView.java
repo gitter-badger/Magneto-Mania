@@ -31,7 +31,7 @@ public class GameView extends SurfaceView {
     private BulletFan[]     mFan             = new BulletFan[3];
     private HeatWave[]      mWave            = new HeatWave[5];
     private RectF[]         heatRect         = new RectF[5];
-    private LaserBeam[]     mBeam            = new LaserBeam[8];
+    private LaserBeam[]     mBeam            = new LaserBeam[4];
     private TimeBomb[]      mBomb            = new TimeBomb[2];
     private BoomerangTwister[] mTwister      = new BoomerangTwister[5];
 
@@ -63,7 +63,6 @@ public class GameView extends SurfaceView {
     private SpriteAnimation animation       = new SpriteAnimation(this);
     private Random          random          = new Random();
 
-    private Point           pFingerPosition = new Point(0,0);
     public static double    Score;
     private Paint           scorePaint      = new Paint();
 
@@ -96,7 +95,7 @@ public class GameView extends SurfaceView {
             this.mTwister[i] = new BoomerangTwister();
         }
 
-        for(int i=0; i<8; i++) {
+        for(int i=0; i<4; i++) {
             this.mBeam[i] = new LaserBeam();
         }
 
@@ -166,6 +165,7 @@ public class GameView extends SurfaceView {
                 /***/       tryGameOver();
                 /***/       System.exit(0);
             }
+                Score += 0.3 + Score / 2500;
 
             if(monsterSleepCount <= mBall.monsterSleepTime) {
                 monsterSleepCount++;
@@ -201,16 +201,16 @@ public class GameView extends SurfaceView {
                     heatWaveTimeGap++;
                     heatRect[0] = mWave[0].setHeatWaveSize(mBall.monsterPosition);
 
-                    if(heatWaveTimeGap > 20)
+                    if(heatWaveTimeGap > 25)
                         heatRect[1] = mWave[1].setHeatWaveSize(mBall.monsterPosition);
 
-                    if(heatWaveTimeGap > 40)
+                    if(heatWaveTimeGap > 50)
                         heatRect[2] = mWave[2].setHeatWaveSize(mBall.monsterPosition);
 
-                    if(heatWaveTimeGap > 60)
+                    if(heatWaveTimeGap > 75)
                         heatRect[3] = mWave[3].setHeatWaveSize(mBall.monsterPosition);
 
-                    if(heatWaveTimeGap > 80)
+                    if(heatWaveTimeGap > 100)
                         heatRect[4] = mWave[4].setHeatWaveSize(mBall.monsterPosition);
 
                     if(mWave[4].heatWaveRadius > 3*GameActivity.mScreenSize.y/2)
@@ -279,13 +279,12 @@ public class GameView extends SurfaceView {
             }
             else if (mBall.monsterTrickSetDecider == 1 && mBall.monsterAttackTrick == 1) {
                 monsterSleepCount = 1;
-                laserAlphaCount = 10;
 
                 if(time_to_fire_laser) {
                     initialPoint = Geometry.setCoordinates(mBall.monsterPosition);
-                    laserAlphaCount+=40;
+                    laserAlphaCount+=10;
 
-                    for(int i=0; i<8; i++) {
+                    for(int i=0; i<4; i++) {
                         mBeam[i].initLaserBeam(i);
                         mBeam[i].laserBeamPaint.setAlpha(laserAlphaCount);
                     }
@@ -297,7 +296,7 @@ public class GameView extends SurfaceView {
                         laser_beam_on_screen = true;
                         laserBeamMoveCount   = 1;
 
-                        for(int i=0; i<8; i++) {
+                        for(int i=0; i<4; i++) {
                             mBeam[i].laserBeamPaint.setAlpha(255);
                         }
                     }
@@ -305,14 +304,14 @@ public class GameView extends SurfaceView {
                 else if(laser_beam_on_screen) {
                     laserBeamMoveCount++;
 
-                    if(laserBeamMoveCount < 175) {
-                        if(laserBeamMoveCount % 25 == 0) {
-                            for(int i=0; i<8; i++) {
+                    if(laserBeamMoveCount < 180) {
+                        if(laserBeamMoveCount % 30 == 0) {
+                            for(int i=0; i<4; i++) {
                                 mBeam[i].initLaserBeam(i);
                             }
                         }
 
-                        for(int i=0; i<8; i++) {
+                        for(int i=0; i<4; i++) {
                             mBeam[i].rotateBeam(i);
                         }
                     }
@@ -325,6 +324,7 @@ public class GameView extends SurfaceView {
                             mBall.monsterPosition.y <= GameActivity.mScreenSize.y || mBall.monsterPosition.y <= 0) {
                         mBall.attackFingerPosition();
                     }
+                    laserAlphaCount = 1;
                     mBall.prepareForSleepAndAttack();
                 }
             }
@@ -470,6 +470,7 @@ public class GameView extends SurfaceView {
                 }
             }
             else {
+                mThread.setFPS(50);
                 monsterSleepCount = 1;
                 mBall.prepareForSleepAndAttack();
                 mBall.attackFingerPosition();
@@ -485,16 +486,16 @@ public class GameView extends SurfaceView {
 
             mWave[0].drawHeatWave(canvas, heatRect[0], 30);
 
-            if(heatWaveTimeGap > 20)
+            if(heatWaveTimeGap > 25)
                 mWave[1].drawHeatWave(canvas, heatRect[1], 0);
 
-            if(heatWaveTimeGap > 40)
+            if(heatWaveTimeGap > 50)
                 mWave[2].drawHeatWave(canvas, heatRect[2], 30);
 
-            if(heatWaveTimeGap > 60)
+            if(heatWaveTimeGap > 75)
                 mWave[3].drawHeatWave(canvas, heatRect[3], 0);
 
-            if(heatWaveTimeGap > 80)
+            if(heatWaveTimeGap > 100)
                 mWave[4].drawHeatWave(canvas, heatRect[4], 30);
         }
 
@@ -509,12 +510,12 @@ public class GameView extends SurfaceView {
 
         if(mBeam != null && mBall.monsterTrickSetDecider == 1 && mBall.monsterAttackTrick == 1) {
             if(time_to_fire_laser) {
-                for(int i=0; i<8; i++) {
+                for(int i=0; i<4; i++) {
                     canvas.drawLine((float) mBeam[i].center.x, (float) mBeam[i].center.y, (float) mBeam[i].laserDestinationX, (float) mBeam[i].laserDestinationY, mBeam[i].laserBeamPaint);
                 }
             }
-            else if (laserBeamMoveCount%2==1 && laser_beam_on_screen) {
-                for(int i=0; i<8; i++) {
+            else if (laser_beam_on_screen) {
+                for(int i=0; i<4; i++) {
                     canvas.drawLine((float) mBeam[i].center.x, (float) mBeam[i].center.y, (float) mBeam[i].laserDestinationX, (float) mBeam[i].laserDestinationY, mBeam[i].laserBeamPaint);
                 }
             }
@@ -538,7 +539,7 @@ public class GameView extends SurfaceView {
         }
 
         canvas.drawCircle((float) mBall.monsterPosition.x, (float) mBall.monsterPosition.y, (float) mBall.monsterRadius, mBall.monsterPaint);
-        canvas.drawText(Integer.toString((int) Score), 20, 20, scorePaint);
+        canvas.drawText(Integer.toString((int) Score), 40, 40, scorePaint);
     }
 
     @SuppressLint("ClickableViewAccessibility")
@@ -582,7 +583,6 @@ public class GameView extends SurfaceView {
 
                 invalidate();
 
-                pFingerPosition = Geometry.setCoordinates(fingerPosition);
                 fingerPosition.x = (int) ev.getX();
                 fingerPosition.y = (int) ev.getY();
 
@@ -611,7 +611,7 @@ public class GameView extends SurfaceView {
                 }
 
                 if (mBeam != null && mBall.monsterTrickSetDecider == 1 && mBall.monsterAttackTrick == 1 && laser_beam_on_screen) {
-                    for (int i = 0; i < 8; i++) {
+                    for (int i = 0; i < 4; i++) {
                         /*** Condition of game over when finger touches the laser beam. ***/
                         /***/is_game_over = mBeam[i].didLaserBeamPenetrateTheFinger();
                         /***/if (is_game_over) {
@@ -642,8 +642,6 @@ public class GameView extends SurfaceView {
                         }
                     }
                 }
-
-                Score += Geometry.distanceForScore(fingerPosition, pFingerPosition) / 10.0;
                 break;
 
             case MotionEvent.ACTION_CANCEL:
@@ -675,6 +673,7 @@ public class GameView extends SurfaceView {
         if(mBall.monsterTrickSetDecider == 0) {
             if(mBall.monsterAttackTrick == 1) {
                 time_for_some_heat = true;
+                mThread.setFPS(100);
             }
             else if(mBall.monsterAttackTrick == 2) {
                 time_to_shoot_bullets = true;

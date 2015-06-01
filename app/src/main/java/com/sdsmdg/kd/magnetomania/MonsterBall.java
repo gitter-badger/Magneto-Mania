@@ -34,7 +34,7 @@ public class MonsterBall {
         if(this.monsterPosition.x == 1)
             this.monsterPosition.x = GameActivity.mScreenSize.x;
 
-        this.monsterVelocity = random.nextInt(20) + 15 + (int)(GameView.Score / 500);
+        this.monsterVelocity = random.nextInt(15) + 15 + (int)(GameView.Score / 1000);
         this.monsterSleepTime = random.nextInt(15) + 15;
 
         this.monsterAttackTrick = 0;
@@ -77,7 +77,7 @@ public class MonsterBall {
             GameView.initialPoint     = Geometry.setCoordinates(monsterPosition);
 
             monsterAttackTrick = 0;
-            monsterVelocity  = random.nextInt(20) + 10 + (int)(GameView.Score / 100);
+            monsterVelocity  = random.nextInt(15) + 15 + (int)(GameView.Score / 1000);
             monsterSleepTime = random.nextInt(15) + 15;
         }
     }
