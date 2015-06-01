@@ -26,30 +26,22 @@ public class LaserBeam {
 
 
     public void initLaserBeam(int orientation) {
-        switch(orientation) {
-            case 0: this.laserDestinationX = 2*center.x;
+        switch (orientation) {
+            case 0:
+                this.laserDestinationX = 2 * center.x;
                 this.laserDestinationY = 0;
                 break;
-            case 1: this.laserDestinationX = center.x;
+            case 1:
+                this.laserDestinationX = 0;
                 this.laserDestinationY = 0;
                 break;
-            case 2: this.laserDestinationX = 0;
-                this.laserDestinationY = 0;
+            case 2:
+                this.laserDestinationX = 0;
+                this.laserDestinationY = 2 * center.y;
                 break;
-            case 3: this.laserDestinationX = 0;
-                this.laserDestinationY = center.y;
-                break;
-            case 4: this.laserDestinationX = 0;
-                this.laserDestinationY = 2*center.y;
-                break;
-            case 5: this.laserDestinationX = center.x;
-                this.laserDestinationY = 2*center.y;
-                break;
-            case 6: this.laserDestinationX = 2*center.x;
-                this.laserDestinationY = 2*center.y;
-                break;
-            case 7: this.laserDestinationX = 2*center.x;
-                this.laserDestinationY = center.y;
+            case 3:
+                this.laserDestinationX = 2 * center.x;
+                this.laserDestinationY = 2 * center.y;
                 break;
         }
     }
@@ -57,18 +49,18 @@ public class LaserBeam {
 
     public void rotateBeam(int orientation) {
 
-        switch(orientation) {
+        switch (orientation) {
             case 0:
-            case 1: laserDestinationX -= (double)GameActivity.mScreenSize.x/50.0;
+                laserDestinationX -= (double) GameActivity.mScreenSize.x / 30.0;
+                break;
+            case 1:
+                laserDestinationY += (double) GameActivity.mScreenSize.y / 30.0;
                 break;
             case 2:
-            case 3: laserDestinationY += (double)GameActivity.mScreenSize.y/50.0;
+                laserDestinationX += (double) GameActivity.mScreenSize.x / 30.0;
                 break;
-            case 4:
-            case 5: laserDestinationX += (double)GameActivity.mScreenSize.x/50.0;
-                break;
-            case 6:
-            case 7: laserDestinationY -= (double)GameActivity.mScreenSize.y/50.0;
+            case 3:
+                laserDestinationY -= (double) GameActivity.mScreenSize.y / 30.0;
                 break;
         }
     }
