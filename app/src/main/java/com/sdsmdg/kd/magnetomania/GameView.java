@@ -59,7 +59,6 @@ public class GameView extends SurfaceView {
     private SpriteAnimation animation       = new SpriteAnimation(this);
     private Random          random          = new Random();
 
-    private Point           pFingerPosition = new Point(0,0);
     public static double    Score;
     private Paint           scorePaint      = new Paint();
 
@@ -158,6 +157,7 @@ public class GameView extends SurfaceView {
                 /***/       tryGameOver();
                 /***/       System.exit(0);
             }
+                Score += 0.3 + Score / 2500;
 
             if(monsterSleepCount <= mBall.monsterSleepTime) {
                 monsterSleepCount++;
@@ -517,7 +517,6 @@ public class GameView extends SurfaceView {
 
                 invalidate();
 
-                pFingerPosition = Geometry.setCoordinates(fingerPosition);
                 fingerPosition.x = (int) ev.getX();
                 fingerPosition.y = (int) ev.getY();
 
@@ -566,7 +565,6 @@ public class GameView extends SurfaceView {
                         }
                     }
                 }
-                Score += Geometry.distanceForScore(fingerPosition, pFingerPosition) / 10.0;
                 break;
 
             case MotionEvent.ACTION_CANCEL:
