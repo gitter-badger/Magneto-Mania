@@ -8,8 +8,8 @@ android {
         applicationId "com.sdsmdg.kd.magnetomania"
         minSdkVersion 15
         targetSdkVersion 21
-        versionCode 1
-        versionName "1.0"
+        versionCode 2100
+        versionName "0.2.1"
     }
     buildTypes {
         release {

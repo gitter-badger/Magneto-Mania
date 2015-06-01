@@ -218,7 +218,9 @@ public class GameView extends SurfaceView {
                 }
                 else {
                     mBall.prepareForSleepAndAttack();
-                    mBall.attackFingerPosition();
+                    mBall.monsterSleepTime = random.nextInt(15) + 15;
+                    destinationPoint = Geometry.setCoordinates(fingerPosition);
+                    initialPoint     = Geometry.setCoordinates(mBall.monsterPosition);
                 }
             }
             else if(mBall.monsterTrickSetDecider == 0 && mBall.monsterAttackTrick == 2) {
@@ -274,7 +276,8 @@ public class GameView extends SurfaceView {
                 else {
                     mBall.prepareForSleepAndAttack();
                     mBall.monsterSleepTime = random.nextInt(15) + 15;
-
+                    destinationPoint = Geometry.setCoordinates(fingerPosition);
+                    initialPoint     = Geometry.setCoordinates(mBall.monsterPosition);
                 }
             }
             else if (mBall.monsterTrickSetDecider == 1 && mBall.monsterAttackTrick == 1) {
@@ -391,7 +394,9 @@ public class GameView extends SurfaceView {
                     bombPlantCount = 1;
 
                     mBall.prepareForSleepAndAttack();
-                    mBall.attackFingerPosition();
+                    mBall.monsterSleepTime = random.nextInt(15) + 15;
+                    destinationPoint = Geometry.setCoordinates(fingerPosition);
+                    initialPoint     = Geometry.setCoordinates(mBall.monsterPosition);
                 }
             }
             else if(mBall.monsterTrickSetDecider == 2 && mBall.monsterAttackTrick == 1) {
@@ -441,7 +446,8 @@ public class GameView extends SurfaceView {
 
                     mBall.prepareForSleepAndAttack();
                     mBall.monsterSleepTime = random.nextInt(15) + 15;
-                    mBall.attackFingerPosition();
+                    destinationPoint = Geometry.setCoordinates(fingerPosition);
+                    initialPoint     = Geometry.setCoordinates(mBall.monsterPosition);
                 }
             }
             else if(mBall.monsterTrickSetDecider == 2 && mBall.monsterAttackTrick == 2) {
@@ -466,7 +472,8 @@ public class GameView extends SurfaceView {
 
                     mBall.prepareForSleepAndAttack();
                     mBall.monsterSleepTime = random.nextInt(15) + 15;
-                    mBall.attackFingerPosition();
+                    destinationPoint = Geometry.setCoordinates(fingerPosition);
+                    initialPoint     = Geometry.setCoordinates(mBall.monsterPosition);
                 }
             }
             else {
