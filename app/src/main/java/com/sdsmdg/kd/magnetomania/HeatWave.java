@@ -61,7 +61,7 @@ public class HeatWave {
         int distance = Geometry.distance(GameView.fingerPosition, heatCenter);
         int angle = (int)(Math.atan2((double)(GameView.fingerPosition.y - heatCenter.y), (double)(GameView.fingerPosition.x - heatCenter.x))*180/Math.PI);
 
-        if (distance <= heatWaveRadius+3 && distance >= heatWaveRadius-3) {
+        if (distance <= heatWaveRadius+5 && distance >= heatWaveRadius-10) {
             if(waveType == 1) {
                 return ((angle > 30 && angle < 60)  || (angle > 90  && angle < 120) || (angle > 150  && angle < 180) ||
                         (angle < 0  && angle > -30) || (angle < -60 && angle > -90) || (angle < -120 && angle > -150));

@@ -193,16 +193,16 @@ public class GameView extends SurfaceView {
                     heatWaveTimeGap++;
                     heatRect[0] = mWave[0].setHeatWaveSize(mBall.monsterPosition);
 
-                    if(heatWaveTimeGap > 20)
+                    if(heatWaveTimeGap > 25)
                         heatRect[1] = mWave[1].setHeatWaveSize(mBall.monsterPosition);
 
-                    if(heatWaveTimeGap > 40)
+                    if(heatWaveTimeGap > 50)
                         heatRect[2] = mWave[2].setHeatWaveSize(mBall.monsterPosition);
 
-                    if(heatWaveTimeGap > 60)
+                    if(heatWaveTimeGap > 75)
                         heatRect[3] = mWave[3].setHeatWaveSize(mBall.monsterPosition);
 
-                    if(heatWaveTimeGap > 80)
+                    if(heatWaveTimeGap > 100)
                         heatRect[4] = mWave[4].setHeatWaveSize(mBall.monsterPosition);
 
                     if(mWave[4].heatWaveRadius > 3*GameActivity.mScreenSize.y/2)
@@ -412,6 +412,7 @@ public class GameView extends SurfaceView {
                 }
             }
             else {
+                mThread.setFPS(50);
                 monsterSleepCount = 1;
                 mBall.prepareForSleepAndAttack();
                 mBall.attackFingerPosition();
@@ -427,16 +428,16 @@ public class GameView extends SurfaceView {
 
             mWave[0].drawHeatWave(canvas, heatRect[0], 30);
 
-            if(heatWaveTimeGap > 20)
+            if(heatWaveTimeGap > 25)
                 mWave[1].drawHeatWave(canvas, heatRect[1], 0);
 
-            if(heatWaveTimeGap > 40)
+            if(heatWaveTimeGap > 50)
                 mWave[2].drawHeatWave(canvas, heatRect[2], 30);
 
-            if(heatWaveTimeGap > 60)
+            if(heatWaveTimeGap > 75)
                 mWave[3].drawHeatWave(canvas, heatRect[3], 0);
 
-            if(heatWaveTimeGap > 80)
+            if(heatWaveTimeGap > 100)
                 mWave[4].drawHeatWave(canvas, heatRect[4], 30);
         }
 
@@ -595,6 +596,7 @@ public class GameView extends SurfaceView {
         if(mBall.monsterTrickSetDecider == 0) {
             if(mBall.monsterAttackTrick == 1) {
                 time_for_some_heat = true;
+                mThread.setFPS(100);
             }
             else if(mBall.monsterAttackTrick == 2) {
                 time_to_shoot_bullets = true;
