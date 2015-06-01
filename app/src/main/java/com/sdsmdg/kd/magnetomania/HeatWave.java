@@ -23,9 +23,13 @@ public class HeatWave {
     public HeatWave() {
         this.heatCenter.x = GameActivity.mScreenSize.x + 80;
         this.heatCenter.y = GameActivity.mScreenSize.y + 80;
-        this.heatWaveVelocity = 6;
+        this.heatWaveVelocity = 10;
         this.heatWaveRadius = 0;
+        this.heatWavePaint.setAlpha(10);
         this.heatWavePaint.setColor(Color.YELLOW);
+        this.heatWavePaint.setStrokeWidth(20);
+        this.heatWavePaint.setStyle(Paint.Style.FILL_AND_STROKE);
+        this.heatWavePaint.setStrokeCap(Paint.Cap.BUTT);
     }
     /**--------------------------------------------------------------------------------------------------**/
 
@@ -33,7 +37,8 @@ public class HeatWave {
     public void initHeatWave(MonsterBall monsterBall) {
         heatCenter = Geometry.setCoordinates(monsterBall.monsterPosition);
         heatWaveRadius = 0;
-        heatWaveVelocity = 6;
+        heatWaveVelocity = 9;
+        heatWavePaint.setAlpha(10);
     }
 
 
@@ -45,6 +50,14 @@ public class HeatWave {
         heatRect.right  = center.x + heatWaveRadius;
         heatRect.bottom = center.y + heatWaveRadius;
 
+        int alpha = heatWavePaint.getAlpha();
+        if(alpha < 255) {
+            alpha += 5;
+            if(alpha > 255) {
+                alpha = 255;
+            }
+        }
+        heatWavePaint.setAlpha(alpha);
         heatWaveRadius += heatWaveVelocity;
         return heatRect;
     }
@@ -61,7 +74,7 @@ public class HeatWave {
         int distance = Geometry.distance(GameView.fingerPosition, heatCenter);
         int angle = (int)(Math.atan2((double)(GameView.fingerPosition.y - heatCenter.y), (double)(GameView.fingerPosition.x - heatCenter.x))*180/Math.PI);
 
-        if (distance <= heatWaveRadius+5 && distance >= heatWaveRadius-10) {
+        if (distance <= heatWaveRadius+5 && distance >= heatWaveRadius-30) {
             if(waveType == 1) {
                 return ((angle > 30 && angle < 60)  || (angle > 90  && angle < 120) || (angle > 150  && angle < 180) ||
                         (angle < 0  && angle > -30) || (angle < -60 && angle > -90) || (angle < -120 && angle > -150));
