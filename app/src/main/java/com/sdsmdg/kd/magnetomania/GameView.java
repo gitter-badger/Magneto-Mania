@@ -529,9 +529,8 @@ public class GameView extends SurfaceView {
 
         if(mTwister != null && mBall.monsterTrickSetDecider == 2 && mBall.monsterAttackTrick == 1) {
             for(int i=0; i<5; i++) {
-//                canvas.drawCircle((float) mTwister[i].twisterPosition.x, (float) mTwister[i].twisterPosition.y,
-//                        (float) mTwister[i].twisterRadius, mTwister[i].twisterPaint);
-                  animation.drawBoomerangTwister(mTwister[i], canvas);
+                canvas.drawCircle((float) mTwister[i].twisterPosition.x, (float) mTwister[i].twisterPosition.y,
+                        (float) mTwister[i].twisterRadius, mTwister[i].twisterPaint);
             }
         }
 
