@@ -12,6 +12,8 @@ public class SpriteAnimation {
     /******************************************** CLASS MEMBERS ********************************************/
     private GameView mGameView;
 
+    private Bitmap mBackgroundBmp;
+
     private Bitmap mBallCoreBodyBmp;
     private Bitmap mBallLeftRingBmp;
     private Bitmap mBallRiteRingBmp;
@@ -43,6 +45,7 @@ public class SpriteAnimation {
     public SpriteAnimation (GameView gameView) {
         this.mGameView = gameView;
 
+        this.mBackgroundBmp   = BitmapFactory.decodeResource(mGameView.getResources(), R.mipmap.background);
         this.mBallCoreBodyBmp = BitmapFactory.decodeResource(mGameView.getResources(), R.mipmap.mballcore);
         this.mBallLeftRingBmp = BitmapFactory.decodeResource(mGameView.getResources(), R.mipmap.mballringleft);
         this.mBallRiteRingBmp = BitmapFactory.decodeResource(mGameView.getResources(), R.mipmap.mballringright);
@@ -73,6 +76,12 @@ public class SpriteAnimation {
         return spriteAngleRotator;
     }
 
+
+    public void drawBackground(Canvas canvas) {
+        fromSheet.set(0, 0, mBackgroundBmp.getWidth(), mBackgroundBmp.getHeight());
+        toDisplay.set(0, 0, GameActivity.mScreenSize.x, GameActivity.mScreenSize.y);
+        canvas.drawBitmap(mBackgroundBmp, fromSheet, toDisplay, null);
+    }
 
     public void drawMonsterBall (MonsterBall monsterBall, Canvas canvas) {
 
