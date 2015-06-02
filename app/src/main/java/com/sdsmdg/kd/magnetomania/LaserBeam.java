@@ -1,5 +1,6 @@
 package com.sdsmdg.kd.magnetomania;
 
+import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
 import android.graphics.Point;
@@ -71,5 +72,21 @@ public class LaserBeam {
         int fingerToCenterAngle = (int)(Math.atan2(GameView.fingerPosition.y - center.y, GameView.fingerPosition.x - center.x)*180/Math.PI);
 
         return (fingerToCenterAngle < destinationToCenterAngle + 3 && fingerToCenterAngle > destinationToCenterAngle - 3);
+    }
+
+
+    public void setLaserBeamPaint(int strokeWidth, String color, Canvas canvas) {
+        laserBeamPaint.setStrokeWidth(strokeWidth);
+        laserBeamPaint.setColor(Color.parseColor(color));
+        canvas.drawLine((float) center.x, (float) center.y, (float) laserDestinationX, (float) laserDestinationY, laserBeamPaint);
+    }
+
+    public void drawLaserBeam(Canvas canvas) {
+        setLaserBeamPaint(45, "#9C27B0", canvas);
+        setLaserBeamPaint(43, "#AB47BC", canvas);
+        setLaserBeamPaint(39, "#B868C8", canvas);
+        setLaserBeamPaint(33, "#CE93D8", canvas);
+        setLaserBeamPaint(25, "#E1BEE7", canvas);
+        setLaserBeamPaint(20, "#F3E5F5", canvas);
     }
 }
