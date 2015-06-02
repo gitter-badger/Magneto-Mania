@@ -18,7 +18,7 @@ public class LaserBeam {
     public LaserBeam() {
         this.laserDestinationX = center.x;
         this.laserDestinationY = center.y;
-        this.laserBeamPaint.setColor(Color.CYAN);
+        this.laserBeamPaint.setColor(Color.parseColor("#9C27B0"));
         this.laserBeamPaint.setAlpha(0);
         this.laserBeamPaint.setStrokeWidth(30);
         this.laserBeamPaint.setStyle(Paint.Style.FILL_AND_STROKE);
@@ -52,16 +52,16 @@ public class LaserBeam {
 
         switch (orientation) {
             case 0:
-                laserDestinationX -= (double) GameActivity.mScreenSize.x / 30.0;
+                laserDestinationX -= (double) GameActivity.mScreenSize.x / 25.0;
                 break;
             case 1:
-                laserDestinationY += (double) GameActivity.mScreenSize.y / 30.0;
+                laserDestinationY += (double) GameActivity.mScreenSize.y / 25.0;
                 break;
             case 2:
-                laserDestinationX += (double) GameActivity.mScreenSize.x / 30.0;
+                laserDestinationX += (double) GameActivity.mScreenSize.x / 25.0;
                 break;
             case 3:
-                laserDestinationY -= (double) GameActivity.mScreenSize.y / 30.0;
+                laserDestinationY -= (double) GameActivity.mScreenSize.y / 25.0;
                 break;
         }
     }

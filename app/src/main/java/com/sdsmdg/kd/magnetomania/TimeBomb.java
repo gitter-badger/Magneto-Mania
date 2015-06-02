@@ -14,7 +14,7 @@ public class TimeBomb {
     protected Paint bombPaint = new Paint();
 
     protected int bombInitialRadius     = (int)(Math.sqrt(Geometry.area(GameActivity.mScreenSize) / (300 * Math.PI)));
-    protected int bombExplosionRadius   = (int)(Math.sqrt(Geometry.area(GameActivity.mScreenSize) / (3 * Math.PI)));
+    protected int bombExplosionRadius   = (int)(Math.sqrt(Geometry.area(GameActivity.mScreenSize) / (2 * Math.PI)));
     protected int explosionIncreaseRate = 5;
 
     protected int bombCurrentRadius;

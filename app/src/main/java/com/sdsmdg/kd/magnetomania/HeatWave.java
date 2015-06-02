@@ -37,7 +37,7 @@ public class HeatWave {
     public void initHeatWave(MonsterBall monsterBall) {
         heatCenter = Geometry.setCoordinates(monsterBall.monsterPosition);
         heatWaveRadius = 0;
-        heatWaveVelocity = 9;
+        heatWaveVelocity = 10;
         heatWavePaint.setAlpha(10);
     }
 

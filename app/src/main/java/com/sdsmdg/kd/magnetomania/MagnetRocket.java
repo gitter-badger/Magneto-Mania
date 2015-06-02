@@ -37,7 +37,7 @@ public class MagnetRocket {
         Random random = new Random();
 
         rocketPosition   = Geometry.setCoordinates(monsterBall.monsterPosition);
-        rocketVelocity   = random.nextInt(10) + 10 + (int)(GameView.Score / 750);
+        rocketVelocity   = random.nextInt(10) + 10;
         rocketXhaustTime = random.nextInt(50) + 150;
 
         rocketPaint.setColor(Color.parseColor("#CC1100"));
