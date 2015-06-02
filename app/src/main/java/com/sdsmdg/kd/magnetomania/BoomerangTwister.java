@@ -42,8 +42,8 @@ public class BoomerangTwister {
         Random random = new Random();
 
         twisterPosition               = Geometry.setCoordinates(monsterBall.monsterPosition);
-        twisterVelocity               = random.nextInt(5) + 20 + (int)(GameView.Score / 1000);
-        twisterVelocityMaxMagnitude   = random.nextInt(5) + 20 + (int)(GameView.Score / 1000);
+        twisterVelocity               = random.nextInt(5) + 20;
+        twisterVelocityMaxMagnitude   = random.nextInt(5) + 20;
         twisterDestination            = Geometry.setCoordinates(GameView.fingerPosition);
         is_twister_thrown             = true;
         twisterAngle                  = 0;
