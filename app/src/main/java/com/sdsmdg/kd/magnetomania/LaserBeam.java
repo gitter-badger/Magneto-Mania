@@ -45,6 +45,8 @@ public class LaserBeam {
                 this.laserDestinationY = 2 * center.y;
                 break;
         }
+        laserBeamPaint.setStrokeWidth(30);
+        laserBeamPaint.setColor(Color.parseColor("#9C27B0"));
     }
 
 
@@ -79,6 +81,7 @@ public class LaserBeam {
         laserBeamPaint.setStrokeWidth(strokeWidth);
         laserBeamPaint.setColor(Color.parseColor(color));
         canvas.drawLine((float) center.x, (float) center.y, (float) laserDestinationX, (float) laserDestinationY, laserBeamPaint);
+        canvas.drawCircle((float)laserDestinationX, (float)laserDestinationY, strokeWidth/4, laserBeamPaint);
     }
 
     public void drawLaserBeam(Canvas canvas) {
