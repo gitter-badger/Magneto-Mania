@@ -17,6 +17,7 @@ public class SpriteAnimation {
     private Bitmap mBallRiteRingBmp;
 
     private Bitmap mRocketBmp;
+    private Bitmap mBoomerangBmp;
 
     private final int M_BALL_BMP_ROWS = 3;
     private final int M_BALL_BMP_COLS = 5;
@@ -46,6 +47,7 @@ public class SpriteAnimation {
         this.mBallLeftRingBmp = BitmapFactory.decodeResource(mGameView.getResources(), R.mipmap.mballringleft);
         this.mBallRiteRingBmp = BitmapFactory.decodeResource(mGameView.getResources(), R.mipmap.mballringright);
         this.mRocketBmp       = BitmapFactory.decodeResource(mGameView.getResources(), R.mipmap.rocket);
+        this.mBoomerangBmp    = BitmapFactory.decodeResource(mGameView.getResources(), R.mipmap.boomerang);
 
         this.spriteUnitCoreBody.x = mBallCoreBodyBmp.getWidth() / M_BALL_BMP_COLS;
         this.spriteUnitCoreBody.y = mBallCoreBodyBmp.getHeight() / M_BALL_BMP_ROWS;
@@ -62,10 +64,13 @@ public class SpriteAnimation {
 
 
     public static void iteratorIncrement() {
-        spriteSheetIterator = ++spriteSheetIterator;
+        spriteSheetIterator = ++spriteSheetIterator % 120;
+    }
 
-        if(spriteSheetIterator > 120)
-            spriteSheetIterator = 0;
+
+    public static int rotatorIncrement(int spriteAngleRotator) {
+        spriteAngleRotator = (spriteAngleRotator + 12) % 360;
+        return spriteAngleRotator;
     }
 
 
@@ -119,6 +124,16 @@ public class SpriteAnimation {
         canvas.rotate(angleFromSpriteToFinger*180/(float)Math.PI + 90, (float) magnetRocket.rocketPosition.x, (float) magnetRocket.rocketPosition.y);
 
         canvas.drawBitmap(mRocketBmp, fromSheet, toDisplay, null);
+        canvas.restore();
+    }
+
+
+    public void drawBoomerangTwister (BoomerangTwister boomerangTwister, Canvas canvas) {
+        canvas.save();
+        canvas.rotate(boomerangTwister.twisterAngle, (float) boomerangTwister.twisterPosition.x, (float) boomerangTwister.twisterPosition.y);
+
+        canvas.drawBitmap(mBoomerangBmp, (float) boomerangTwister.twisterPosition.x - boomerangTwister.twisterRadius,
+                (float) boomerangTwister.twisterPosition.y - boomerangTwister.twisterRadius, null);
         canvas.restore();
     }
 }

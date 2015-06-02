@@ -19,6 +19,7 @@ public class BoomerangTwister {
     protected final int twisterRadius = (int)(Math.sqrt(Geometry.area(GameActivity.mScreenSize)/ (50*Math.PI)));
 
     protected boolean is_twister_thrown;
+    protected int twisterAngle;
     /**---------------------------------------------------------------------------------------------------**/
 
 
@@ -32,6 +33,7 @@ public class BoomerangTwister {
         this.twisterVelocityMaxMagnitude = 20;
         this.twisterPaint.setColor(Color.parseColor("#FFAA00"));
         this.twisterPaint.setAlpha(150);
+        this.twisterAngle      = 0;
     }
     /**--------------------------------------------------------------------------------------------------**/
 
@@ -44,6 +46,7 @@ public class BoomerangTwister {
         twisterVelocityMaxMagnitude   = random.nextInt(5) + 20 + (int)(GameView.Score / 1000);
         twisterDestination            = Geometry.setCoordinates(GameView.fingerPosition);
         is_twister_thrown             = true;
+        twisterAngle                  = 0;
     }
 
 
@@ -53,6 +56,8 @@ public class BoomerangTwister {
         twisterVelocity   -= 0.25;
         twisterPosition.x += mVelocityComponent.x;
         twisterPosition.y += mVelocityComponent.y;
+
+        twisterAngle = SpriteAnimation.rotatorIncrement(twisterAngle);
     }
 
 
