@@ -10,11 +10,12 @@ import android.graphics.Point;
 public class BulletFan {
 
     /******************************************** CLASS MEMBERS ********************************************/
-    protected Point     bulletPosition[]    = new Point[7];
-    protected Point     bulletDestination[] = new Point[7];
-    protected Point     bulletVelocity[]    = new Point[7];
+    protected final int SIZE                = 7;
+    protected Point     bulletPosition[]    = new Point[SIZE];
+    protected Point     bulletDestination[] = new Point[SIZE];
+    protected Point     bulletVelocity[]    = new Point[SIZE];
 
-    protected double    bulletDistance[]    = new double[7];
+    protected double    bulletDistance[]    = new double[SIZE];
     protected double    slopeOfPathCentre;
     protected double    slopeOfPathCorner;
 
@@ -27,13 +28,13 @@ public class BulletFan {
 
     /********************************************* CONSTRUCTOR *********************************************/
     public BulletFan() {
-        for(int i=0; i<7; i++) {
+        for(int i = 0; i < SIZE; i++) {
             this.bulletPosition[i]    = new Point(0,0);
             this.bulletDestination[i] = new Point(0,0);
             this.bulletVelocity[i]    = new Point(0,0);
         }
 
-        for(int i=0; i<7; i++) {
+        for(int i = 0; i < SIZE; i++) {
             this.bulletPosition[i].x  = GameActivity.mScreenSize.x + 80;
             this.bulletPosition[i].y  = GameActivity.mScreenSize.y + 80;
             this.bulletDistance[i]    = 0;
@@ -49,7 +50,7 @@ public class BulletFan {
 
     public void initBullets(MonsterBall monsterBall) {
 
-        for(int i=0; i<7; i++) {
+        for(int i = 0; i < SIZE; i++) {
             bulletPosition[i] = Geometry.setCoordinates(monsterBall.monsterPosition);
         }
         bulletsVelocity = 20;
@@ -107,7 +108,7 @@ public class BulletFan {
 
 
         /* Setting distance between the attack point of bullets and destination of bullets, to decide velocity components. */
-        for(int i = 0; i < 7; i++) {
+        for(int i = 0; i < SIZE; i++) {
             bulletVelocity[i] = Geometry.calcVelocityComponents(bulletDestination[i], monsterBall.monsterPosition, (int)bulletsVelocity);
         }
     }
@@ -115,7 +116,7 @@ public class BulletFan {
 
     public void setDirectionAndShoot() {
 
-        for(int i=0; i<7; i++) {
+        for(int i = 0; i < SIZE; i++) {
             bulletPosition[i].x += bulletVelocity[i].x;
             bulletPosition[i].y += bulletVelocity[i].y;
         }
@@ -125,7 +126,7 @@ public class BulletFan {
     public boolean didBulletGetTheFinger() {
         int distance;
 
-        for (int i=0; i<7; i++) {
+        for (int i = 0; i < SIZE; i++) {
             distance = Geometry.distance(bulletPosition[i], GameView.fingerPosition);
 
             if (distance < bulletsRadius)

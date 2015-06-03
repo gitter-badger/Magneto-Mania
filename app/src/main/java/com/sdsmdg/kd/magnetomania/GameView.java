@@ -286,7 +286,7 @@ public class GameView extends SurfaceView {
 
                 if(time_to_fire_laser) {
                     initialPoint = Geometry.setCoordinates(mBall.monsterPosition);
-                    laserAlphaCount = (laserAlphaCount + 3) % 255;
+                    laserAlphaCount = (laserAlphaCount + 5) % 255;
 
                     for(int i=0; i<4; i++) {
                         mBeam[i].initLaserBeam(i);
@@ -308,8 +308,8 @@ public class GameView extends SurfaceView {
                 else if(laser_beam_on_screen) {
                     laserBeamMoveCount++;
 
-                    if(laserBeamMoveCount < 225) {
-                        if(laserBeamMoveCount % 25 == 0) {
+                    if(laserBeamMoveCount < 180) {
+                        if(laserBeamMoveCount % 30 == 0) {
                             for(int i=0; i<4; i++) {
                                 mBeam[i].initLaserBeam(i);
                             }

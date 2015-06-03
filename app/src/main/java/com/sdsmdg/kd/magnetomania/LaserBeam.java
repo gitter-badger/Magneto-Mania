@@ -54,16 +54,16 @@ public class LaserBeam {
 
         switch (orientation) {
             case 0:
-                laserDestinationX -= (double) GameActivity.mScreenSize.x / 25.0;
+                laserDestinationX -= (double) GameActivity.mScreenSize.x / 30.0;
                 break;
             case 1:
-                laserDestinationY += (double) GameActivity.mScreenSize.y / 25.0;
+                laserDestinationY += (double) GameActivity.mScreenSize.y / 30.0;
                 break;
             case 2:
-                laserDestinationX += (double) GameActivity.mScreenSize.x / 25.0;
+                laserDestinationX += (double) GameActivity.mScreenSize.x / 30.0;
                 break;
             case 3:
-                laserDestinationY -= (double) GameActivity.mScreenSize.y / 25.0;
+                laserDestinationY -= (double) GameActivity.mScreenSize.y / 30.0;
                 break;
         }
     }
