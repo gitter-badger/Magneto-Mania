@@ -35,6 +35,7 @@ public class GameView extends SurfaceView {
     private LaserBeam[]     mBeam            = new LaserBeam[4];
     private TimeBomb[]      mBomb            = new TimeBomb[2];
     private BoomerangTwister[] mTwister      = new BoomerangTwister[5];
+    private LightSaber      mSaber           = new LightSaber();
 
     public static Point     fingerPosition   = new Point(0,0);
     public static Point     destinationPoint = new Point(0,0);
@@ -60,6 +61,8 @@ public class GameView extends SurfaceView {
     private boolean         bomb_residue_on_screen;
     private boolean         time_for_some_twisters;
     private boolean         twisters_on_screen;
+    private boolean         time_for_saber_action;
+    private boolean         saber_blade_on_screen;
 
     private SpriteAnimation animation       = new SpriteAnimation(this);
     private Random          random          = new Random();
@@ -124,6 +127,8 @@ public class GameView extends SurfaceView {
         this.bomb_residue_on_screen = false;
         this.time_for_some_twisters = false;
         this.twisters_on_screen     = false;
+        this.time_for_saber_action  = false;
+        this.saber_blade_on_screen  = false;
 
         Score                       = 0.0;
         this.scorePaint.setColor(Color.LTGRAY);
@@ -477,6 +482,33 @@ public class GameView extends SurfaceView {
                     initialPoint     = Geometry.setCoordinates(mBall.monsterPosition);
                 }
             }
+            else if(mBall.monsterTrickSetDecider == 3 && mBall.monsterAttackTrick == 1) {
+                monsterSleepCount = 1;
+                
+                if(time_for_saber_action) {
+                    time_for_saber_action = false;
+                    saber_blade_on_screen = true;
+
+                    initialPoint     = Geometry.setCoordinates(mBall.monsterPosition);
+                    destinationPoint = Geometry.setCoordinates(fingerPosition);
+
+                    mSaber.initLightSaberBlade(mBall);
+                }
+                else if(saber_blade_on_screen) {
+                    mSaber.swirlTowardsFinger();
+
+                    if (mSaber.lightSaberCenter.x >= GameActivity.mScreenSize.x + mSaber.saberTipRadius || mSaber.lightSaberCenter.x <= -mSaber.saberTipRadius ||
+                        mSaber.lightSaberCenter.y >= GameActivity.mScreenSize.y + mSaber.saberTipRadius || mSaber.lightSaberCenter.y <= -mSaber.saberTipRadius) {
+                        saber_blade_on_screen = false;
+                    }
+                }
+                else {
+                    mBall.prepareForSleepAndAttack();
+                    mBall.monsterSleepTime = random.nextInt(15) + 15;
+                    destinationPoint = Geometry.setCoordinates(fingerPosition);
+                    initialPoint     = Geometry.setCoordinates(mBall.monsterPosition);
+                }
+            }
             else {
                 mThread.setFPS(50);
                 monsterSleepCount = 1;
@@ -544,6 +576,10 @@ public class GameView extends SurfaceView {
 
         if(mRocket != null && mBall.monsterTrickSetDecider == 2 && mBall.monsterAttackTrick == 2) {
             canvas.drawCircle((float)mRocket.rocketPosition.x, (float)mRocket.rocketPosition.y, (float)mRocket.rocketRadius, mRocket.rocketPaint);
+        }
+
+        if(mSaber != null && mBall.monsterTrickSetDecider == 3 && mBall.monsterAttackTrick == 1) {
+            mSaber.drawLightSaberBlade(canvas);
         }
 
         canvas.drawCircle((float) mBall.monsterPosition.x, (float) mBall.monsterPosition.y, (float) mBall.monsterRadius, mBall.monsterPaint);
@@ -675,7 +711,7 @@ public class GameView extends SurfaceView {
 
 
     public void randomizeTrajectory() {
-        mBall.monsterTrickSetDecider = ++mBall.monsterTrickSetDecider % 3;
+        mBall.monsterTrickSetDecider = ++mBall.monsterTrickSetDecider % 4;
         mBall.monsterAttackTrick     = random.nextInt(2) + 1;
 
         if(mBall.monsterTrickSetDecider == 0) {
@@ -703,6 +739,14 @@ public class GameView extends SurfaceView {
             }
             else if(mBall.monsterAttackTrick == 2) {
                 mRocket.initRocket(mBall);
+            }
+        }
+        else if(mBall.monsterTrickSetDecider == 3) {
+            if(mBall.monsterAttackTrick == 1) {
+                time_for_saber_action = true;
+            }
+            else if(mBall.monsterAttackTrick == 2) {
+                mThread.setFPS(50);
             }
         }
     }
