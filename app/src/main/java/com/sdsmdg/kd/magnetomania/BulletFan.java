@@ -15,7 +15,6 @@ public class BulletFan {
     protected Point     bulletDestination[] = new Point[SIZE];
     protected Point     bulletVelocity[]    = new Point[SIZE];
 
-    protected double    bulletDistance[]    = new double[SIZE];
     protected double    slopeOfPathCentre;
     protected double    slopeOfPathCorner;
 
@@ -37,7 +36,6 @@ public class BulletFan {
         for(int i = 0; i < SIZE; i++) {
             this.bulletPosition[i].x  = GameActivity.mScreenSize.x + 80;
             this.bulletPosition[i].y  = GameActivity.mScreenSize.y + 80;
-            this.bulletDistance[i]    = 0;
         }
 
         this.slopeOfPathCentre = 0;
