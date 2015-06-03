@@ -57,11 +57,10 @@ public class Geometry extends Point {
     public static Point circularPathDisplacement(Point object, Point center, int radius, double omega) {
         // omega is angular velocity in degrees per second.
         double theta = Math.atan2((double)object.y - center.y, (double)object.x - center.x)* 180 / Math.PI;
-        Log.i("theta " + theta, "omega " + omega);
+
         theta = (theta + omega) % 360;
-        Log.i("theta\' " + theta, "omega\' " + omega);
+
         object.set((int)((double)center.x + (double)(radius)*Math.cos(theta * Math.PI / 180)), (int)((double)center.y + (double)(radius)*Math.sin(theta * Math.PI / 180)));
-        Log.i("cos " + (double)(radius)*Math.cos(theta), "sin " + (double)(radius)*Math.sin(theta));
         return object;
     }
 }
