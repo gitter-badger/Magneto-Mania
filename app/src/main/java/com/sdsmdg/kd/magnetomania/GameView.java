@@ -35,7 +35,7 @@ public class GameView extends SurfaceView {
     private LaserBeam[]     mBeam            = new LaserBeam[4];
     private TimeBomb[]      mBomb            = new TimeBomb[2];
     private BoomerangTwister[] mTwister      = new BoomerangTwister[5];
-    private LightSaber      mSaber           = new LightSaber();
+    private LightSaber[]    mSaber           = new LightSaber[3];
 
     public static Point     fingerPosition   = new Point(0,0);
     public static Point     destinationPoint = new Point(0,0);
@@ -49,6 +49,7 @@ public class GameView extends SurfaceView {
     private int             laserAlphaCount;
     private int             bombPlantCount;
     private int             twisterTimeGap;
+    private int             saberTimeGap;
 
     private boolean         monster_trick_time;
     private boolean         time_to_shoot_bullets;
@@ -107,6 +108,10 @@ public class GameView extends SurfaceView {
             this.mBomb[i] = new TimeBomb();
         }
 
+        for(int i=0; i<3; i++) {
+            this.mSaber[i] = new LightSaber();
+        }
+
         this.monsterSleepCount      = 1;
         this.rocketXhaustCount      = 1;
         this.bulletFansTimeGap      = 1;
@@ -115,6 +120,7 @@ public class GameView extends SurfaceView {
         this.laserAlphaCount        = 1;
         this.bombPlantCount         = 1;
         this.twisterTimeGap         = 1;
+        this.saberTimeGap           = 1;
 
         this.monster_trick_time     = false;
         this.time_to_shoot_bullets  = false;
@@ -486,23 +492,37 @@ public class GameView extends SurfaceView {
                 monsterSleepCount = 1;
                 
                 if(time_for_saber_action) {
-                    time_for_saber_action = false;
-                    saber_blade_on_screen = true;
+                    saberTimeGap++;
 
-                    initialPoint     = Geometry.setCoordinates(mBall.monsterPosition);
-                    destinationPoint = Geometry.setCoordinates(fingerPosition);
+                    for(int i = 0; i < 3; i++) {
+                        if(saberTimeGap > 30    *(i+1) && !mSaber[i].is_saber_thrown) {
+                            mSaber[i].initLightSaberBlade(mBall);
+                            mSaber[i].is_saber_thrown = true;
+                        }
+                        else if(mSaber[i].is_saber_thrown) {
+                            mSaber[i].swirlTowardsFinger();
+                        }
+                    }
 
-                    mSaber.initLightSaberBlade(mBall);
+                    if(mSaber[2].is_saber_thrown) {
+                        time_for_saber_action = false;
+                        saber_blade_on_screen = true;
+                    }
                 }
                 else if(saber_blade_on_screen) {
-                    mSaber.swirlTowardsFinger();
+                    for(int i = 0; i < 3; i++) {
+                        mSaber[i].swirlTowardsFinger();
+                    }
 
-                    if (mSaber.lightSaberCenter.x >= GameActivity.mScreenSize.x + mSaber.saberTipRadius || mSaber.lightSaberCenter.x <= -mSaber.saberTipRadius ||
-                        mSaber.lightSaberCenter.y >= GameActivity.mScreenSize.y + mSaber.saberTipRadius || mSaber.lightSaberCenter.y <= -mSaber.saberTipRadius) {
+                    if (mSaber[2].lightSaberCenter.x >= GameActivity.mScreenSize.x + mSaber[2].saberTipRadius || mSaber[2].lightSaberCenter.x <= -mSaber[2].saberTipRadius ||
+                        mSaber[2].lightSaberCenter.y >= GameActivity.mScreenSize.y + mSaber[2].saberTipRadius || mSaber[2].lightSaberCenter.y <= -mSaber[2].saberTipRadius) {
                         saber_blade_on_screen = false;
                     }
                 }
                 else {
+                    for(int i = 0; i < 3; i++) {
+                        mSaber[i].is_saber_thrown = false;
+                    }
                     mBall.prepareForSleepAndAttack();
                     mBall.monsterSleepTime = random.nextInt(15) + 15;
                     destinationPoint = Geometry.setCoordinates(fingerPosition);
@@ -579,7 +599,11 @@ public class GameView extends SurfaceView {
         }
 
         if(mSaber != null && mBall.monsterTrickSetDecider == 3 && mBall.monsterAttackTrick == 1) {
-            mSaber.drawLightSaberBlade(canvas);
+            for(int i = 0; i < 3; i++) {
+                if (mSaber[i].is_saber_thrown) {
+                    mSaber[i].drawLightSaberBlade(canvas);
+                }
+            }
         }
 
         canvas.drawCircle((float) mBall.monsterPosition.x, (float) mBall.monsterPosition.y, (float) mBall.monsterRadius, mBall.monsterPaint);

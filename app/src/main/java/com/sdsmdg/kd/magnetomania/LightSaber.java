@@ -10,6 +10,7 @@ public class LightSaber {
 
     /******************************************** CLASS MEMBERS ********************************************/
     protected Point     lightSaberCenter   = new Point(0,0);
+    protected Point     saberDestination   = new Point(0,0);
     protected Point[]   lightSaberTip      = new Point[4];
 
     protected double saberCenterVelocity;
@@ -19,8 +20,10 @@ public class LightSaber {
     protected Paint saberClassOnePaint = new Paint();
     protected Paint saberClassTwoPaint = new Paint();
 
-    protected final int saberCentralRadius = (int)(Math.sqrt(Geometry.area(GameActivity.mScreenSize) / (300 * Math.PI)));
+    protected final int saberCentralRadius = (int)(Math.sqrt(Geometry.area(GameActivity.mScreenSize) / (250 * Math.PI)));
     protected final int saberTipRadius     = (int)(Math.sqrt(Geometry.area(GameActivity.mScreenSize) / (5 * Math.PI)));
+
+    protected boolean is_saber_thrown;
     /**---------------------------------------------------------------------------------------------------**/
 
 
@@ -48,13 +51,15 @@ public class LightSaber {
 
         this.saberClassOnePaint.setStrokeWidth(25);
         this.saberClassTwoPaint.setStrokeWidth(25);
+
+        this.is_saber_thrown      = false;
     }
     /**--------------------------------------------------------------------------------------------------**/
 
 
     public void initLightSaberBlade(MonsterBall monsterBall) {
-        lightSaberCenter.x = monsterBall.monsterPosition.x;
-        lightSaberCenter.y = monsterBall.monsterPosition.y;
+        lightSaberCenter = Geometry.setCoordinates(monsterBall.monsterPosition);
+        saberDestination = Geometry.setCoordinates(GameView.fingerPosition);
 
         for (int i = 0; i < 4; i++) {
             lightSaberTip[i].set(lightSaberCenter.x + (int)(saberTipRadius * Math.cos(Math.PI*i/2)),
@@ -64,7 +69,7 @@ public class LightSaber {
 
 
     public void swirlTowardsFinger() {
-        Point mVelocityComponent = Geometry.calcVelocityComponents(GameView.destinationPoint, GameView.initialPoint, (int)saberCenterVelocity);
+        Point mVelocityComponent = Geometry.calcVelocityComponents(saberDestination, GameView.initialPoint, (int)saberCenterVelocity);
 
         lightSaberCenter.x += mVelocityComponent.x;
         lightSaberCenter.y += mVelocityComponent.y;
