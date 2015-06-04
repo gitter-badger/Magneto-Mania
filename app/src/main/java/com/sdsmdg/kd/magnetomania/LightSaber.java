@@ -30,13 +30,13 @@ public class LightSaber {
         this.lightSaberCenter.x   = GameActivity.mScreenSize.x + 300;
         this.lightSaberCenter.y   = GameActivity.mScreenSize.y + 300;
 
-        this.saberCenterVelocity  = 20;
+        this.saberCenterVelocity  = 15;
 
         for (int i = 0; i < 4; i++) {
             this.lightSaberTip[i] = new Point(0,0);
         }
 
-        this.lightSaberOmega      = 10;
+        this.lightSaberOmega      = 5;
 
         this.saberCentralPaint.setColor(Color.GRAY);
 
@@ -57,8 +57,8 @@ public class LightSaber {
         lightSaberCenter.y = monsterBall.monsterPosition.y;
 
         for (int i = 0; i < 4; i++) {
-            lightSaberTip[i].set(lightSaberCenter.x + (int)(saberTipRadius * Math.cos(90*i)),
-                    lightSaberCenter.y + (int)(saberTipRadius * Math.sin(90*i)));
+            lightSaberTip[i].set(lightSaberCenter.x + (int)(saberTipRadius * Math.cos(Math.PI*i/2)),
+                    lightSaberCenter.y - (int)(saberTipRadius * Math.sin(Math.PI*i/2)));
         }
     }
 
@@ -68,10 +68,23 @@ public class LightSaber {
 
         lightSaberCenter.x += mVelocityComponent.x;
         lightSaberCenter.y += mVelocityComponent.y;
+
+        for(int i = 0; i < 4; i++) {
+            lightSaberTip[i].x += mVelocityComponent.x;
+            lightSaberTip[i].y += mVelocityComponent.y;
+        }
+
+        for(int i = 0; i < 4; i++) {
+            lightSaberTip[i] = Geometry.circularPathDisplacement(lightSaberTip[i], lightSaberCenter, saberTipRadius, lightSaberOmega);
+        }
     }
 
 
     public void drawLightSaberBlade(Canvas canvas) {
+        canvas.drawLine(lightSaberCenter.x, lightSaberCenter.y, lightSaberTip[0].x, lightSaberTip[0].y, saberClassOnePaint);
+        canvas.drawLine(lightSaberCenter.x, lightSaberCenter.y, lightSaberTip[1].x, lightSaberTip[1].y, saberClassTwoPaint);
+        canvas.drawLine(lightSaberCenter.x, lightSaberCenter.y, lightSaberTip[2].x, lightSaberTip[2].y, saberClassOnePaint);
+        canvas.drawLine(lightSaberCenter.x, lightSaberCenter.y, lightSaberTip[3].x, lightSaberTip[3].y, saberClassTwoPaint);
         canvas.drawCircle(lightSaberCenter.x, lightSaberCenter.y, saberCentralRadius, saberCentralPaint);
     }
 }
