@@ -20,7 +20,7 @@ public class LightSaber {
     protected Paint saberClassOnePaint = new Paint();
     protected Paint saberClassTwoPaint = new Paint();
 
-    protected final int saberCentralRadius = (int)(Math.sqrt(Geometry.area(GameActivity.mScreenSize) / (250 * Math.PI)));
+    protected final int saberCentralRadius = (int)(Math.sqrt(Geometry.area(GameActivity.mScreenSize) / (300 * Math.PI)));
     protected final int saberTipRadius     = (int)(Math.sqrt(Geometry.area(GameActivity.mScreenSize) / (5 * Math.PI)));
 
     protected boolean is_saber_thrown;
@@ -33,13 +33,13 @@ public class LightSaber {
         this.lightSaberCenter.x   = GameActivity.mScreenSize.x + 300;
         this.lightSaberCenter.y   = GameActivity.mScreenSize.y + 300;
 
-        this.saberCenterVelocity  = 15;
+        this.saberCenterVelocity  = 5;
 
         for (int i = 0; i < 4; i++) {
             this.lightSaberTip[i] = new Point(0,0);
         }
 
-        this.lightSaberOmega      = 5;
+        this.lightSaberOmega      = 3;
 
         this.saberCentralPaint.setColor(Color.GRAY);
 
@@ -48,6 +48,9 @@ public class LightSaber {
 
         this.saberClassOnePaint.setStyle(Paint.Style.FILL_AND_STROKE);
         this.saberClassTwoPaint.setStyle(Paint.Style.FILL_AND_STROKE);
+
+        this.saberClassOnePaint.setAlpha(3);
+        this.saberClassTwoPaint.setAlpha(3);
 
         this.saberClassOnePaint.setStrokeWidth(25);
         this.saberClassTwoPaint.setStrokeWidth(25);
@@ -79,6 +82,12 @@ public class LightSaber {
             lightSaberTip[i].y += mVelocityComponent.y;
         }
 
+        int alpha = saberClassOnePaint.getAlpha();
+        if(alpha < 255 || alpha < 250) {
+            alpha = (alpha + 3) % 255;
+            saberClassOnePaint.setAlpha(alpha);
+            saberClassTwoPaint.setAlpha(alpha);
+        }
         for(int i = 0; i < 4; i++) {
             lightSaberTip[i] = Geometry.circularPathDisplacement(lightSaberTip[i], lightSaberCenter, saberTipRadius, lightSaberOmega);
         }

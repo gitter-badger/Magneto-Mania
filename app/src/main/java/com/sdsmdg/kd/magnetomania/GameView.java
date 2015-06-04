@@ -106,9 +106,6 @@ public class GameView extends SurfaceView {
 
         for(int i=0; i<2; i++) {
             this.mBomb[i] = new TimeBomb();
-        }
-
-        for(int i=0; i<3; i++) {
             this.mSaber[i] = new LightSaber();
         }
 
@@ -494,8 +491,8 @@ public class GameView extends SurfaceView {
                 if(time_for_saber_action) {
                     saberTimeGap++;
 
-                    for(int i = 0; i < 3; i++) {
-                        if(saberTimeGap > 30    *(i+1) && !mSaber[i].is_saber_thrown) {
+                    for(int i = 0; i < 2; i++) {
+                        if(saberTimeGap > 40*(i+1) && !mSaber[i].is_saber_thrown) {
                             mSaber[i].initLightSaberBlade(mBall);
                             mSaber[i].is_saber_thrown = true;
                         }
@@ -504,24 +501,27 @@ public class GameView extends SurfaceView {
                         }
                     }
 
-                    if(mSaber[2].is_saber_thrown) {
+                    if(mSaber[1].is_saber_thrown) {
                         time_for_saber_action = false;
                         saber_blade_on_screen = true;
                     }
                 }
                 else if(saber_blade_on_screen) {
-                    for(int i = 0; i < 3; i++) {
+                    for(int i = 0; i < 2; i++) {
                         mSaber[i].swirlTowardsFinger();
                     }
 
-                    if (mSaber[2].lightSaberCenter.x >= GameActivity.mScreenSize.x + mSaber[2].saberTipRadius || mSaber[2].lightSaberCenter.x <= -mSaber[2].saberTipRadius ||
-                        mSaber[2].lightSaberCenter.y >= GameActivity.mScreenSize.y + mSaber[2].saberTipRadius || mSaber[2].lightSaberCenter.y <= -mSaber[2].saberTipRadius) {
+                    if (mSaber[1].lightSaberCenter.x >= GameActivity.mScreenSize.x + mSaber[1].saberTipRadius || mSaber[1].lightSaberCenter.x <= -mSaber[1].saberTipRadius ||
+                        mSaber[1].lightSaberCenter.y >= GameActivity.mScreenSize.y + mSaber[1].saberTipRadius || mSaber[1].lightSaberCenter.y <= -mSaber[1].saberTipRadius) {
                         saber_blade_on_screen = false;
                     }
                 }
                 else {
-                    for(int i = 0; i < 3; i++) {
+                    saberTimeGap = 1;
+                    for(int i = 0; i < 2; i++) {
                         mSaber[i].is_saber_thrown = false;
+                        mSaber[i].saberClassOnePaint.setAlpha(3);
+                        mSaber[i].saberClassTwoPaint.setAlpha(3);
                     }
                     mBall.prepareForSleepAndAttack();
                     mBall.monsterSleepTime = random.nextInt(15) + 15;
@@ -735,8 +735,8 @@ public class GameView extends SurfaceView {
 
 
     public void randomizeTrajectory() {
-        mBall.monsterTrickSetDecider = ++mBall.monsterTrickSetDecider % 4;
-        mBall.monsterAttackTrick     = random.nextInt(2) + 1;
+        mBall.monsterTrickSetDecider = 3; //++mBall.monsterTrickSetDecider % 4;
+        mBall.monsterAttackTrick     = 1; //random.nextInt(2) + 1;
 
         if(mBall.monsterTrickSetDecider == 0) {
             if(mBall.monsterAttackTrick == 1) {
