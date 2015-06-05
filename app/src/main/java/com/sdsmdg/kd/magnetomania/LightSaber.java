@@ -11,7 +11,10 @@ public class LightSaber {
     /******************************************** CLASS MEMBERS ********************************************/
     protected Point     lightSaberCenter   = new Point(0,0);
     protected Point     saberDestination   = new Point(0,0);
-    protected Point[]   lightSaberTip      = new Point[4];
+
+    protected double[]   lightSaberTipX = new double[4];
+    protected double[]   lightSaberTipY = new double[4];
+    protected double[]   lightSaberTip  = {0,0};
 
     protected double saberCenterVelocity;
     protected double lightSaberOmega;
@@ -36,7 +39,8 @@ public class LightSaber {
         this.saberCenterVelocity  = 5;
 
         for (int i = 0; i < 4; i++) {
-            this.lightSaberTip[i] = new Point(0,0);
+            this.lightSaberTipX[i] = 0;
+            this.lightSaberTipY[i] = 0;
         }
 
         this.lightSaberOmega      = 3;
@@ -65,8 +69,8 @@ public class LightSaber {
         saberDestination = Geometry.setCoordinates(GameView.fingerPosition);
 
         for (int i = 0; i < 4; i++) {
-            lightSaberTip[i].set(lightSaberCenter.x + (int)(saberTipRadius * Math.cos(Math.PI*i/2)),
-                    lightSaberCenter.y - (int)(saberTipRadius * Math.sin(Math.PI*i/2)));
+            lightSaberTipX[i] = lightSaberCenter.x + (saberTipRadius * Math.cos(Math.PI*i/2));
+            lightSaberTipY[i] = lightSaberCenter.y - (saberTipRadius * Math.sin(Math.PI*i/2));
         }
     }
 
@@ -78,27 +82,31 @@ public class LightSaber {
         lightSaberCenter.y += mVelocityComponent.y;
 
         for(int i = 0; i < 4; i++) {
-            lightSaberTip[i].x += mVelocityComponent.x;
-            lightSaberTip[i].y += mVelocityComponent.y;
+            lightSaberTipX[i] += mVelocityComponent.x;
+            lightSaberTipY[i] += mVelocityComponent.y;
         }
 
         int alpha = saberClassOnePaint.getAlpha();
-        if(alpha < 255 || alpha < 250) {
-            alpha = (alpha + 3) % 255;
+        if(alpha < 255) {
+            alpha = (alpha + 3) % 256;
             saberClassOnePaint.setAlpha(alpha);
             saberClassTwoPaint.setAlpha(alpha);
         }
         for(int i = 0; i < 4; i++) {
-            lightSaberTip[i] = Geometry.circularPathDisplacement(lightSaberTip[i], lightSaberCenter, saberTipRadius, lightSaberOmega);
+            lightSaberTip[0] = lightSaberTipX[i];
+            lightSaberTip[1] = lightSaberTipY[i];
+            lightSaberTip = Geometry.circularPathDisplacement(lightSaberTip, lightSaberCenter, saberTipRadius, lightSaberOmega);
+            lightSaberTipX[i] = lightSaberTip[0];
+            lightSaberTipY[i] = lightSaberTip[1];
         }
     }
 
 
     public void drawLightSaberBlade(Canvas canvas) {
-        canvas.drawLine(lightSaberCenter.x, lightSaberCenter.y, lightSaberTip[0].x, lightSaberTip[0].y, saberClassOnePaint);
-        canvas.drawLine(lightSaberCenter.x, lightSaberCenter.y, lightSaberTip[1].x, lightSaberTip[1].y, saberClassTwoPaint);
-        canvas.drawLine(lightSaberCenter.x, lightSaberCenter.y, lightSaberTip[2].x, lightSaberTip[2].y, saberClassOnePaint);
-        canvas.drawLine(lightSaberCenter.x, lightSaberCenter.y, lightSaberTip[3].x, lightSaberTip[3].y, saberClassTwoPaint);
+        canvas.drawLine(lightSaberCenter.x, lightSaberCenter.y, (float)lightSaberTipX[0], (float)lightSaberTipY[0], saberClassOnePaint);
+        canvas.drawLine(lightSaberCenter.x, lightSaberCenter.y, (float)lightSaberTipX[1], (float)lightSaberTipY[1], saberClassTwoPaint);
+        canvas.drawLine(lightSaberCenter.x, lightSaberCenter.y, (float)lightSaberTipX[2], (float)lightSaberTipY[2], saberClassOnePaint);
+        canvas.drawLine(lightSaberCenter.x, lightSaberCenter.y, (float)lightSaberTipX[3], (float)lightSaberTipY[3], saberClassTwoPaint);
         canvas.drawCircle(lightSaberCenter.x, lightSaberCenter.y, saberCentralRadius, saberCentralPaint);
     }
 }
