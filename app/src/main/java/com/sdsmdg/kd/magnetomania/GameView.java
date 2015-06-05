@@ -488,7 +488,12 @@ public class GameView extends SurfaceView {
 
     public void draw(Canvas canvas) {
 
-        canvas.drawColor(Color.BLACK);
+        if(laser_beam_on_screen) {
+            canvas.drawColor(Color.parseColor("#BB000000"));
+        }
+        else {
+            canvas.drawColor(Color.BLACK);
+        }
 
         if(mWave != null && mBall.monsterTrickSetDecider == 0 && mBall.monsterAttackTrick == 1) {
 

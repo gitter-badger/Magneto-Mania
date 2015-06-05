@@ -17,7 +17,8 @@ public class GameOverActivity extends Activity {
 
         TextView textView = (TextView) findViewById(R.id.user_score);
         textView.setText(Integer.toString((int)userScore));
+
+        GameView.is_game_over    = false;
+        GameView.is_game_started = false;
     }
-
-
 }
