@@ -18,14 +18,15 @@ public class LightSaber {
     protected double[]   lightSaberTip  = {0,0};
 
     protected double saberCenterVelocity;
+    protected double lightSaberAngle;
     protected double lightSaberOmega;
 
     protected Paint saberCentralPaint  = new Paint();
     protected Paint saberClassOnePaint = new Paint();
     protected Paint saberClassTwoPaint = new Paint();
 
-    protected final int saberCentralRadius = (int)(Math.sqrt(Geometry.area(GameActivity.mScreenSize) / (200 * Math.PI)));
-    protected final int saberTipRadius     = (int)(Math.sqrt(Geometry.area(GameActivity.mScreenSize) / (5 * Math.PI)));
+    protected final int saberCentralRadius = (int)(Math.sqrt(Geometry.area(GameActivity.mScreenSize) / (175 * Math.PI)));
+    protected final int saberTipRadius     = (int)(Math.sqrt(Geometry.area(GameActivity.mScreenSize) / (4 * Math.PI)));
 
     protected boolean is_saber_thrown;
     /**---------------------------------------------------------------------------------------------------**/
@@ -44,6 +45,7 @@ public class LightSaber {
             this.lightSaberTipY[i] = 0;
         }
 
+        this.lightSaberAngle      = 0;
         this.lightSaberOmega      = 3;
 
         this.saberCentralPaint.setColor(Color.GRAY);
@@ -77,6 +79,7 @@ public class LightSaber {
             lightSaberTipY[i] = lightSaberCenter.y - (saberTipRadius * Math.sin(Math.PI*i/2));
         }
 
+        this.lightSaberAngle    = 0;
         this.saberClassOnePaint.setAlpha(3);
         this.saberClassTwoPaint.setAlpha(3);
     }
@@ -87,6 +90,8 @@ public class LightSaber {
 
         lightSaberCenter.x += mVelocityComponent.x;
         lightSaberCenter.y += mVelocityComponent.y;
+
+        lightSaberAngle += lightSaberOmega;
 
         for(int i = 0; i < 4; i++) {
             lightSaberTipX[i] += mVelocityComponent.x;
@@ -155,7 +160,7 @@ public class LightSaber {
         }
     }
 
-    public void drawLightSaberBlade(Canvas canvas) {
+    public void drawLightSaberBlade(Canvas canvas, SpriteAnimation animation) {
         int alpha = saberClassOnePaint.getAlpha();
         if(alpha < 255) {
             if(alpha + 1 + alpha/20 >= 255) {
@@ -186,6 +191,6 @@ public class LightSaber {
         setSaberClassTwoPaint(26, alpha, 178, 255,  89, canvas);
         setSaberClassTwoPaint(18, alpha, 241, 255, 233, canvas);
 
-        canvas.drawCircle(lightSaberCenter.x, lightSaberCenter.y, saberCentralRadius, saberCentralPaint);
+        animation.drawSaberCenter(this, canvas);
     }
 }

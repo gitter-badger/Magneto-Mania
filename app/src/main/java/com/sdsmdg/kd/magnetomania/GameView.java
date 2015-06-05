@@ -606,7 +606,7 @@ public class GameView extends SurfaceView {
         if(mSaber != null && mBall.monsterTrickSetDecider == 3 && mBall.monsterAttackTrick == 1) {
             for(int i = 0; i < 2; i++) {
                 if (mSaber[i].is_saber_thrown) {
-                    mSaber[i].drawLightSaberBlade(canvas);
+                    mSaber[i].drawLightSaberBlade(canvas, animation);
                 }
             }
         }
