@@ -23,7 +23,7 @@ public class LightSaber {
     protected Paint saberClassOnePaint = new Paint();
     protected Paint saberClassTwoPaint = new Paint();
 
-    protected final int saberCentralRadius = (int)(Math.sqrt(Geometry.area(GameActivity.mScreenSize) / (300 * Math.PI)));
+    protected final int saberCentralRadius = (int)(Math.sqrt(Geometry.area(GameActivity.mScreenSize) / (250 * Math.PI)));
     protected final int saberTipRadius     = (int)(Math.sqrt(Geometry.area(GameActivity.mScreenSize) / (5 * Math.PI)));
 
     protected boolean is_saber_thrown;
@@ -36,7 +36,7 @@ public class LightSaber {
         this.lightSaberCenter.x   = GameActivity.mScreenSize.x + 300;
         this.lightSaberCenter.y   = GameActivity.mScreenSize.y + 300;
 
-        this.saberCenterVelocity  = 5;
+        this.saberCenterVelocity  = 8;
 
         for (int i = 0; i < 4; i++) {
             this.lightSaberTipX[i] = 0;
@@ -47,14 +47,17 @@ public class LightSaber {
 
         this.saberCentralPaint.setColor(Color.GRAY);
 
-        this.saberClassOnePaint.setColor(Color.LTGRAY);
-        this.saberClassTwoPaint.setColor(Color.MAGENTA);
+        this.saberClassOnePaint.setAlpha(3);
+        this.saberClassTwoPaint.setAlpha(3);
+
+        this.saberClassOnePaint.setStrokeCap(Paint.Cap.ROUND);
+        this.saberClassTwoPaint.setStrokeCap(Paint.Cap.ROUND);
+
+        this.saberClassOnePaint.setColor(Color.WHITE);
+        this.saberClassTwoPaint.setColor(Color.WHITE);
 
         this.saberClassOnePaint.setStyle(Paint.Style.FILL_AND_STROKE);
         this.saberClassTwoPaint.setStyle(Paint.Style.FILL_AND_STROKE);
-
-        this.saberClassOnePaint.setAlpha(3);
-        this.saberClassTwoPaint.setAlpha(3);
 
         this.saberClassOnePaint.setStrokeWidth(25);
         this.saberClassTwoPaint.setStrokeWidth(25);
@@ -72,6 +75,9 @@ public class LightSaber {
             lightSaberTipX[i] = lightSaberCenter.x + (saberTipRadius * Math.cos(Math.PI*i/2));
             lightSaberTipY[i] = lightSaberCenter.y - (saberTipRadius * Math.sin(Math.PI*i/2));
         }
+
+        this.saberClassOnePaint.setAlpha(3);
+        this.saberClassTwoPaint.setAlpha(3);
     }
 
 
@@ -86,12 +92,7 @@ public class LightSaber {
             lightSaberTipY[i] += mVelocityComponent.y;
         }
 
-        int alpha = saberClassOnePaint.getAlpha();
-        if(alpha < 255) {
-            alpha = (alpha + 3) % 256;
-            saberClassOnePaint.setAlpha(alpha);
-            saberClassTwoPaint.setAlpha(alpha);
-        }
+
         for(int i = 0; i < 4; i++) {
             lightSaberTip[0] = lightSaberTipX[i];
             lightSaberTip[1] = lightSaberTipY[i];
@@ -102,11 +103,49 @@ public class LightSaber {
     }
 
 
+    public void setSaberClassOnePaint(int strokeWidth, String color, Canvas canvas) {
+        saberClassOnePaint.setStrokeWidth(strokeWidth);
+        saberClassOnePaint.setColor(Color.parseColor(color));
+
+        int alpha = saberClassOnePaint.getAlpha();
+        if(alpha < 255) {
+            alpha = (alpha + 1) % 256;
+            saberClassOnePaint.setAlpha(alpha);
+        }
+
+        for(int i = 0; i < 4; i++) {
+            if(i % 2 == 0) {
+                canvas.drawLine(lightSaberCenter.x, lightSaberCenter.y, (float) lightSaberTipX[i], (float) lightSaberTipY[i], saberClassOnePaint);
+            }
+        }
+    }
+
+    public void setSaberClassTwoPaint(int strokeWidth, String color, Canvas canvas) {
+        saberClassTwoPaint.setStrokeWidth(strokeWidth);
+        saberClassTwoPaint.setColor(Color.parseColor(color));
+
+        int alpha = saberClassTwoPaint.getAlpha();
+        if(alpha < 255) {
+            alpha = (alpha + 1) % 256;
+            saberClassTwoPaint.setAlpha(alpha);
+        }
+
+        for(int i = 0; i < 4; i++) {
+            if(i % 2 == 1) {
+                canvas.drawLine(lightSaberCenter.x, lightSaberCenter.y, (float) lightSaberTipX[i], (float) lightSaberTipY[i], saberClassTwoPaint);
+            }
+        }
+    }
+
     public void drawLightSaberBlade(Canvas canvas) {
-        canvas.drawLine(lightSaberCenter.x, lightSaberCenter.y, (float)lightSaberTipX[0], (float)lightSaberTipY[0], saberClassOnePaint);
-        canvas.drawLine(lightSaberCenter.x, lightSaberCenter.y, (float)lightSaberTipX[1], (float)lightSaberTipY[1], saberClassTwoPaint);
-        canvas.drawLine(lightSaberCenter.x, lightSaberCenter.y, (float)lightSaberTipX[2], (float)lightSaberTipY[2], saberClassOnePaint);
-        canvas.drawLine(lightSaberCenter.x, lightSaberCenter.y, (float)lightSaberTipX[3], (float)lightSaberTipY[3], saberClassTwoPaint);
+        setSaberClassOnePaint(30, "#2196F3", canvas);
+        setSaberClassOnePaint(26, "#64B5F6", canvas);
+        setSaberClassOnePaint(20, "#E3F2FD", canvas);
+
+        setSaberClassTwoPaint(30, "#76FF03", canvas);
+        setSaberClassTwoPaint(26, "#B2FF59", canvas);
+        setSaberClassTwoPaint(20, "#F1F8E9", canvas);
+
         canvas.drawCircle(lightSaberCenter.x, lightSaberCenter.y, saberCentralRadius, saberCentralPaint);
     }
 }

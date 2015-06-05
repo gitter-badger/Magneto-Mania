@@ -492,7 +492,7 @@ public class GameView extends SurfaceView {
                     saberTimeGap++;
 
                     for(int i = 0; i < 2; i++) {
-                        if(saberTimeGap > 40*(i+1) && !mSaber[i].is_saber_thrown) {
+                        if(saberTimeGap > 80*(i) && !mSaber[i].is_saber_thrown) {
                             mSaber[i].initLightSaberBlade(mBall);
                             mSaber[i].is_saber_thrown = true;
                         }
