@@ -24,7 +24,7 @@ public class LightSaber {
     protected Paint saberClassOnePaint = new Paint();
     protected Paint saberClassTwoPaint = new Paint();
 
-    protected final int saberCentralRadius = (int)(Math.sqrt(Geometry.area(GameActivity.mScreenSize) / (250 * Math.PI)));
+    protected final int saberCentralRadius = (int)(Math.sqrt(Geometry.area(GameActivity.mScreenSize) / (200 * Math.PI)));
     protected final int saberTipRadius     = (int)(Math.sqrt(Geometry.area(GameActivity.mScreenSize) / (5 * Math.PI)));
 
     protected boolean is_saber_thrown;
@@ -101,6 +101,29 @@ public class LightSaber {
             lightSaberTipX[i] = lightSaberTip[0];
             lightSaberTipY[i] = lightSaberTip[1];
         }
+    }
+
+
+    public boolean didSaberCutThroughTheFinger() {
+        int distance = Geometry.distance(GameView.fingerPosition, lightSaberCenter);
+
+        if(distance < saberCentralRadius) {
+            return true;
+        }
+        int fingerToCenterAngle = 0;
+        int tipToCenterAngle = 0;
+
+        if(distance < saberTipRadius + 10) {
+            fingerToCenterAngle = (int) (Math.atan2(GameView.fingerPosition.y - lightSaberCenter.y, GameView.fingerPosition.x - lightSaberCenter.x) * 180 / Math.PI);
+
+            for (int i = 0; i < 4; i++) {
+                tipToCenterAngle = (int) (Math.atan2(lightSaberTipY[i] - lightSaberCenter.y, lightSaberTipX[i] - lightSaberCenter.x) * 180 / Math.PI);
+                if (fingerToCenterAngle > tipToCenterAngle - 5 && fingerToCenterAngle < tipToCenterAngle + 5) {
+                    return true;
+                }
+            }
+        }
+        return false;
     }
 
 

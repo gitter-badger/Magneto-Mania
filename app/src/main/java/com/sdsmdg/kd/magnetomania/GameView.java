@@ -715,6 +715,17 @@ public class GameView extends SurfaceView {
                         }
                     }
                 }
+
+                if (mSaber != null && mBall.monsterTrickSetDecider == 3 && mBall.monsterAttackTrick == 1) {
+                    for (int i = 0; i < 2; i++) {
+                        /*** Conditon of game over when finger touches the boomerang. ***/
+                        /***/is_game_over = mSaber[i].didSaberCutThroughTheFinger();
+                        /***/if (is_game_over) {
+                            /***/tryGameOver();
+                            /***/System.exit(0);
+                        }
+                    }
+                }
                 break;
 
             case MotionEvent.ACTION_CANCEL:
@@ -740,8 +751,8 @@ public class GameView extends SurfaceView {
 
 
     public void randomizeTrajectory() {
-        mBall.monsterTrickSetDecider = 3; //++mBall.monsterTrickSetDecider % 4;
-        mBall.monsterAttackTrick     = 1; //random.nextInt(2) + 1;
+        mBall.monsterTrickSetDecider = ++mBall.monsterTrickSetDecider % 4;
+        mBall.monsterAttackTrick     = random.nextInt(2) + 1;
 
         if(mBall.monsterTrickSetDecider == 0) {
             if(mBall.monsterAttackTrick == 1) {
@@ -773,6 +784,7 @@ public class GameView extends SurfaceView {
         else if(mBall.monsterTrickSetDecider == 3) {
             if(mBall.monsterAttackTrick == 1) {
                 time_for_saber_action = true;
+                mThread.setFPS(40);
             }
             else if(mBall.monsterAttackTrick == 2) {
                 mThread.setFPS(50);
