@@ -4,6 +4,7 @@ import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
 import android.graphics.Point;
+import android.util.Log;
 
 
 public class LightSaber {
@@ -103,15 +104,9 @@ public class LightSaber {
     }
 
 
-    public void setSaberClassOnePaint(int strokeWidth, String color, Canvas canvas) {
+    public void setSaberClassOnePaint(int strokeWidth, int A, int R, int G, int B, Canvas canvas) {
         saberClassOnePaint.setStrokeWidth(strokeWidth);
-        saberClassOnePaint.setColor(Color.parseColor(color));
-
-        int alpha = saberClassOnePaint.getAlpha();
-        if(alpha < 255) {
-            alpha = (alpha + 1) % 256;
-            saberClassOnePaint.setAlpha(alpha);
-        }
+        saberClassOnePaint.setColor(Color.argb(A,R,G,B));
 
         for(int i = 0; i < 4; i++) {
             if(i % 2 == 0) {
@@ -120,9 +115,9 @@ public class LightSaber {
         }
     }
 
-    public void setSaberClassTwoPaint(int strokeWidth, String color, Canvas canvas) {
+    public void setSaberClassTwoPaint(int strokeWidth, int A, int R, int G, int B, Canvas canvas) {
         saberClassTwoPaint.setStrokeWidth(strokeWidth);
-        saberClassTwoPaint.setColor(Color.parseColor(color));
+        saberClassTwoPaint.setColor(Color.argb(A, R, G, B));
 
         int alpha = saberClassTwoPaint.getAlpha();
         if(alpha < 255) {
@@ -138,13 +133,35 @@ public class LightSaber {
     }
 
     public void drawLightSaberBlade(Canvas canvas) {
-        setSaberClassOnePaint(30, "#2196F3", canvas);
-        setSaberClassOnePaint(26, "#64B5F6", canvas);
-        setSaberClassOnePaint(20, "#E3F2FD", canvas);
+        int alpha = saberClassOnePaint.getAlpha();
+        if(alpha < 255) {
+            if(alpha + 1 + alpha/20 >= 255) {
+                alpha = 255;
+            }
+            else {
+                alpha = (alpha + 1 + alpha / 20) % 256;
+            }
+            saberClassOnePaint.setAlpha(alpha);
+        }
 
-        setSaberClassTwoPaint(30, "#76FF03", canvas);
-        setSaberClassTwoPaint(26, "#B2FF59", canvas);
-        setSaberClassTwoPaint(20, "#F1F8E9", canvas);
+        setSaberClassOnePaint(30, alpha, 33, 150, 243, canvas);
+        setSaberClassOnePaint(26, alpha, 100, 181, 246, canvas);
+        setSaberClassOnePaint(18, alpha, 227, 242, 253, canvas);
+
+        alpha = saberClassTwoPaint.getAlpha();
+        if(alpha < 255) {
+            if(alpha + 1 + alpha/20 >= 255) {
+                alpha = 255;
+            }
+            else {
+                alpha = (alpha + 1 + alpha / 20) % 256;
+            }
+            saberClassTwoPaint.setAlpha(alpha);
+        }
+
+        setSaberClassTwoPaint(30, alpha, 118, 255,   3, canvas);
+        setSaberClassTwoPaint(26, alpha, 178, 255,  89, canvas);
+        setSaberClassTwoPaint(18, alpha, 241, 255, 233, canvas);
 
         canvas.drawCircle(lightSaberCenter.x, lightSaberCenter.y, saberCentralRadius, saberCentralPaint);
     }
