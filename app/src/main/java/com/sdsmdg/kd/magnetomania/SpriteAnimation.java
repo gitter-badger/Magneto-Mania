@@ -20,6 +20,7 @@ public class SpriteAnimation {
 
     private Bitmap mRocketBmp;
     private Bitmap mBoomerangBmp;
+    private Bitmap mSaberCenterBmp;
 
     private final int M_BALL_BMP_ROWS = 3;
     private final int M_BALL_BMP_COLS = 5;
@@ -51,6 +52,7 @@ public class SpriteAnimation {
         this.mBallRiteRingBmp = BitmapFactory.decodeResource(mGameView.getResources(), R.mipmap.mballringright);
         this.mRocketBmp       = BitmapFactory.decodeResource(mGameView.getResources(), R.mipmap.rocket);
         this.mBoomerangBmp    = BitmapFactory.decodeResource(mGameView.getResources(), R.mipmap.boomerang);
+        this.mSaberCenterBmp  = BitmapFactory.decodeResource(mGameView.getResources(), R.mipmap.sabercenter);
 
         this.spriteUnitCoreBody.x = mBallCoreBodyBmp.getWidth() / M_BALL_BMP_COLS;
         this.spriteUnitCoreBody.y = mBallCoreBodyBmp.getHeight() / M_BALL_BMP_ROWS;
@@ -143,6 +145,20 @@ public class SpriteAnimation {
 
         canvas.drawBitmap(mBoomerangBmp, (float) boomerangTwister.twisterPosition.x - boomerangTwister.twisterRadius,
                 (float) boomerangTwister.twisterPosition.y - boomerangTwister.twisterRadius, null);
+        canvas.restore();
+    }
+
+
+    public void drawSaberCenter (LightSaber lightSaber, Canvas canvas) {
+        canvas.save();
+        canvas.rotate((float) lightSaber.lightSaberAngle, (float) lightSaber.lightSaberCenter.x, (float) lightSaber.lightSaberCenter.y);
+
+        fromSheet.set(0, 0, mSaberCenterBmp.getWidth(), mSaberCenterBmp.getHeight());
+        toDisplay.set(lightSaber.lightSaberCenter.x - lightSaber.saberCentralRadius,
+                      lightSaber.lightSaberCenter.y - lightSaber.saberCentralRadius,
+                      lightSaber.lightSaberCenter.x + lightSaber.saberCentralRadius,
+                      lightSaber.lightSaberCenter.y + lightSaber.saberCentralRadius);
+        canvas.drawBitmap(mSaberCenterBmp, fromSheet, toDisplay, null);
         canvas.restore();
     }
 }

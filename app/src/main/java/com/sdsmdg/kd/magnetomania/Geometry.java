@@ -1,6 +1,7 @@
 package com.sdsmdg.kd.magnetomania;
 
 import android.graphics.Point;
+import android.util.Log;
 
 
 public class Geometry extends Point {
@@ -50,5 +51,17 @@ public class Geometry extends Point {
         else {
             monsterBall.monsterPosition = Geometry.setCoordinates(center);
         }
+    }
+
+
+    public static double[] circularPathDisplacement(double object[], Point center, int radius, double omega) {
+        // omega is angular velocity in degrees per second.
+        double theta = Math.atan2(object[1] - center.y, object[0] - center.x)* 180 / Math.PI;
+
+        theta = (theta + omega) % 360;
+
+        object[0] = center.x + radius*Math.cos(theta * Math.PI / 180);
+        object[1] = center.y + radius*Math.sin(theta * Math.PI / 180);
+        return object;
     }
 }
