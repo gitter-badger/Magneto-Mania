@@ -26,7 +26,7 @@ public class MonsterBall {
 
 
     /********************************************* CONSTRUCTOR *********************************************/
-    public MonsterBall() {
+    public MonsterBall(GameView gameView) {
 
         this.monsterPosition.y = random.nextInt(GameActivity.mScreenSize.y + 1);
         this.monsterPosition.x = random.nextInt(2);
@@ -50,8 +50,6 @@ public class MonsterBall {
         monsterVelocity   -= 0.05;
         monsterPosition.x += mVelocityComponent.x;
         monsterPosition.y += mVelocityComponent.y;
-
-        SpriteAnimation.iteratorIncrement();
     }
 
 

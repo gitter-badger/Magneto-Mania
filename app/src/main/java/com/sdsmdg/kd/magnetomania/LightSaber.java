@@ -1,5 +1,6 @@
 package com.sdsmdg.kd.magnetomania;
 
+import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
@@ -10,30 +11,31 @@ import android.util.Log;
 public class LightSaber {
 
     /******************************************** CLASS MEMBERS ********************************************/
-    protected Point     lightSaberCenter   = new Point(0,0);
-    protected Point     saberDestination   = new Point(0,0);
+    protected Point         lightSaberCenter   = new Point(0,0);
+    protected Point         saberDestination   = new Point(0,0);
 
-    protected double[]   lightSaberTipX = new double[4];
-    protected double[]   lightSaberTipY = new double[4];
-    protected double[]   lightSaberTip  = {0,0};
+    protected double[]      lightSaberTipX = new double[4];
+    protected double[]      lightSaberTipY = new double[4];
+    protected double[]      lightSaberTip  = {0,0};
 
-    protected double saberCenterVelocity;
-    protected double lightSaberAngle;
-    protected double lightSaberOmega;
+    protected double        saberCenterVelocity;
+    protected double        lightSaberAngle;
+    protected double        lightSaberOmega;
 
-    protected Paint saberCentralPaint  = new Paint();
-    protected Paint saberClassOnePaint = new Paint();
-    protected Paint saberClassTwoPaint = new Paint();
+    protected Paint         saberCentralPaint  = new Paint();
+    protected Paint         saberClassOnePaint = new Paint();
+    protected Paint         saberClassTwoPaint = new Paint();
 
-    protected final int saberCentralRadius = (int)(Math.sqrt(Geometry.area(GameActivity.mScreenSize) / (175 * Math.PI)));
-    protected final int saberTipRadius     = (int)(Math.sqrt(Geometry.area(GameActivity.mScreenSize) / (4 * Math.PI)));
+    protected final int     saberCentralRadius = (int)(Math.sqrt(Geometry.area(GameActivity.mScreenSize) / (175 * Math.PI)));
+    protected final int     saberTipRadius     = (int)(Math.sqrt(Geometry.area(GameActivity.mScreenSize) / (4 * Math.PI)));
 
-    protected boolean is_saber_thrown;
+    protected boolean       is_saber_thrown;
+    private SpriteAnimation animation = null;
     /**---------------------------------------------------------------------------------------------------**/
 
 
     /********************************************* CONSTRUCTOR *********************************************/
-    public LightSaber() {
+    public LightSaber(GameView gameView) {
 
         this.lightSaberCenter.x   = GameActivity.mScreenSize.x + 300;
         this.lightSaberCenter.y   = GameActivity.mScreenSize.y + 300;
@@ -66,6 +68,9 @@ public class LightSaber {
         this.saberClassTwoPaint.setStrokeWidth(25);
 
         this.is_saber_thrown      = false;
+        this.animation            = new SpriteAnimation(gameView, 1 ,1);
+        this.animation.mBitmap    = BitmapFactory.decodeResource(gameView.getResources(), R.mipmap.sabercenter);
+        this.animation.setSpriteUnitDimension();
     }
     /**--------------------------------------------------------------------------------------------------**/
 
@@ -160,7 +165,7 @@ public class LightSaber {
         }
     }
 
-    public void drawLightSaberBlade(Canvas canvas, SpriteAnimation animation) {
+    public void drawLightSaberBlade(Canvas canvas) {
         int alpha = saberClassOnePaint.getAlpha();
         if(alpha < 255) {
             if(alpha + 1 + alpha/20 >= 255) {
@@ -191,6 +196,9 @@ public class LightSaber {
         setSaberClassTwoPaint(26, alpha, 178, 255,  89, canvas);
         setSaberClassTwoPaint(18, alpha, 241, 255, 233, canvas);
 
-        animation.drawSaberCenter(this, canvas);
+        animation.setRotatedCanvas(canvas, lightSaberCenter, (int)lightSaberAngle);
+        animation.setSourceDestinyRects(lightSaberCenter, saberCentralRadius);
+        animation.drawDitmap(canvas);
+        canvas.restore();
     }
 }
