@@ -152,12 +152,6 @@ public class LightSaber {
         saberClassTwoPaint.setStrokeWidth(strokeWidth);
         saberClassTwoPaint.setColor(Color.argb(A, R, G, B));
 
-        int alpha = saberClassTwoPaint.getAlpha();
-        if(alpha < 255) {
-            alpha = (alpha + 1) % 256;
-            saberClassTwoPaint.setAlpha(alpha);
-        }
-
         for(int i = 0; i < 4; i++) {
             if(i % 2 == 1) {
                 canvas.drawLine(lightSaberCenter.x, lightSaberCenter.y, (float) lightSaberTipX[i], (float) lightSaberTipY[i], saberClassTwoPaint);
@@ -198,7 +192,7 @@ public class LightSaber {
 
         animation.setRotatedCanvas(canvas, lightSaberCenter, (int)lightSaberAngle);
         animation.setSourceDestinyRects(lightSaberCenter, saberCentralRadius);
-        animation.drawDitmap(canvas);
+        animation.drawBitmap(canvas);
         canvas.restore();
     }
 }

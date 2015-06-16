@@ -60,7 +60,7 @@ public class SpriteAnimation {
     }
 
 
-    public void drawDitmap(Canvas canvas) {
+    public void drawBitmap(Canvas canvas) {
         canvas.drawBitmap(mBitmap, fromSheet, toDisplay, null);
     }
 }

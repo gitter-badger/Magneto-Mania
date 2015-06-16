@@ -72,7 +72,8 @@ public class BoomerangTwister {
 
     public void drawBoomerangTwister(Canvas canvas) {
         animation.setRotatedCanvas(canvas, twisterPosition, twisterAngle);
-        animation.drawDitmap(canvas);
+        animation.setSourceDestinyRects(twisterPosition, twisterRadius);
+        animation.drawBitmap(canvas);
         canvas.restore();
     }
 }

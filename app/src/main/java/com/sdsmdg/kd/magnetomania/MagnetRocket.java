@@ -81,7 +81,7 @@ public class MagnetRocket {
         animation.toDisplay.set(rocketPosition.x - rocketRadius, rocketPosition.y - rocketRadius - 10, rocketPosition.x + rocketRadius, rocketPosition.y + rocketRadius + 10);
 
         animation.setRotatedCanvas(canvas, rocketPosition, (int)rocketTipAngle);
-        animation.drawDitmap(canvas);
+        animation.drawBitmap(canvas);
         canvas.restore();
     }
 }

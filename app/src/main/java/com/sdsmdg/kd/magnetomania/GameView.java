@@ -100,7 +100,7 @@ public class GameView extends SurfaceView {
         }
 
         for(int i=0; i<4; i++) {
-            this.mBeam[i] = new LaserBeam();
+            this.mBeam[i] = new LaserBeam(this);
         }
 
         for(int i=0; i<2; i++) {
