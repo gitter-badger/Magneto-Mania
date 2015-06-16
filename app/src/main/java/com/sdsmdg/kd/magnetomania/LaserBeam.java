@@ -1,21 +1,27 @@
 package com.sdsmdg.kd.magnetomania;
 
+import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
 import android.graphics.Point;
 
 
-
 public class LaserBeam {
 
-    protected final Point center = new Point(GameActivity.mScreenSize.x/2, GameActivity.mScreenSize.y/2);
-    protected double laserDestinationX;
-    protected double laserDestinationY;
-    protected Paint laserBeamPaint   = new Paint();
+    /******************************************** CLASS MEMBERS ********************************************/
+    protected final Point   center = new Point(GameActivity.mScreenSize.x/2, GameActivity.mScreenSize.y/2);
+    protected double        laserDestinationX;
+    protected double        laserDestinationY;
+    protected float         laserBeamAngle;
+    protected Point         laserMidPoint = new Point(0,0);
+    protected Paint         laserBeamPaint   = new Paint();
+    private SpriteAnimation animation = null;
+    /**--------------------------------------------------------------------------------------------------**/
 
 
-    public LaserBeam() {
+    /********************************************* CONSTRUCTOR *********************************************/
+    public LaserBeam(GameView gameView) {
         this.laserDestinationX = center.x;
         this.laserDestinationY = center.y;
         this.laserBeamPaint.setColor(Color.parseColor("#9C27B0"));
@@ -23,7 +29,12 @@ public class LaserBeam {
         this.laserBeamPaint.setStrokeWidth(30);
         this.laserBeamPaint.setStyle(Paint.Style.FILL_AND_STROKE);
         this.laserBeamPaint.setStrokeCap(Paint.Cap.ROUND);
+        this.animation         = new SpriteAnimation(gameView, 1, 1);
+        this.animation.mBitmap = BitmapFactory.decodeResource(gameView.getResources(), R.mipmap.laserbeam);
+        this.animation.setSpriteUnitDimension();
+        this.laserBeamAngle    = 0;
     }
+    /**--------------------------------------------------------------------------------------------------**/
 
 
     public void initLaserBeam(int orientation) {
@@ -91,5 +102,17 @@ public class LaserBeam {
         setLaserBeamPaint(33, "#CE93D8", canvas);
         setLaserBeamPaint(25, "#E1BEE7", canvas);
         setLaserBeamPaint(20, "#F3E5F5", canvas);
+    }
+
+
+    public void drawLaser (Canvas canvas) {
+        laserBeamAngle = (float) (Math.atan2(laserDestinationY - center.y, laserDestinationX - center.x)*180/Math.PI);
+        animation.setRotatedCanvas(canvas, center, (int)laserBeamAngle);
+
+        laserMidPoint.set((int)(center.x + laserDestinationX)/2, (int)(center.y + laserDestinationY)/2);
+        animation.fromSheet.set(0,0, animation.mBitmap.getWidth(), animation.mBitmap.getHeight());
+        animation.toDisplay.set(center.x, center.y - 20, center.x + GameActivity.mScreenSize.y, center.y + 20);
+        animation.drawBitmap(canvas);
+        canvas.restore();
     }
 }

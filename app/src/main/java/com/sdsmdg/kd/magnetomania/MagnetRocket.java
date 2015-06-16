@@ -1,5 +1,7 @@
 package com.sdsmdg.kd.magnetomania;
 
+import android.graphics.BitmapFactory;
+import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
 import android.graphics.Point;
@@ -11,24 +13,31 @@ import java.util.Random;
 public class MagnetRocket {
 
     /******************************************** CLASS MEMBERS ********************************************/
-    protected Point         rocketPosition  = new Point(0,0);
+    protected Point         rocketPosition = new Point(0,0);
     protected double        rocketVelocity;
 
-    protected Paint         rocketPaint     = new Paint();
-    protected final int     rocketRadius    = (int)(Math.sqrt(Geometry.area(GameActivity.mScreenSize)/ (32*Math.PI)));
+    protected Paint         rocketPaint = new Paint();
+    protected final int     rocketRadius = (int)(Math.sqrt(Geometry.area(GameActivity.mScreenSize)/ (32*Math.PI)));
 
     protected int           rocketXhaustTime;
+    protected float         rocketTipAngle;
+    private SpriteAnimation animation = null;
+    private int             animationIterator;
     /**---------------------------------------------------------------------------------------------------**/
 
 
     /********************************************* CONSTRUCTOR *********************************************/
-    public MagnetRocket() {
+    public MagnetRocket(GameView gameView) {
         this.rocketPosition.x   = GameActivity.mScreenSize.x + 80;
         this.rocketPosition.y   = GameActivity.mScreenSize.y + 80;
         this.rocketVelocity     = 0;
 
         this.rocketXhaustTime   = 0;
-        rocketPaint.setColor(Color.parseColor("#CC1100"));
+        this.rocketPaint.setColor(Color.parseColor("#CC1100"));
+        this.animation          = new SpriteAnimation(gameView, 2, 4);
+        this.animation.mBitmap  = BitmapFactory.decodeResource(gameView.getResources(), R.mipmap.rocket);
+        this.animation.setSpriteUnitDimension();
+        this.animationIterator  = 0;
     }
     /**--------------------------------------------------------------------------------------------------**/
 
@@ -51,7 +60,10 @@ public class MagnetRocket {
         rocketPosition.x        += rVelocityComponent.x;
         rocketPosition.y        += rVelocityComponent.y;
 
-        SpriteAnimation.iteratorIncrement();
+        animationIterator = ++animationIterator % 4;
+        if(animationIterator == 0) {
+            animation.iteratorIncrement();
+        }
     }
 
 
@@ -61,4 +73,15 @@ public class MagnetRocket {
         return distance < this.rocketRadius;
     }
 
+
+    public void drawMagnetRocket (Canvas canvas) {
+        rocketTipAngle = (float)Math.atan2((double)GameView.fingerPosition.y - rocketPosition.y, (double)GameView.fingerPosition.x - rocketPosition.x)*180/(float)Math.PI + 90;
+        animation.setSourceDestinyRects(rocketPosition, rocketRadius);
+
+        animation.toDisplay.set(rocketPosition.x - rocketRadius, rocketPosition.y - rocketRadius - 10, rocketPosition.x + rocketRadius, rocketPosition.y + rocketRadius + 10);
+
+        animation.setRotatedCanvas(canvas, rocketPosition, (int)rocketTipAngle);
+        animation.drawBitmap(canvas);
+        canvas.restore();
+    }
 }

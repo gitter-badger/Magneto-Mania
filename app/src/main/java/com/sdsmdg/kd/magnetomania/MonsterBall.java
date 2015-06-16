@@ -1,5 +1,7 @@
 package com.sdsmdg.kd.magnetomania;
 
+import android.graphics.BitmapFactory;
+import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
 import android.graphics.Point;
@@ -21,12 +23,13 @@ public class MonsterBall {
     protected int           monsterAttackTrick;
     protected int           monsterTrickSetDecider;
 
-    protected Random        random          = new Random();
+    private SpriteAnimation animation = null;
+    protected Random        random = new Random();
     /**--------------------------------------------------------------------------------------------------**/
 
 
     /********************************************* CONSTRUCTOR *********************************************/
-    public MonsterBall () {
+    public MonsterBall(GameView gameView) {
 
         this.monsterPosition.y      = random.nextInt(GameActivity.mScreenSize.y + 1);
         this.monsterPosition.x      = random.nextInt(2);
@@ -40,16 +43,21 @@ public class MonsterBall {
         this.monsterAttackTrick     = 0;
         this.monsterTrickSetDecider = 0;
         monsterPaint.setColor(Color.parseColor("#FFFFFF"));
+        this.animation = new SpriteAnimation(gameView, 3, 5);
+        this.animation.mBitmap = BitmapFactory.decodeResource(gameView.getResources(), R.mipmap.mballcore);
+        this.animation.setSpriteUnitDimension();
     }
     /**--------------------------------------------------------------------------------------------------**/
 
 
     public void attackFingerPosition () {
         Point mVelocityComponent    = Geometry.calcVelocityComponents(GameView.destinationPoint, GameView.initialPoint, (int)monsterVelocity);
+
         monsterVelocity            -= 0.05;
         monsterPosition.x          += mVelocityComponent.x;
         monsterPosition.y          += mVelocityComponent.y;
-        SpriteAnimation.iteratorIncrement();
+
+        animation.iteratorIncrement();
     }
 
 
@@ -87,4 +95,9 @@ public class MonsterBall {
         return distance < this.monsterRadius;
     }
 
+
+    public void drawMonsterBall (Canvas canvas) {
+        animation.setSourceDestinyRects(monsterPosition, monsterRadius);
+        animation.drawBitmap(canvas);
+    }
 }

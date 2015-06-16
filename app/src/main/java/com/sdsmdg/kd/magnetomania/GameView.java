@@ -27,8 +27,8 @@ public class GameView extends SurfaceView {
     public static boolean   is_game_started;
     public static boolean   is_game_over;
 
-    private MonsterBall     mBall            = new MonsterBall();
-    private MagnetRocket    mRocket          = new MagnetRocket();
+    private MonsterBall     mBall            = new MonsterBall(this);
+    private MagnetRocket    mRocket          = new MagnetRocket(this);
     private BulletFan[]     mFan             = new BulletFan[3];
     private HeatWave[]      mWave            = new HeatWave[5];
     private RectF[]         heatRect         = new RectF[5];
@@ -65,7 +65,6 @@ public class GameView extends SurfaceView {
     private boolean         time_for_saber_action;
     private boolean         saber_blade_on_screen;
 
-    private SpriteAnimation animation       = new SpriteAnimation(this);
     private Random          random          = new Random();
 
     public static double    Score;
@@ -97,16 +96,16 @@ public class GameView extends SurfaceView {
         for(int i=0; i<5; i++) {
             this.heatRect[i] = new RectF();
             this.mWave[i]    = new HeatWave();
-            this.mTwister[i] = new BoomerangTwister();
+            this.mTwister[i] = new BoomerangTwister(this);
         }
 
         for(int i=0; i<4; i++) {
-            this.mBeam[i] = new LaserBeam();
+            this.mBeam[i] = new LaserBeam(this);
         }
 
         for(int i=0; i<2; i++) {
             this.mBomb[i] = new TimeBomb();
-            this.mSaber[i] = new LightSaber();
+            this.mSaber[i] = new LightSaber(this);
         }
 
         this.monsterSleepCount      = 1;
@@ -440,7 +439,7 @@ public class GameView extends SurfaceView {
 
                     if ((mTwister[4].twisterPosition.x >= GameActivity.mScreenSize.x + 25 || mTwister[4].twisterPosition.x <= -25 ||
                          mTwister[4].twisterPosition.y >= GameActivity.mScreenSize.y + 25 || mTwister[4].twisterPosition.y <= -25) &&
-                         mTwister[4].twisterVelocity < -(mTwister[4].twisterVelocityMaxMagnitude)) {
+                         mTwister[4].twisterVelocity < -(mTwister[4].velocityMax)) {
                         twisters_on_screen = false;
                     }
                 }
@@ -594,8 +593,7 @@ public class GameView extends SurfaceView {
 
         if(mTwister != null && mBall.monsterTrickSetDecider == 2 && mBall.monsterAttackTrick == 1) {
             for(int i=0; i<5; i++) {
-                canvas.drawCircle((float) mTwister[i].twisterPosition.x, (float) mTwister[i].twisterPosition.y,
-                        (float) mTwister[i].twisterRadius, mTwister[i].twisterPaint);
+                mTwister[i].drawBoomerangTwister(canvas);
             }
         }
 
@@ -606,7 +604,7 @@ public class GameView extends SurfaceView {
         if(mSaber != null && mBall.monsterTrickSetDecider == 3 && mBall.monsterAttackTrick == 1) {
             for(int i = 0; i < 2; i++) {
                 if (mSaber[i].is_saber_thrown) {
-                    mSaber[i].drawLightSaberBlade(canvas, animation);
+                    mSaber[i].drawLightSaberBlade(canvas);
                 }
             }
         }
