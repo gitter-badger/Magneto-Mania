@@ -11,51 +11,49 @@ import java.util.Random;
 public class MonsterBall {
 
     /******************************************** CLASS MEMBERS ********************************************/
-    protected Point monsterPosition = new Point(0,0);
-    protected double monsterVelocity;
+    protected Point         monsterPosition = new Point(0,0);
+    protected double        monsterVelocity;
 
-    protected Paint monsterPaint = new Paint();
-    protected final int monsterRadius = (int)(Math.sqrt(Geometry.area(GameActivity.mScreenSize) / (12 * Math.PI)));
+    protected Paint         monsterPaint    = new Paint();
+    protected final int     monsterRadius   = (int)(Math.sqrt(Geometry.area(GameActivity.mScreenSize) / (12 * Math.PI)));
 
-    protected int monsterSleepTime;
-    protected int monsterAttackTrick;
-    protected int monsterTrickSetDecider;
+    protected int           monsterSleepTime;
+    protected int           monsterAttackTrick;
+    protected int           monsterTrickSetDecider;
 
-    protected Random random = new Random();
+    protected Random        random          = new Random();
     /**--------------------------------------------------------------------------------------------------**/
 
 
     /********************************************* CONSTRUCTOR *********************************************/
-    public MonsterBall() {
+    public MonsterBall () {
 
-        this.monsterPosition.y = random.nextInt(GameActivity.mScreenSize.y + 1);
-        this.monsterPosition.x = random.nextInt(2);
+        this.monsterPosition.y      = random.nextInt(GameActivity.mScreenSize.y + 1);
+        this.monsterPosition.x      = random.nextInt(2);
 
         if(this.monsterPosition.x == 1)
-            this.monsterPosition.x = GameActivity.mScreenSize.x;
+            this.monsterPosition.x  = GameActivity.mScreenSize.x;
 
-        this.monsterVelocity = random.nextInt(15) + 15 + (int)(GameView.Score / 1000);
-        this.monsterSleepTime = random.nextInt(15) + 15;
+        this.monsterVelocity        = random.nextInt(15) + 15 + (int)(GameView.Score / 1000);
+        this.monsterSleepTime       = random.nextInt(15) + 15;
 
-        this.monsterAttackTrick = 0;
+        this.monsterAttackTrick     = 0;
         this.monsterTrickSetDecider = 0;
         monsterPaint.setColor(Color.parseColor("#FFFFFF"));
     }
     /**--------------------------------------------------------------------------------------------------**/
 
 
-    public void attackFingerPosition() {
-        Point mVelocityComponent = Geometry.calcVelocityComponents(GameView.destinationPoint, GameView.initialPoint, (int)monsterVelocity);
-
-        monsterVelocity   -= 0.05;
-        monsterPosition.x += mVelocityComponent.x;
-        monsterPosition.y += mVelocityComponent.y;
-
+    public void attackFingerPosition () {
+        Point mVelocityComponent    = Geometry.calcVelocityComponents(GameView.destinationPoint, GameView.initialPoint, (int)monsterVelocity);
+        monsterVelocity            -= 0.05;
+        monsterPosition.x          += mVelocityComponent.x;
+        monsterPosition.y          += mVelocityComponent.y;
         SpriteAnimation.iteratorIncrement();
     }
 
 
-    public void prepareForSleepAndAttack() {
+    public void prepareForSleepAndAttack () {
         if (monsterPosition.x >= GameActivity.mScreenSize.x-5 || monsterPosition.x <= 5 ||
                 monsterPosition.y >= GameActivity.mScreenSize.y-5 || monsterPosition.y <= 5) {
 
@@ -83,7 +81,7 @@ public class MonsterBall {
     }
 
 
-    public boolean didMonsterGetTheFinger() {
+    public boolean didMonsterGetTheFinger () {
         int distance = Geometry.distance(GameView.fingerPosition, monsterPosition);
 
         return distance < this.monsterRadius;

@@ -10,16 +10,16 @@ import java.util.Random;
 public class BoomerangTwister {
 
     /******************************************** CLASS MEMBERS ********************************************/
-    protected Point twisterPosition = new Point(0,0);
-    protected Point twisterDestination = new Point(0,0);
-    protected double twisterVelocity;
-    protected double twisterVelocityMaxMagnitude;
+    protected Point     twisterPosition = new Point(0,0);
+    protected Point     twisterDestination = new Point(0,0);
+    protected double    twisterVelocity;
+    protected double    twisterVelocityMaxMagnitude;
 
-    protected Paint twisterPaint = new Paint();
+    protected Paint     twisterPaint = new Paint();
     protected final int twisterRadius = (int)(Math.sqrt(Geometry.area(GameActivity.mScreenSize)/ (50*Math.PI)));
 
-    protected boolean is_twister_thrown;
-    protected int twisterAngle;
+    protected boolean   is_twister_thrown;
+    protected int       twisterAngle;
     /**---------------------------------------------------------------------------------------------------**/
 
 

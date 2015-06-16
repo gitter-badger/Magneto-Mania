@@ -11,23 +11,23 @@ import java.util.Random;
 public class MagnetRocket {
 
     /******************************************** CLASS MEMBERS ********************************************/
-    protected Point rocketPosition = new Point(0,0);
-    protected double rocketVelocity;
+    protected Point         rocketPosition  = new Point(0,0);
+    protected double        rocketVelocity;
 
-    protected Paint rocketPaint = new Paint();
-    protected final int rocketRadius = (int)(Math.sqrt(Geometry.area(GameActivity.mScreenSize)/ (32*Math.PI)));
+    protected Paint         rocketPaint     = new Paint();
+    protected final int     rocketRadius    = (int)(Math.sqrt(Geometry.area(GameActivity.mScreenSize)/ (32*Math.PI)));
 
-    protected int rocketXhaustTime;
+    protected int           rocketXhaustTime;
     /**---------------------------------------------------------------------------------------------------**/
 
 
     /********************************************* CONSTRUCTOR *********************************************/
     public MagnetRocket() {
-        this.rocketPosition.x = GameActivity.mScreenSize.x + 80;
-        this.rocketPosition.y = GameActivity.mScreenSize.y + 80;
-        this.rocketVelocity = 0;
+        this.rocketPosition.x   = GameActivity.mScreenSize.x + 80;
+        this.rocketPosition.y   = GameActivity.mScreenSize.y + 80;
+        this.rocketVelocity     = 0;
 
-        this.rocketXhaustTime = 0;
+        this.rocketXhaustTime   = 0;
         rocketPaint.setColor(Color.parseColor("#CC1100"));
     }
     /**--------------------------------------------------------------------------------------------------**/
@@ -36,20 +36,20 @@ public class MagnetRocket {
     public void initRocket(MonsterBall monsterBall) {
         Random random = new Random();
 
-        rocketPosition   = Geometry.setCoordinates(monsterBall.monsterPosition);
-        rocketVelocity   = random.nextInt(10) + 10;
-        rocketXhaustTime = random.nextInt(50) + 150;
+        rocketPosition          = Geometry.setCoordinates(monsterBall.monsterPosition);
+        rocketVelocity          = random.nextInt(10) + 10;
+        rocketXhaustTime        = random.nextInt(50) + 150;
 
         rocketPaint.setColor(Color.parseColor("#CC1100"));
     }
 
 
-    public void rocketTrackFinger() {
+    public void rocketTrackFinger () {
         Point rVelocityComponent = Geometry.calcVelocityComponents(GameView.fingerPosition, rocketPosition, (int)rocketVelocity);
 
-        rocketVelocity   += 0.05;
-        rocketPosition.x += rVelocityComponent.x;
-        rocketPosition.y += rVelocityComponent.y;
+        rocketVelocity          += 0.05;
+        rocketPosition.x        += rVelocityComponent.x;
+        rocketPosition.y        += rVelocityComponent.y;
 
         SpriteAnimation.iteratorIncrement();
     }

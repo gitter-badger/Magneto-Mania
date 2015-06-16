@@ -11,20 +11,20 @@ import android.util.Log;
 public class HeatWave {
 
     /******************************************** CLASS MEMBERS ********************************************/
-    protected Point heatCenter = new Point(0,0);
+    protected Point  heatCenter = new Point(0,0);
 
-    protected int heatWaveVelocity;
-    protected int heatWaveRadius;
-    protected Paint heatWavePaint = new Paint();
+    protected int    heatWaveVelocity;
+    protected int    heatWaveRadius;
+    protected Paint  heatWavePaint = new Paint();
     /**---------------------------------------------------------------------------------------------------**/
 
 
     /********************************************* CONSTRUCTOR *********************************************/
     public HeatWave() {
-        this.heatCenter.x = GameActivity.mScreenSize.x + 80;
-        this.heatCenter.y = GameActivity.mScreenSize.y + 80;
+        this.heatCenter.x     = GameActivity.mScreenSize.x + 80;
+        this.heatCenter.y     = GameActivity.mScreenSize.y + 80;
         this.heatWaveVelocity = 10;
-        this.heatWaveRadius = 0;
+        this.heatWaveRadius   = 0;
         this.heatWavePaint.setAlpha(10);
         this.heatWavePaint.setColor(Color.YELLOW);
         this.heatWavePaint.setStrokeWidth(20);
@@ -35,20 +35,19 @@ public class HeatWave {
 
 
     public void initHeatWave(MonsterBall monsterBall) {
-        heatCenter = Geometry.setCoordinates(monsterBall.monsterPosition);
-        heatWaveRadius = 0;
-        heatWaveVelocity = 10;
+        heatCenter          = Geometry.setCoordinates(monsterBall.monsterPosition);
+        heatWaveRadius      = 0;
+        heatWaveVelocity    = 10;
         heatWavePaint.setAlpha(10);
     }
 
 
     public RectF setHeatWaveSize(Point center) {
-        RectF heatRect = new RectF();
-
-        heatRect.left   = center.x - heatWaveRadius;
-        heatRect.top    = center.y - heatWaveRadius;
-        heatRect.right  = center.x + heatWaveRadius;
-        heatRect.bottom = center.y + heatWaveRadius;
+        RectF heatRect     = new RectF();
+        heatRect.left      = center.x - heatWaveRadius;
+        heatRect.top       = center.y - heatWaveRadius;
+        heatRect.right     = center.x + heatWaveRadius;
+        heatRect.bottom    = center.y + heatWaveRadius;
 
         int alpha = heatWavePaint.getAlpha();
         if(alpha < 255) {
