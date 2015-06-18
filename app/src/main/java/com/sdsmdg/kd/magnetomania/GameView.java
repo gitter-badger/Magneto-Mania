@@ -555,27 +555,27 @@ public class GameView extends SurfaceView {
                 mBubble = mBubbleList.get(i);
 
                 if(mBubble.clockwise) {
-                    if(mBubble.bubblePaint.getAlpha() < 255 && !mBubble.is_to_fade_out) {
-                        mBubble.bubbleClockwiseFadeIn();
-                        mBubble.bubbleStartTheta = mBubble.bubbleTheta;
-                    }
-                    else if(mBubble.bubblePaint.getAlpha() == 255 && !mBubble.is_to_fade_out) {
-                        mBubble.bubbleClockwiseDisplacement();
-                    }
-                    else {
-                        mBubble.bubbleClockwiseFadeOut();
+                    if(!mBubble.is_bubble_taken) {
+                        if (mBubble.bubblePaint.getAlpha() < 255 && !mBubble.is_to_fade_out) {
+                            mBubble.bubbleClockwiseFadeIn();
+                            mBubble.bubbleStartTheta = mBubble.bubbleTheta;
+                        } else if (mBubble.bubblePaint.getAlpha() == 255 && !mBubble.is_to_fade_out) {
+                            mBubble.bubbleClockwiseDisplacement();
+                        } else {
+                            mBubble.bubbleClockwiseFadeOut();
+                        }
                     }
                 }
                 else {
-                    if(mBubble.bubblePaint.getAlpha() < 255 && !mBubble.is_to_fade_out) {
-                        mBubble.bubbleAntiClockwiseFadeIn();
-                        mBubble.bubbleStartTheta = mBubble.bubbleTheta;
-                    }
-                    else if(mBubble.bubblePaint.getAlpha() == 255 && !mBubble.is_to_fade_out) {
-                        mBubble.bubbleAntiClockwiseDisplacement();
-                    }
-                    else {
-                        mBubble.bubbleAntiClockwiseFadeOut();
+                    if(!mBubble.is_bubble_taken) {
+                        if (mBubble.bubblePaint.getAlpha() < 255 && !mBubble.is_to_fade_out) {
+                            mBubble.bubbleAntiClockwiseFadeIn();
+                            mBubble.bubbleStartTheta = mBubble.bubbleTheta;
+                        } else if (mBubble.bubblePaint.getAlpha() == 255 && !mBubble.is_to_fade_out) {
+                            mBubble.bubbleAntiClockwiseDisplacement();
+                        } else {
+                            mBubble.bubbleAntiClockwiseFadeOut();
+                        }
                     }
                 }
             }
@@ -661,8 +661,11 @@ public class GameView extends SurfaceView {
         for(int i = 0; i < mBubbleList.size(); i++) {
             mBubble = mBubbleList.get(i);
 
-            if(mBubble.is_bubble_taken || mBubble.is_time_out) {
+            if(mBubble.is_time_out) {
                 mBubbleList.remove(i);
+            }
+            else if(mBubble.is_bubble_taken) {
+                mBubble.drawBonusScore(canvas);
             }
             else {
                 mBubble.drawBubble(canvas);

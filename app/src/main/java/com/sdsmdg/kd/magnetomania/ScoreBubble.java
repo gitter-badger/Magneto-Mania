@@ -27,7 +27,11 @@ public class ScoreBubble {
     protected int           bubbleTheta;
     protected int           bubbleOmega;
     protected Bitmap        bubbleBitmap;
+    protected Bitmap        bonusBitmap;
+
     protected Paint         bubblePaint  = new Paint();
+    protected Paint         bonusPaint   = new Paint();
+
     protected Random        random       = new Random();
     protected final int[]   scoreValues  = {50, 100, 250, 500};
     protected boolean       is_bubble_taken;
@@ -45,6 +49,8 @@ public class ScoreBubble {
     public ScoreBubble(GameView gameView) {
         this.gameView        = gameView;
         this.bubblePaint.setColor(Color.TRANSPARENT);
+        this.bonusPaint.setColor(Color.TRANSPARENT);
+        this.bonusPaint.setAlpha(255);
         this.is_bubble_taken = false;
         this.is_time_out     = false;
         this.is_to_fade_out  = false;
@@ -79,15 +85,19 @@ public class ScoreBubble {
         switch(bubbleValue) {
             case 50:
                 bubbleBitmap = BitmapFactory.decodeResource(gameView.getResources(), R.mipmap.score50);
+                bonusBitmap  = BitmapFactory.decodeResource(gameView.getResources(), R.mipmap.score50);
                 break;
             case 100:
                 bubbleBitmap = BitmapFactory.decodeResource(gameView.getResources(), R.mipmap.score100);
+                bonusBitmap  = BitmapFactory.decodeResource(gameView.getResources(), R.mipmap.score100);
                 break;
             case 250:
                 bubbleBitmap = BitmapFactory.decodeResource(gameView.getResources(), R.mipmap.score250);
+                bonusBitmap  = BitmapFactory.decodeResource(gameView.getResources(), R.mipmap.score250);
                 break;
             case 500:
                 bubbleBitmap = BitmapFactory.decodeResource(gameView.getResources(), R.mipmap.score500);
+                bonusBitmap  = BitmapFactory.decodeResource(gameView.getResources(), R.mipmap.score500);
                 break;
         }
 
@@ -170,5 +180,23 @@ public class ScoreBubble {
                 break;
         }
         canvas.drawBitmap(bubbleBitmap, fromSheet, toDisplay, bubblePaint);
+    }
+
+
+    public void drawBonusScore (Canvas canvas) {
+        fromSheet.set(0, 0, bonusBitmap.getWidth(), bonusBitmap.getHeight());
+
+        if(bonusPaint.getAlpha() > 0) {
+            int alpha = bonusPaint.getAlpha();
+            bonusPaint.setAlpha(alpha - 3);
+
+            toDisplay.set(bubbleCenter.x - bubbleRadius - (51 - alpha / 5), bubbleCenter.y - bubbleRadius - (51 - alpha / 5),
+                    bubbleCenter.x + bubbleRadius + (51 - alpha/5), bubbleCenter.y + bubbleRadius + (51 - alpha/5));
+
+            canvas.drawBitmap(bonusBitmap, fromSheet, toDisplay, bonusPaint);
+        }
+        else {
+            is_time_out = true;
+        }
     }
 }
