@@ -10,10 +10,14 @@ import android.graphics.Color;
 import android.graphics.Paint;
 import android.graphics.Point;
 import android.graphics.RectF;
+import android.text.style.TtsSpan;
 import android.util.Log;
 import android.view.MotionEvent;
 import android.view.SurfaceHolder;
 import android.view.SurfaceView;
+
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Random;
 
 
@@ -37,6 +41,9 @@ public class GameView extends SurfaceView {
     private BoomerangTwister[] mTwister      = new BoomerangTwister[5];
     private LightSaber[]    mSaber           = new LightSaber[3];
 
+    private List<ScoreBubble> mBubbleList    = new ArrayList<>();
+    private ScoreBubble     mBubble          = new ScoreBubble(this);
+
     public static Point     fingerPosition   = new Point(0,0);
     public static Point     destinationPoint = new Point(0,0);
     public static Point     initialPoint     = new Point(0,0);
@@ -50,6 +57,7 @@ public class GameView extends SurfaceView {
     private int             bombPlantCount;
     private int             twisterTimeGap;
     private int             saberTimeGap;
+    private int             scoreBubbleCount;
 
     private boolean         monster_trick_time;
     private boolean         time_to_shoot_bullets;
@@ -117,6 +125,7 @@ public class GameView extends SurfaceView {
         this.bombPlantCount         = 1;
         this.twisterTimeGap         = 1;
         this.saberTimeGap           = 1;
+        this.scoreBubbleCount       = 1;
 
         this.monster_trick_time     = false;
         this.time_to_shoot_bullets  = false;
@@ -534,6 +543,42 @@ public class GameView extends SurfaceView {
                 mBall.prepareForSleepAndAttack();
                 mBall.attackFingerPosition();
             }
+
+            scoreBubbleCount = ++scoreBubbleCount % 200;
+            if(scoreBubbleCount == 0) {
+                mBubble = new ScoreBubble(this);
+                mBubble.initBubble();
+                mBubbleList.add(mBubble);
+            }
+
+            for(int i = 0; i < mBubbleList.size(); i++) {
+                mBubble = mBubbleList.get(i);
+
+                if(mBubble.clockwise) {
+                    if(!mBubble.is_bubble_taken) {
+                        if (mBubble.bubblePaint.getAlpha() < 255 && !mBubble.is_to_fade_out) {
+                            mBubble.bubbleClockwiseFadeIn();
+                            mBubble.bubbleStartTheta = mBubble.bubbleTheta;
+                        } else if (mBubble.bubblePaint.getAlpha() == 255 && !mBubble.is_to_fade_out) {
+                            mBubble.bubbleClockwiseDisplacement();
+                        } else {
+                            mBubble.bubbleClockwiseFadeOut();
+                        }
+                    }
+                }
+                else {
+                    if(!mBubble.is_bubble_taken) {
+                        if (mBubble.bubblePaint.getAlpha() < 255 && !mBubble.is_to_fade_out) {
+                            mBubble.bubbleAntiClockwiseFadeIn();
+                            mBubble.bubbleStartTheta = mBubble.bubbleTheta;
+                        } else if (mBubble.bubblePaint.getAlpha() == 255 && !mBubble.is_to_fade_out) {
+                            mBubble.bubbleAntiClockwiseDisplacement();
+                        } else {
+                            mBubble.bubbleAntiClockwiseFadeOut();
+                        }
+                    }
+                }
+            }
         }
     }
 
@@ -611,6 +656,21 @@ public class GameView extends SurfaceView {
 
         canvas.drawCircle((float) mBall.monsterPosition.x, (float) mBall.monsterPosition.y, (float) mBall.monsterRadius, mBall.monsterPaint);
         canvas.drawText(Integer.toString((int) Score), 40, 40, scorePaint);
+
+
+        for(int i = 0; i < mBubbleList.size(); i++) {
+            mBubble = mBubbleList.get(i);
+
+            if(mBubble.is_time_out) {
+                mBubbleList.remove(i);
+            }
+            else if(mBubble.is_bubble_taken) {
+                mBubble.drawBonusScore(canvas);
+            }
+            else {
+                mBubble.drawBubble(canvas);
+            }
+        }
     }
 
     @SuppressLint("ClickableViewAccessibility")
@@ -724,6 +784,16 @@ public class GameView extends SurfaceView {
                         }
                     }
                 }
+
+                for(int i = 0; i < mBubbleList.size(); i++) {
+                    mBubble = mBubbleList.get(i);
+                    if(Geometry.distance(fingerPosition, mBubble.bubbleCenter) < mBubble.bubbleRadius) {
+                        if(mBubble.bubblePaint.getAlpha() > 20) {
+                            mBubble.is_bubble_taken = true;
+                            Score += mBubble.bubbleValue;
+                        }
+                    }
+                }
                 break;
 
             case MotionEvent.ACTION_CANCEL:
@@ -755,7 +825,6 @@ public class GameView extends SurfaceView {
         if(mBall.monsterTrickSetDecider == 0) {
             if(mBall.monsterAttackTrick == 1) {
                 time_for_some_heat = true;
-                mThread.setFPS(100);
             }
             else if(mBall.monsterAttackTrick == 2) {
                 time_to_shoot_bullets = true;

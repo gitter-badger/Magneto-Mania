@@ -56,7 +56,7 @@ public class Geometry extends Point {
 
     public static Point setPolarCoordinates(Point center, int radius, int theta) {
         return new Point(center.x + (int)(radius*Math.cos(theta * Math.PI / 180)),
-                center.y + (int)(radius*Math.sin(theta * Math.PI / 180)));
+                         center.y + (int)(radius*Math.sin(theta * Math.PI / 180)));
     }
 
 
