@@ -54,6 +54,12 @@ public class Geometry extends Point {
     }
 
 
+    public static Point setPolarCoordinates(Point center, int radius, int theta) {
+        return new Point(center.x + (int)(radius*Math.cos(theta * Math.PI / 180)),
+                center.y + (int)(radius*Math.sin(theta * Math.PI / 180)));
+    }
+
+
     public static double[] circularPathDisplacement(double object[], Point center, int radius, double omega) {
         // omega is angular velocity in degrees per second.
         double theta = Math.atan2(object[1] - center.y, object[0] - center.x)* 180 / Math.PI;
