@@ -64,16 +64,16 @@ public class ScoreBubble {
 
         switch(bubbleValue) {
             case 50:
-                bubbleBitmap = BitmapFactory.decodeResource(gameView.getResources(), R.mipmap.sabercenter);
+                bubbleBitmap = BitmapFactory.decodeResource(gameView.getResources(), R.mipmap.score50);
                 break;
             case 100:
-                bubbleBitmap = BitmapFactory.decodeResource(gameView.getResources(), R.mipmap.sabercenter);
+                bubbleBitmap = BitmapFactory.decodeResource(gameView.getResources(), R.mipmap.score100);
                 break;
             case 250:
-                bubbleBitmap = BitmapFactory.decodeResource(gameView.getResources(), R.mipmap.sabercenter);
+                bubbleBitmap = BitmapFactory.decodeResource(gameView.getResources(), R.mipmap.score250);
                 break;
             case 500:
-                bubbleBitmap = BitmapFactory.decodeResource(gameView.getResources(), R.mipmap.sabercenter);
+                bubbleBitmap = BitmapFactory.decodeResource(gameView.getResources(), R.mipmap.score500);
                 break;
         }
 
@@ -120,7 +120,7 @@ public class ScoreBubble {
         bubbleTheta          -= bubbleOmega;
         bubbleCenter          = Geometry.setPolarCoordinates(center, orbitRadius, bubbleTheta);
 
-        if(bubbleTheta < bubbleStartTheta + 180) {
+        if(bubbleTheta < bubbleStartTheta - 360) {
             is_to_fade_out = true;
         }
     }
@@ -137,8 +137,24 @@ public class ScoreBubble {
 
 
     public void drawBubble (Canvas canvas) {
-        toDisplay.set(bubbleCenter.x - bubbleRadius, bubbleCenter.y - bubbleRadius,
-                      bubbleCenter.x + bubbleRadius, bubbleCenter.y + bubbleRadius);
+        switch(bubbleValue) {
+            case 50:
+                toDisplay.set(bubbleCenter.x - bubbleRadius - 5, bubbleCenter.y - bubbleRadius - 5,
+                              bubbleCenter.x + bubbleRadius + 5, bubbleCenter.y + bubbleRadius + 5);
+                break;
+            case 100:
+                toDisplay.set(bubbleCenter.x - bubbleRadius - 10, bubbleCenter.y - bubbleRadius - 10,
+                              bubbleCenter.x + bubbleRadius + 10, bubbleCenter.y + bubbleRadius + 10);
+                break;
+            case 250:
+                toDisplay.set(bubbleCenter.x - bubbleRadius - 15, bubbleCenter.y - bubbleRadius - 15,
+                              bubbleCenter.x + bubbleRadius + 15, bubbleCenter.y + bubbleRadius + 15);
+                break;
+            case 500:
+                toDisplay.set(bubbleCenter.x - bubbleRadius - 20, bubbleCenter.y - bubbleRadius - 20,
+                              bubbleCenter.x + bubbleRadius + 20, bubbleCenter.y + bubbleRadius + 20);
+                break;
+        }
         canvas.drawBitmap(bubbleBitmap, fromSheet, toDisplay, bubblePaint);
     }
 }

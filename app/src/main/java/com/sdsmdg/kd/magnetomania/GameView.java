@@ -781,6 +781,16 @@ public class GameView extends SurfaceView {
                         }
                     }
                 }
+
+                for(int i = 0; i < mBubbleList.size(); i++) {
+                    mBubble = mBubbleList.get(i);
+                    if(Geometry.distance(fingerPosition, mBubble.bubbleCenter) < mBubble.bubbleRadius) {
+                        if(mBubble.bubblePaint.getAlpha() > 20) {
+                            mBubble.is_bubble_taken = true;
+                            Score += mBubble.bubbleValue;
+                        }
+                    }
+                }
                 break;
 
             case MotionEvent.ACTION_CANCEL:
@@ -812,7 +822,6 @@ public class GameView extends SurfaceView {
         if(mBall.monsterTrickSetDecider == 0) {
             if(mBall.monsterAttackTrick == 1) {
                 time_for_some_heat = true;
-                mThread.setFPS(100);
             }
             else if(mBall.monsterAttackTrick == 2) {
                 time_to_shoot_bullets = true;
