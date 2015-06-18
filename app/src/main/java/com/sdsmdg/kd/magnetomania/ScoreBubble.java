@@ -34,6 +34,7 @@ public class ScoreBubble {
     protected boolean       is_time_out;
     protected boolean       is_to_fade_out;
     protected boolean       clockwise;
+    protected boolean       is_luck_strong;
 
     protected Rect          fromSheet = new Rect();
     protected Rect          toDisplay = new Rect();
@@ -47,6 +48,7 @@ public class ScoreBubble {
         this.is_bubble_taken = false;
         this.is_time_out     = false;
         this.is_to_fade_out  = false;
+        this.is_luck_strong  = false;
         this.clockwise       = random.nextBoolean();
     }
     /**--------------------------------------------------------------------------------------------------**/
@@ -57,6 +59,18 @@ public class ScoreBubble {
         orbitRadius                     = random.nextInt(3*GameActivity.mScreenSize.x/8) + GameActivity.mScreenSize.x/8;
         bubbleCenter                    = Geometry.setPolarCoordinates(center, orbitRadius, bubbleStartTheta);
         bubbleValue                     = scoreValues[random.nextInt(4)];
+
+        if(bubbleValue == 250 || bubbleValue == 500) {
+            is_luck_strong              = random.nextBoolean();
+            if(!is_luck_strong) {
+                if(bubbleValue == 250) {
+                    bubbleValue = 50;
+                }
+                else {
+                    bubbleValue = 100;
+                }
+            }
+        }
 
         bubbleRadius                    = (int)(Math.sqrt(Geometry.area(GameActivity.mScreenSize) / (100 * Math.PI)));
         bubbleTheta                     = bubbleStartTheta;
