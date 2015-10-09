@@ -788,7 +788,7 @@ public class GameView extends SurfaceView {
                 for(int i = 0; i < mBubbleList.size(); i++) {
                     mBubble = mBubbleList.get(i);
                     if(Geometry.distance(fingerPosition, mBubble.bubbleCenter) < mBubble.bubbleRadius) {
-                        if(mBubble.bubblePaint.getAlpha() > 20) {
+                        if(mBubble.bubblePaint.getAlpha() > 20 && !mBubble.is_bubble_taken) {
                             mBubble.is_bubble_taken = true;
                             Score += mBubble.bubbleValue;
                         }
