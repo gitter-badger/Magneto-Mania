@@ -538,7 +538,6 @@ public class GameView extends SurfaceView {
                 }
             }
             else {
-                mThread.setFPS(50);
                 monsterSleepCount = 1;
                 mBall.prepareForSleepAndAttack();
                 mBall.attackFingerPosition();
@@ -582,7 +581,7 @@ public class GameView extends SurfaceView {
         }
     }
 
-    public void draw(Canvas canvas) {
+    public void draw(Canvas canvas, float interpolation) {
 
         if(laser_beam_on_screen || (mSaber != null && mBall.monsterTrickSetDecider == 3 && mBall.monsterAttackTrick == 1)) {
             canvas.drawColor(Color.parseColor("#BB000000"));
@@ -671,6 +670,8 @@ public class GameView extends SurfaceView {
                 mBubble.drawBubble(canvas);
             }
         }
+
+        mThread.incrementFrameCount();
     }
 
     @SuppressLint("ClickableViewAccessibility")
@@ -851,10 +852,10 @@ public class GameView extends SurfaceView {
         else if(mBall.monsterTrickSetDecider == 3) {
             if(mBall.monsterAttackTrick == 1) {
                 time_for_saber_action = true;
-                mThread.setFPS(40);
+
             }
             else if(mBall.monsterAttackTrick == 2) {
-                mThread.setFPS(50);
+
             }
         }
     }
