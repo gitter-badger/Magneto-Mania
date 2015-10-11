@@ -653,7 +653,7 @@ public class GameView extends SurfaceView {
             }
         }
 
-        canvas.drawCircle((float) mBall.monsterPosition.x, (float) mBall.monsterPosition.y, (float) mBall.monsterRadius, mBall.monsterPaint);
+        mBall.drawMonsterBall(canvas, interpolation);
         canvas.drawText(Integer.toString((int) Score), 40, 40, scorePaint);
 
 
