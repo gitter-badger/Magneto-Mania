@@ -186,6 +186,7 @@ public class GameView extends SurfaceView {
 
             if(monsterSleepCount <= mBall.monsterSleepTime) {
                 monsterSleepCount++;
+                mBall.monsterPrevPosition       = Geometry.setCoordinates(mBall.monsterPosition);
 
                 if(monsterSleepCount == mBall.monsterSleepTime) {
                     if(monster_trick_time) {
@@ -380,6 +381,8 @@ public class GameView extends SurfaceView {
                         } else if (mBall.monsterPosition.y < 0) {
                             mBall.monsterPosition.y = 0;
                         }
+
+                        mBall.monsterPrevPosition   = Geometry.setCoordinates(mBall.monsterPosition);
 
                         if (mBomb[0].is_bomb_planted && mBomb[1].is_bomb_planted) {
                             time_to_plant_bombs = false;

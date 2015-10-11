@@ -32,10 +32,10 @@ public class GameThread extends Thread {
     public void run()
     {
         // Number of updates in one second
-        final double GAME_HERTZ = 50.0;
+        final double TARGET_UPS = 40.0;
 
         // Calculate how many nanoseconds each frame should take for our target Game Hertz
-        final double TIME_BETWEEN_UPDATES = 1000000000 / GAME_HERTZ;
+        final double TIME_BETWEEN_UPDATES = 1000000000 / TARGET_UPS;
 
         // At the very most, the game will be updated this many times before a new render
         final int MAX_UPDATES_BEFORE_RENDER = 1;
@@ -45,7 +45,7 @@ public class GameThread extends Thread {
         // The last time a render was done
         double lastRenderTime = System.nanoTime();
 
-        final double TARGET_FPS = 50;
+        final double TARGET_FPS = 60.0;
         final double TARGET_TIME_BETWEEN_RENDERS = 1000000000 / TARGET_FPS;
 
         // Simple way of finding FPS

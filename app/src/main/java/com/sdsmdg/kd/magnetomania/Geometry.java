@@ -50,6 +50,7 @@ public class Geometry extends Point {
         }
         else {
             monsterBall.monsterPosition = Geometry.setCoordinates(center);
+            monsterBall.monsterPrevPosition = Geometry.setCoordinates(monsterBall.monsterPosition);
         }
     }
 

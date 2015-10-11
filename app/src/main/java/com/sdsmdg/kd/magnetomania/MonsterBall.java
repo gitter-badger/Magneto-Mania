@@ -5,7 +5,6 @@ import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
 import android.graphics.Point;
-import android.util.Log;
 
 import java.util.Random;
 
@@ -39,11 +38,11 @@ public class MonsterBall {
         this.monsterPosition.y      = random.nextInt(GameActivity.mScreenSize.y + 1);
         this.monsterPosition.x      = random.nextInt(2);
 
-        this.monsterPrevPosition.y  = this.monsterPosition.y;
-        this.monsterPrevPosition.x  = this.monsterPosition.x;
-
         if(this.monsterPosition.x == 1)
             this.monsterPosition.x  = GameActivity.mScreenSize.x;
+
+        this.monsterPrevPosition.y  = this.monsterPosition.y;
+        this.monsterPrevPosition.x  = this.monsterPosition.x;
 
         this.monsterVelocity        = random.nextInt(15) + 15 + (int)(GameView.Score / 1000);
         this.monsterSleepTime       = random.nextInt(15) + 15;
@@ -92,6 +91,8 @@ public class MonsterBall {
             GameView.destinationPoint = Geometry.setCoordinates(GameView.fingerPosition);
             GameView.initialPoint     = Geometry.setCoordinates(monsterPosition);
 
+            monsterPrevPosition       = Geometry.setCoordinates(monsterPosition);
+
             monsterAttackTrick = 0;
             monsterVelocity  = random.nextInt(15) + 15 + (int)(GameView.Score / 1000);
             monsterSleepTime = random.nextInt(15) + 15;
@@ -108,10 +109,9 @@ public class MonsterBall {
 
     public void drawMonsterBall (Canvas canvas, float interpolation) {
 
-        monsterDraw.x = (int)((monsterPosition.x - monsterPrevPosition.x) * interpolation) + monsterPrevPosition.x;
-        monsterDraw.y = (int)((monsterPosition.y - monsterPrevPosition.y) * interpolation) + monsterPrevPosition.y;
+        monsterDraw.x = (int)(((monsterPosition.x - monsterPrevPosition.x) * interpolation) + monsterPrevPosition.x);
+        monsterDraw.y = (int)(((monsterPosition.y - monsterPrevPosition.y) * interpolation) + monsterPrevPosition.y);
 
-        Log.i("interpolation",""+interpolation);
         canvas.drawCircle((float) monsterDraw.x, (float) monsterDraw.y,
                           (float) monsterRadius, monsterPaint);
 
