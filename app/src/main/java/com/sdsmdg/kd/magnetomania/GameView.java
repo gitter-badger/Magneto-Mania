@@ -488,6 +488,7 @@ public class GameView extends SurfaceView {
                     rocketXhaustCount = 1;
                     mRocket.rocketPosition.x = GameActivity.mScreenSize.x + 80;
                     mRocket.rocketPosition.y = GameActivity.mScreenSize.y + 80;
+                    mRocket.rocketPrevPosition = Geometry.setCoordinates(mRocket.rocketPosition);
                     mRocket.rocketXhaustTime = 0;
 
                     mBall.prepareForSleepAndAttack();
@@ -645,7 +646,7 @@ public class GameView extends SurfaceView {
         }
 
         if(mRocket != null && mBall.monsterTrickSetDecider == 2 && mBall.monsterAttackTrick == 2) {
-            canvas.drawCircle((float)mRocket.rocketPosition.x, (float)mRocket.rocketPosition.y, (float)mRocket.rocketRadius, mRocket.rocketPaint);
+            mRocket.drawMagnetRocket(canvas, interpolation);
         }
 
         if(mSaber != null && mBall.monsterTrickSetDecider == 3 && mBall.monsterAttackTrick == 1) {
