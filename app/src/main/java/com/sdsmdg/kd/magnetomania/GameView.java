@@ -625,7 +625,7 @@ public class GameView extends SurfaceView {
             }
             else if (laser_beam_on_screen) {
                 for(int i=0; i<4; i++) {
-                    mBeam[i].drawLaserBeam(canvas);
+                    mBeam[i].drawLaserBeam(canvas, interpolation);
                 }
             }
         }

@@ -13,6 +13,10 @@ public class LaserBeam {
     protected final Point   center = new Point(GameActivity.mScreenSize.x/2, GameActivity.mScreenSize.y/2);
     protected double        laserDestinationX;
     protected double        laserDestinationY;
+    protected double        laserPrevDestinationX;
+    protected double        laserPrevDestinationY;
+    protected double        laserDrawX;
+    protected double        laserDrawY;
     protected float         laserBeamAngle;
     protected Point         laserMidPoint = new Point(0,0);
     protected Paint         laserBeamPaint   = new Paint();
@@ -24,6 +28,8 @@ public class LaserBeam {
     public LaserBeam(GameView gameView) {
         this.laserDestinationX = center.x;
         this.laserDestinationY = center.y;
+        this.laserPrevDestinationX = this.laserDestinationX;
+        this.laserPrevDestinationY = this.laserDestinationY;
         this.laserBeamPaint.setColor(Color.parseColor("#9C27B0"));
         this.laserBeamPaint.setAlpha(0);
         this.laserBeamPaint.setStrokeWidth(30);
@@ -56,6 +62,8 @@ public class LaserBeam {
                 this.laserDestinationY = 2 * center.y;
                 break;
         }
+        laserPrevDestinationX          = laserDestinationX;
+        laserPrevDestinationY          = laserDestinationY;
         laserBeamPaint.setStrokeWidth(30);
         laserBeamPaint.setColor(Color.parseColor("#9C27B0"));
     }
@@ -65,15 +73,19 @@ public class LaserBeam {
 
         switch (orientation) {
             case 0:
+                laserPrevDestinationX = laserDestinationX;
                 laserDestinationX -= (double) GameActivity.mScreenSize.x / 30.0;
                 break;
             case 1:
+                laserPrevDestinationY = laserDestinationY;
                 laserDestinationY += (double) GameActivity.mScreenSize.y / 30.0;
                 break;
             case 2:
+                laserPrevDestinationX = laserDestinationX;
                 laserDestinationX += (double) GameActivity.mScreenSize.x / 30.0;
                 break;
             case 3:
+                laserPrevDestinationY = laserDestinationY;
                 laserDestinationY -= (double) GameActivity.mScreenSize.y / 30.0;
                 break;
         }
@@ -88,20 +100,24 @@ public class LaserBeam {
     }
 
 
-    public void setLaserBeamPaint(int strokeWidth, String color, Canvas canvas) {
+    public void setLaserBeamPaint(int strokeWidth, String color, Canvas canvas, float interpolation) {
         laserBeamPaint.setStrokeWidth(strokeWidth);
         laserBeamPaint.setColor(Color.parseColor(color));
-        canvas.drawLine((float) center.x, (float) center.y, (float) laserDestinationX, (float) laserDestinationY, laserBeamPaint);
-        canvas.drawCircle((float)laserDestinationX, (float)laserDestinationY, strokeWidth/4, laserBeamPaint);
+
+        laserDrawX = ((laserDestinationX - laserPrevDestinationX) * interpolation) + laserPrevDestinationX;
+        laserDrawY = ((laserDestinationY - laserPrevDestinationY) * interpolation) + laserPrevDestinationY;
+
+        canvas.drawLine((float) center.x, (float) center.y, (float) laserDrawX, (float) laserDrawY, laserBeamPaint);
+        canvas.drawCircle((float)laserDrawX, (float)laserDrawY, strokeWidth/4, laserBeamPaint);
     }
 
-    public void drawLaserBeam(Canvas canvas) {
-        setLaserBeamPaint(45, "#9C27B0", canvas);
-        setLaserBeamPaint(43, "#AB47BC", canvas);
-        setLaserBeamPaint(39, "#B868C8", canvas);
-        setLaserBeamPaint(33, "#CE93D8", canvas);
-        setLaserBeamPaint(25, "#E1BEE7", canvas);
-        setLaserBeamPaint(20, "#F3E5F5", canvas);
+    public void drawLaserBeam(Canvas canvas, float interpolation) {
+        setLaserBeamPaint(45, "#9C27B0", canvas, interpolation);
+        setLaserBeamPaint(43, "#AB47BC", canvas, interpolation);
+        setLaserBeamPaint(39, "#B868C8", canvas, interpolation);
+        setLaserBeamPaint(33, "#CE93D8", canvas, interpolation);
+        setLaserBeamPaint(25, "#E1BEE7", canvas, interpolation);
+        setLaserBeamPaint(20, "#F3E5F5", canvas, interpolation);
     }
 
 
