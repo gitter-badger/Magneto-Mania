@@ -612,11 +612,8 @@ public class GameView extends SurfaceView {
         }
 
         if(mFan != null && mBall.monsterTrickSetDecider == 0 && mBall.monsterAttackTrick == 2) {
-            for(int i=0; i<7; i++) {
-                for (int j = 0; j < 3; j++) {
-                    canvas.drawCircle((float) mFan[j].bulletPosition[i].x, (float) mFan[j].bulletPosition[i].y,
-                            (float) mFan[j].bulletsRadius, mFan[j].bulletsPaint);
-                }
+            for(int i=0; i<3; i++) {
+                mFan[i].drawBulletFan(canvas, interpolation);
             }
         }
 

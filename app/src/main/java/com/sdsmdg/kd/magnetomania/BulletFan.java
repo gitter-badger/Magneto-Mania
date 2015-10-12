@@ -1,6 +1,7 @@
 package com.sdsmdg.kd.magnetomania;
 
 
+import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
 import android.graphics.Point;
@@ -13,12 +14,16 @@ public class BulletFan {
     protected final int SIZE                     = 7;
     protected Point     bulletPathCenter         = new Point(0,0);
     protected Point     bulletPosition[]         = new Point[SIZE];
+    protected Point     bulletPrevPosition[]     = new Point[SIZE];
+
     protected Point     bulletDestination        = new Point(0,0);
     protected int       destinationPositionAngle;
     protected int[]     bulletAngleOfPropagation = new int[SIZE];
     protected int       bulletPathRadius;
 
     protected int       bulletsVelocity;
+
+    protected Point     bulletDraw[]             = new Point[SIZE];
 
     protected Paint     bulletsPaint             = new Paint();
     protected final int bulletsRadius = (int)(Math.sqrt(Geometry.area(GameActivity.mScreenSize) / (300 * Math.PI)));
@@ -29,6 +34,8 @@ public class BulletFan {
     public BulletFan() {
         for(int i = 0; i < SIZE; i++) {
             this.bulletPosition[i]              = new Point(GameActivity.mScreenSize.x + 80, GameActivity.mScreenSize.y + 80);
+            this.bulletPrevPosition[i]          = new Point(GameActivity.mScreenSize.x + 80, GameActivity.mScreenSize.y + 80);
+            this.bulletDraw[i]                  = new Point(GameActivity.mScreenSize.x + 80, GameActivity.mScreenSize.y + 80);
             this.bulletAngleOfPropagation[i]    = 0;
         }
 
@@ -44,6 +51,7 @@ public class BulletFan {
         bulletPathCenter         = Geometry.setCoordinates(monsterBall.monsterPosition);
         for(int i = 0; i < SIZE; i++) {
             bulletPosition[i]    = Geometry.setCoordinates(bulletPathCenter);
+            bulletPrevPosition[i]= Geometry.setCoordinates(bulletPosition[i]);
         }
         bulletDestination        = Geometry.setCoordinates(GameView.destinationPoint);
         bulletsVelocity = 20;
@@ -61,6 +69,7 @@ public class BulletFan {
     public void setDirectionAndShoot() {
         bulletPathRadius += bulletsVelocity;
         for(int i = 0; i < SIZE; i++) {
+            bulletPrevPosition[i]= Geometry.setCoordinates(bulletPosition[i]);
             bulletPosition[i]    = Geometry.setPolarCoordinates(bulletPathCenter, bulletPathRadius, bulletAngleOfPropagation[i]);
         }
     }
@@ -78,4 +87,13 @@ public class BulletFan {
         return false;
     }
 
+
+    public void drawBulletFan (Canvas canvas, float interpolation) {
+        for(int i=0; i<SIZE; i++) {
+            bulletDraw[i].x = (int)(((bulletPosition[i].x - bulletPrevPosition[i].x) * interpolation) + bulletPrevPosition[i].x);
+            bulletDraw[i].y = (int)(((bulletPosition[i].y - bulletPrevPosition[i].y) * interpolation) + bulletPrevPosition[i].y);
+
+            canvas.drawCircle((float) bulletDraw[i].x, (float) bulletDraw[i].y, (float) bulletsRadius, bulletsPaint);
+        }
+    }
 }
