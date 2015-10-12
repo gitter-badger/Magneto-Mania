@@ -638,7 +638,9 @@ public class GameView extends SurfaceView {
 
         if(mTwister != null && mBall.monsterTrickSetDecider == 2 && mBall.monsterAttackTrick == 1) {
             for(int i=0; i<5; i++) {
-                mTwister[i].drawBoomerangTwister(canvas);
+                if (mTwister[i].is_twister_thrown) {
+                    mTwister[i].drawBoomerangTwister(canvas, interpolation);
+                }
             }
         }
 

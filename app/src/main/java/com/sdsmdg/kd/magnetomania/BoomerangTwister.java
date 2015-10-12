@@ -13,6 +13,10 @@ public class BoomerangTwister {
 
     /******************************************** CLASS MEMBERS ********************************************/
     protected Point         twisterPosition     = new Point(0,0);
+    protected Point         twisterprevPosition = new Point(0,0);
+
+    protected Point         twisterDraw         = new Point(0,0);
+
     protected Point         twisterDestination  = new Point(0,0);
     protected double        twisterVelocity;
     protected double        velocityMax;
@@ -45,6 +49,7 @@ public class BoomerangTwister {
         Random random = new Random();
 
         twisterPosition               = Geometry.setCoordinates(monsterBall.monsterPosition);
+        twisterprevPosition           = Geometry.setCoordinates(twisterPosition);
         twisterVelocity               = random.nextInt(5) + 20;
         velocityMax                   = random.nextInt(5) + 20;
         twisterDestination            = Geometry.setCoordinates(GameView.fingerPosition);
@@ -56,6 +61,7 @@ public class BoomerangTwister {
     public void attackTowardsFinger() {
         Point mVelocityComponent = Geometry.calcVelocityComponents(twisterDestination, GameView.initialPoint, (int)twisterVelocity);
 
+        twisterprevPosition= Geometry.setCoordinates(twisterPosition);
         twisterVelocity   -= 0.25;
         twisterPosition.x += mVelocityComponent.x;
         twisterPosition.y += mVelocityComponent.y;
@@ -70,9 +76,12 @@ public class BoomerangTwister {
     }
 
 
-    public void drawBoomerangTwister(Canvas canvas) {
-        animation.setRotatedCanvas(canvas, twisterPosition, twisterAngle);
-        animation.setSourceDestinyRects(twisterPosition, twisterRadius);
+    public void drawBoomerangTwister(Canvas canvas, float interpolation) {
+        twisterDraw.x = (int)(((twisterPosition.x - twisterprevPosition.x) * interpolation) + twisterprevPosition.x);
+        twisterDraw.y = (int)(((twisterPosition.y - twisterprevPosition.y) * interpolation) + twisterprevPosition.y);
+
+        animation.setRotatedCanvas(canvas, twisterDraw, twisterAngle);
+        animation.setSourceDestinyRects(twisterDraw, twisterRadius);
         animation.drawBitmap(canvas);
         canvas.restore();
     }
