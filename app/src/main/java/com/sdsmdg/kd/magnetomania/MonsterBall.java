@@ -14,6 +14,10 @@ public class MonsterBall {
 
     /******************************************** CLASS MEMBERS ********************************************/
     protected Point         monsterPosition = new Point(0,0);
+    protected Point         monsterPrevPosition = new Point(0,0);
+
+    protected Point         monsterDraw     = new Point(0,0);
+
     protected double        monsterVelocity;
 
     protected Paint         monsterPaint    = new Paint();
@@ -37,6 +41,9 @@ public class MonsterBall {
         if(this.monsterPosition.x == 1)
             this.monsterPosition.x  = GameActivity.mScreenSize.x;
 
+        this.monsterPrevPosition.y  = this.monsterPosition.y;
+        this.monsterPrevPosition.x  = this.monsterPosition.x;
+
         this.monsterVelocity        = random.nextInt(15) + 15 + (int)(GameView.Score / 1000);
         this.monsterSleepTime       = random.nextInt(15) + 15;
 
@@ -52,6 +59,8 @@ public class MonsterBall {
 
     public void attackFingerPosition () {
         Point mVelocityComponent    = Geometry.calcVelocityComponents(GameView.destinationPoint, GameView.initialPoint, (int)monsterVelocity);
+
+        monsterPrevPosition         = Geometry.setCoordinates(monsterPosition);
 
         monsterVelocity            -= 0.05;
         monsterPosition.x          += mVelocityComponent.x;
@@ -82,6 +91,8 @@ public class MonsterBall {
             GameView.destinationPoint = Geometry.setCoordinates(GameView.fingerPosition);
             GameView.initialPoint     = Geometry.setCoordinates(monsterPosition);
 
+            monsterPrevPosition       = Geometry.setCoordinates(monsterPosition);
+
             monsterAttackTrick = 0;
             monsterVelocity  = random.nextInt(15) + 15 + (int)(GameView.Score / 1000);
             monsterSleepTime = random.nextInt(15) + 15;
@@ -96,8 +107,15 @@ public class MonsterBall {
     }
 
 
-    public void drawMonsterBall (Canvas canvas) {
-        animation.setSourceDestinyRects(monsterPosition, monsterRadius);
-        animation.drawBitmap(canvas);
+    public void drawMonsterBall (Canvas canvas, float interpolation) {
+
+        monsterDraw.x = (int)(((monsterPosition.x - monsterPrevPosition.x) * interpolation) + monsterPrevPosition.x);
+        monsterDraw.y = (int)(((monsterPosition.y - monsterPrevPosition.y) * interpolation) + monsterPrevPosition.y);
+
+        canvas.drawCircle((float) monsterDraw.x, (float) monsterDraw.y,
+                          (float) monsterRadius, monsterPaint);
+
+//        animation.setSourceDestinyRects(monsterPosition, monsterRadius);
+//        animation.drawBitmap(canvas);
     }
 }

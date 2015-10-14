@@ -14,6 +14,9 @@ public class MagnetRocket {
 
     /******************************************** CLASS MEMBERS ********************************************/
     protected Point         rocketPosition = new Point(0,0);
+    protected Point         rocketPrevPosition = new Point(0,0);
+    protected Point         rocketDraw = new Point(0,0);
+
     protected double        rocketVelocity;
 
     protected Paint         rocketPaint = new Paint();
@@ -31,6 +34,7 @@ public class MagnetRocket {
         this.rocketPosition.x   = GameActivity.mScreenSize.x + 80;
         this.rocketPosition.y   = GameActivity.mScreenSize.y + 80;
         this.rocketVelocity     = 0;
+        this.rocketPrevPosition = Geometry.setCoordinates(rocketPosition);
 
         this.rocketXhaustTime   = 0;
         this.rocketPaint.setColor(Color.parseColor("#CC1100"));
@@ -48,6 +52,7 @@ public class MagnetRocket {
         rocketPosition          = Geometry.setCoordinates(monsterBall.monsterPosition);
         rocketVelocity          = random.nextInt(10) + 10;
         rocketXhaustTime        = random.nextInt(50) + 150;
+        rocketPrevPosition      = Geometry.setCoordinates(rocketPosition);
 
         rocketPaint.setColor(Color.parseColor("#CC1100"));
     }
@@ -56,6 +61,7 @@ public class MagnetRocket {
     public void rocketTrackFinger () {
         Point rVelocityComponent = Geometry.calcVelocityComponents(GameView.fingerPosition, rocketPosition, (int)rocketVelocity);
 
+        rocketPrevPosition      = Geometry.setCoordinates(rocketPosition);
         rocketVelocity          += 0.05;
         rocketPosition.x        += rVelocityComponent.x;
         rocketPosition.y        += rVelocityComponent.y;
@@ -74,14 +80,19 @@ public class MagnetRocket {
     }
 
 
-    public void drawMagnetRocket (Canvas canvas) {
-        rocketTipAngle = (float)Math.atan2((double)GameView.fingerPosition.y - rocketPosition.y, (double)GameView.fingerPosition.x - rocketPosition.x)*180/(float)Math.PI + 90;
-        animation.setSourceDestinyRects(rocketPosition, rocketRadius);
+    public void drawMagnetRocket (Canvas canvas, float interpolation) {
+//        rocketTipAngle = (float)Math.atan2((double)GameView.fingerPosition.y - rocketPosition.y, (double)GameView.fingerPosition.x - rocketPosition.x)*180/(float)Math.PI + 90;
+//        animation.setSourceDestinyRects(rocketPosition, rocketRadius);
+//
+//        animation.toDisplay.set(rocketPosition.x - rocketRadius, rocketPosition.y - rocketRadius - 10, rocketPosition.x + rocketRadius, rocketPosition.y + rocketRadius + 10);
+//
+//        animation.setRotatedCanvas(canvas, rocketPosition, (int)rocketTipAngle);
+//        animation.drawBitmap(canvas);
+//        canvas.restore();
 
-        animation.toDisplay.set(rocketPosition.x - rocketRadius, rocketPosition.y - rocketRadius - 10, rocketPosition.x + rocketRadius, rocketPosition.y + rocketRadius + 10);
+        rocketDraw.x = (int)(((rocketPosition.x - rocketPrevPosition.x) * interpolation) + rocketPrevPosition.x);
+        rocketDraw.y = (int)(((rocketPosition.y - rocketPrevPosition.y) * interpolation) + rocketPrevPosition.y);
 
-        animation.setRotatedCanvas(canvas, rocketPosition, (int)rocketTipAngle);
-        animation.drawBitmap(canvas);
-        canvas.restore();
+        canvas.drawCircle((float) rocketDraw.x, (float) rocketDraw.y, (float) rocketRadius, rocketPaint);
     }
 }

@@ -184,6 +184,7 @@ public class GameView extends SurfaceView {
 
             if(monsterSleepCount <= mBall.monsterSleepTime) {
                 monsterSleepCount++;
+                mBall.monsterPrevPosition       = Geometry.setCoordinates(mBall.monsterPosition);
 
                 if(monsterSleepCount == mBall.monsterSleepTime) {
                     if(monster_trick_time) {
@@ -373,6 +374,8 @@ public class GameView extends SurfaceView {
                             mBall.monsterPosition.y = 0;
                         }
 
+                        mBall.monsterPrevPosition   = Geometry.setCoordinates(mBall.monsterPosition);
+
                         if (mBomb[0].is_bomb_planted && mBomb[1].is_bomb_planted) {
                             time_to_plant_bombs = false;
                             bomb_residue_on_screen = true;
@@ -477,6 +480,7 @@ public class GameView extends SurfaceView {
                     rocketXhaustCount = 1;
                     mRocket.rocketPosition.x = GameActivity.mScreenSize.x + 80;
                     mRocket.rocketPosition.y = GameActivity.mScreenSize.y + 80;
+                    mRocket.rocketPrevPosition = Geometry.setCoordinates(mRocket.rocketPosition);
                     mRocket.rocketXhaustTime = 0;
 
                     mBall.prepareForSleepAndAttack();
@@ -530,7 +534,6 @@ public class GameView extends SurfaceView {
                 }
             }
             else {
-                mThread.setFPS(50);
                 monsterSleepCount = 1;
                 mBall.prepareForSleepAndAttack();
                 mBall.attackFingerPosition();
@@ -574,7 +577,7 @@ public class GameView extends SurfaceView {
         }
     }
 
-    public void draw(Canvas canvas) {
+    public void draw(Canvas canvas, float interpolation) {
 
         if(laser_beam_on_screen || (mSaber != null && mBall.monsterTrickSetDecider == 3 && mBall.monsterAttackTrick == 1)) {
             canvas.drawColor(Color.parseColor("#BB000000"));
@@ -593,11 +596,8 @@ public class GameView extends SurfaceView {
         }
 
         if(mFan != null && mBall.monsterTrickSetDecider == 0 && mBall.monsterAttackTrick == 2) {
-            for(int i=0; i<7; i++) {
-                for (int j = 0; j < 3; j++) {
-                    canvas.drawCircle((float) mFan[j].bulletPosition[i].x, (float) mFan[j].bulletPosition[i].y,
-                            (float) mFan[j].bulletsRadius, mFan[j].bulletsPaint);
-                }
+            for(int i=0; i<3; i++) {
+                mFan[i].drawBulletFan(canvas, interpolation);
             }
         }
 
@@ -609,7 +609,7 @@ public class GameView extends SurfaceView {
             }
             else if (laser_beam_on_screen) {
                 for(int i=0; i<4; i++) {
-                    mBeam[i].drawLaserBeam(canvas);
+                    mBeam[i].drawLaserBeam(canvas, interpolation);
                 }
             }
         }
@@ -622,12 +622,14 @@ public class GameView extends SurfaceView {
 
         if(mTwister != null && mBall.monsterTrickSetDecider == 2 && mBall.monsterAttackTrick == 1) {
             for(int i=0; i<5; i++) {
-                mTwister[i].drawBoomerangTwister(canvas);
+                if (mTwister[i].is_twister_thrown) {
+                    mTwister[i].drawBoomerangTwister(canvas, interpolation);
+                }
             }
         }
 
         if(mRocket != null && mBall.monsterTrickSetDecider == 2 && mBall.monsterAttackTrick == 2) {
-            canvas.drawCircle((float)mRocket.rocketPosition.x, (float)mRocket.rocketPosition.y, (float)mRocket.rocketRadius, mRocket.rocketPaint);
+            mRocket.drawMagnetRocket(canvas, interpolation);
         }
 
         if(mSaber != null && mBall.monsterTrickSetDecider == 3 && mBall.monsterAttackTrick == 1) {
@@ -638,7 +640,7 @@ public class GameView extends SurfaceView {
             }
         }
 
-        canvas.drawCircle((float) mBall.monsterPosition.x, (float) mBall.monsterPosition.y, (float) mBall.monsterRadius, mBall.monsterPaint);
+        mBall.drawMonsterBall(canvas, interpolation);
         canvas.drawText(Integer.toString((int) Score), 40, 40, scorePaint);
 
 
@@ -655,6 +657,8 @@ public class GameView extends SurfaceView {
                 mBubble.drawBubble(canvas);
             }
         }
+
+        mThread.incrementFrameCount();
     }
 
     @SuppressLint("ClickableViewAccessibility")
@@ -835,10 +839,10 @@ public class GameView extends SurfaceView {
         else if(mBall.monsterTrickSetDecider == 3) {
             if(mBall.monsterAttackTrick == 1) {
                 time_for_saber_action = true;
-                mThread.setFPS(40);
+
             }
             else if(mBall.monsterAttackTrick == 2) {
-                mThread.setFPS(50);
+
             }
         }
     }
