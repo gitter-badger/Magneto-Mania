@@ -35,7 +35,6 @@ public class GameView extends SurfaceView {
     private MagnetRocket    mRocket          = new MagnetRocket(this);
     private BulletFan[]     mFan             = new BulletFan[3];
     private HeatWave[]      mWave            = new HeatWave[5];
-    private RectF[]         heatRect         = new RectF[5];
     private LaserBeam[]     mBeam            = new LaserBeam[4];
     private TimeBomb[]      mBomb            = new TimeBomb[2];
     private BoomerangTwister[] mTwister      = new BoomerangTwister[5];
@@ -102,7 +101,6 @@ public class GameView extends SurfaceView {
         }
 
         for(int i=0; i<5; i++) {
-            this.heatRect[i] = new RectF();
             this.mWave[i]    = new HeatWave();
             this.mTwister[i] = new BoomerangTwister(this);
         }
@@ -216,19 +214,13 @@ public class GameView extends SurfaceView {
 
                 if(heat_waves_on_screen) {
                     heatWaveTimeGap++;
-                    heatRect[0] = mWave[0].setHeatWaveSize(mBall.monsterPosition);
 
-                    if(heatWaveTimeGap > 22)
-                        heatRect[1] = mWave[1].setHeatWaveSize(mBall.monsterPosition);
-
-                    if(heatWaveTimeGap > 44)
-                        heatRect[2] = mWave[2].setHeatWaveSize(mBall.monsterPosition);
-
-                    if(heatWaveTimeGap > 66)
-                        heatRect[3] = mWave[3].setHeatWaveSize(mBall.monsterPosition);
-
-                    if(heatWaveTimeGap > 88)
-                        heatRect[4] = mWave[4].setHeatWaveSize(mBall.monsterPosition);
+                    for (int i=0; i<5; i++) {
+                        if(heatWaveTimeGap > 22*i) {
+                            mWave[i].setHeatWaveSize(mBall.monsterPosition);
+                            mWave[i].is_wave_released = true;
+                        }
+                    }
 
                     if(mWave[4].heatWaveRadius > 3*GameActivity.mScreenSize.y/2)
                         heat_waves_on_screen = false;
@@ -593,19 +585,11 @@ public class GameView extends SurfaceView {
 
         if(mWave != null && mBall.monsterTrickSetDecider == 0 && mBall.monsterAttackTrick == 1) {
 
-            mWave[0].drawHeatWave(canvas, heatRect[0], 30);
-
-            if(heatWaveTimeGap > 22)
-                mWave[1].drawHeatWave(canvas, heatRect[1], 0);
-
-            if(heatWaveTimeGap > 44)
-                mWave[2].drawHeatWave(canvas, heatRect[2], 30);
-
-            if(heatWaveTimeGap > 66)
-                mWave[3].drawHeatWave(canvas, heatRect[3], 0);
-
-            if(heatWaveTimeGap > 88)
-                mWave[4].drawHeatWave(canvas, heatRect[4], 30);
+            for(int i=0; i<5; i++) {
+                if(mWave[i].is_wave_released) {
+                    mWave[i].drawHeatWave(canvas, 30*(i%2 + 1));
+                }
+            }
         }
 
         if(mFan != null && mBall.monsterTrickSetDecider == 0 && mBall.monsterAttackTrick == 2) {

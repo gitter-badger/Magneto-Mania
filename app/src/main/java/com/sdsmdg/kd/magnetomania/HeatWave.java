@@ -5,16 +5,17 @@ import android.graphics.Color;
 import android.graphics.Paint;
 import android.graphics.Point;
 import android.graphics.RectF;
-import android.util.Log;
 
 
 public class HeatWave {
 
     /******************************************** CLASS MEMBERS ********************************************/
     protected Point  heatCenter = new Point(0,0);
-
+    protected RectF  heatRect   = new RectF();
     protected int    heatWaveVelocity;
     protected int    heatWaveRadius;
+
+    protected boolean is_wave_released;
     protected Paint  heatWavePaint = new Paint();
     /**---------------------------------------------------------------------------------------------------**/
 
@@ -25,6 +26,7 @@ public class HeatWave {
         this.heatCenter.y     = GameActivity.mScreenSize.y + 80;
         this.heatWaveVelocity = 10;
         this.heatWaveRadius   = 0;
+        this.is_wave_released = false;
         this.heatWavePaint.setAlpha(10);
         this.heatWavePaint.setColor(Color.YELLOW);
         this.heatWavePaint.setStrokeWidth(20);
@@ -39,11 +41,11 @@ public class HeatWave {
         heatWaveRadius      = 0;
         heatWaveVelocity    = 10;
         heatWavePaint.setAlpha(10);
+        is_wave_released    = false;
     }
 
 
-    public RectF setHeatWaveSize(Point center) {
-        RectF heatRect     = new RectF();
+    public void setHeatWaveSize(Point center) {
         heatRect.left      = center.x - heatWaveRadius;
         heatRect.top       = center.y - heatWaveRadius;
         heatRect.right     = center.x + heatWaveRadius;
@@ -58,13 +60,12 @@ public class HeatWave {
         }
         heatWavePaint.setAlpha(alpha);
         heatWaveRadius += heatWaveVelocity;
-        return heatRect;
     }
 
 
-    public void drawHeatWave(Canvas canvas, RectF heatRect, int startAngle) {
+    public void drawHeatWave(Canvas canvas, int startAngle) {
         for(int i=0; i<6; i++) {
-            canvas.drawArc(heatRect, startAngle + 60*i, 30, false, heatWavePaint);
+            canvas.drawArc(heatRect, startAngle + 60 * i, 30, false, heatWavePaint);
         }
     }
 
