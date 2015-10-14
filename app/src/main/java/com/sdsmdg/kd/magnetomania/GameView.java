@@ -632,7 +632,7 @@ public class GameView extends SurfaceView {
 
         if(mBomb != null && mBall.monsterTrickSetDecider == 1 && mBall.monsterAttackTrick == 2) {
             for(int i=0; i<2; i++) {
-                canvas.drawCircle(mBomb[i].bombPosition.x, mBomb[i].bombPosition.y, mBomb[i].bombCurrentRadius, mBomb[i].bombPaint);
+                mBomb[i].drawTimeBomb(canvas, interpolation);
             }
         }
 
