@@ -16,6 +16,9 @@ public class HeatWave {
     protected int    heatWaveRadius;
 
     protected boolean is_wave_released;
+
+    protected int    heatWavePrevRadius;
+    protected int    heatWaveDrawRadius;
     protected Paint  heatWavePaint = new Paint();
     /**---------------------------------------------------------------------------------------------------**/
 
@@ -26,7 +29,12 @@ public class HeatWave {
         this.heatCenter.y     = GameActivity.mScreenSize.y + 80;
         this.heatWaveVelocity = 10;
         this.heatWaveRadius   = 0;
+
         this.is_wave_released = false;
+
+        this.heatWavePrevRadius = 0;
+        this.heatWaveDrawRadius = 0;
+
         this.heatWavePaint.setAlpha(10);
         this.heatWavePaint.setColor(Color.YELLOW);
         this.heatWavePaint.setStrokeWidth(20);
@@ -39,17 +47,16 @@ public class HeatWave {
     public void initHeatWave(MonsterBall monsterBall) {
         heatCenter          = Geometry.setCoordinates(monsterBall.monsterPosition);
         heatWaveRadius      = 0;
+        heatWavePrevRadius = 0;
+        heatWaveDrawRadius = 0;
+
         heatWaveVelocity    = 10;
         heatWavePaint.setAlpha(10);
         is_wave_released    = false;
     }
 
 
-    public void setHeatWaveSize(Point center) {
-        heatRect.left      = center.x - heatWaveRadius;
-        heatRect.top       = center.y - heatWaveRadius;
-        heatRect.right     = center.x + heatWaveRadius;
-        heatRect.bottom    = center.y + heatWaveRadius;
+    public void setHeatWaveSize() {
 
         int alpha = heatWavePaint.getAlpha();
         if(alpha < 255) {
@@ -59,13 +66,20 @@ public class HeatWave {
             }
         }
         heatWavePaint.setAlpha(alpha);
+        heatWavePrevRadius = heatWaveRadius;
         heatWaveRadius += heatWaveVelocity;
     }
 
 
-    public void drawHeatWave(Canvas canvas, int startAngle) {
+    public void drawHeatWave(Canvas canvas, int startAngle, float interpolation) {
         for(int i=0; i<6; i++) {
-            canvas.drawArc(heatRect, startAngle + 60 * i, 30, false, heatWavePaint);
+            heatWaveDrawRadius = (int)((heatWaveRadius - heatWavePrevRadius)*interpolation) + heatWavePrevRadius;
+
+            heatRect.left      = heatCenter.x - heatWaveDrawRadius;
+            heatRect.top       = heatCenter.y - heatWaveDrawRadius;
+            heatRect.right     = heatCenter.x + heatWaveDrawRadius;
+            heatRect.bottom    = heatCenter.y + heatWaveDrawRadius;
+            canvas.drawArc(heatRect, startAngle + 60*i, 30, false, heatWavePaint);
         }
     }
 
@@ -74,7 +88,7 @@ public class HeatWave {
         int distance = Geometry.distance(GameView.fingerPosition, heatCenter);
         int angle = (int)(Math.atan2((double)(GameView.fingerPosition.y - heatCenter.y), (double)(GameView.fingerPosition.x - heatCenter.x))*180/Math.PI);
 
-        if (distance <= heatWaveRadius+5 && distance >= heatWaveRadius-30) {
+        if (distance <= heatWaveRadius+10 && distance >= heatWaveRadius-30) {
             if(waveType == 1) {
                 return ((angle > 30 && angle < 60)  || (angle > 90  && angle < 120) || (angle > 150  && angle < 180) ||
                         (angle < 0  && angle > -30) || (angle < -60 && angle > -90) || (angle < -120 && angle > -150));

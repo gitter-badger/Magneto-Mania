@@ -1,6 +1,7 @@
 package com.sdsmdg.kd.magnetomania;
 
 
+import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
 import android.graphics.Point;
@@ -17,6 +18,8 @@ public class TimeBomb {
     protected int       explosionIncreaseRate = 5;
 
     protected int       bombCurrentRadius;
+    protected int       bombPrevRadius;
+    protected int       bombDrawRadius;
     protected int       timeBombCounter;
     protected boolean   is_bomb_planted;
     /**--------------------------------------------------------------------------------------------------**/
@@ -38,6 +41,7 @@ public class TimeBomb {
     public void initTimeBomb (MonsterBall monsterBall) {
         bombPosition            = Geometry.setCoordinates(monsterBall.monsterPosition);
         bombCurrentRadius       = bombInitialRadius;
+        bombPrevRadius          = bombCurrentRadius;
         timeBombCounter         = 20;
         is_bomb_planted         = true;
         bombPaint.setAlpha(255);
@@ -52,6 +56,7 @@ public class TimeBomb {
 
     public void increaseBombExplosion () {
         if(bombCurrentRadius < bombExplosionRadius) {
+            bombPrevRadius = bombCurrentRadius;
             bombCurrentRadius += explosionIncreaseRate;
             int alpha = bombPaint.getAlpha();
             alpha -= 5;
@@ -59,16 +64,21 @@ public class TimeBomb {
         }
         else {
             bombCurrentRadius = 0;
+            bombPrevRadius=0;
             bombPosition.set(GameActivity.mScreenSize.x - 100, GameActivity.mScreenSize.y - 100);
             bombExplosionRadius = 0;
-
         }
-
     }
 
 
     public boolean didFingerBecameVictimOfBombBlast () {
         int distance = Geometry.distance(GameView.fingerPosition, bombPosition);
         return distance < bombCurrentRadius;
+    }
+
+
+    public void drawTimeBomb (Canvas canvas, float interpolation) {
+        bombDrawRadius = (int)((bombCurrentRadius - bombPrevRadius)*interpolation) + bombPrevRadius;
+        canvas.drawCircle(bombPosition.x, bombPosition.y, bombDrawRadius, bombPaint);
     }
 }

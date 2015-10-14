@@ -215,10 +215,9 @@ public class GameView extends SurfaceView {
 
                 if(heat_waves_on_screen) {
                     heatWaveTimeGap++;
-
                     for (int i=0; i<5; i++) {
                         if(heatWaveTimeGap > 22*i) {
-                            mWave[i].setHeatWaveSize(mBall.monsterPosition);
+                            mWave[i].setHeatWaveSize();
                             mWave[i].is_wave_released = true;
                         }
                     }
@@ -590,7 +589,7 @@ public class GameView extends SurfaceView {
 
             for(int i=0; i<5; i++) {
                 if(mWave[i].is_wave_released) {
-                    mWave[i].drawHeatWave(canvas, 30*(i%2 + 1));
+                    mWave[i].drawHeatWave(canvas, 30*(i%2 + 1), interpolation);
                 }
             }
         }
@@ -616,7 +615,7 @@ public class GameView extends SurfaceView {
 
         if(mBomb != null && mBall.monsterTrickSetDecider == 1 && mBall.monsterAttackTrick == 2) {
             for(int i=0; i<2; i++) {
-                canvas.drawCircle(mBomb[i].bombPosition.x, mBomb[i].bombPosition.y, mBomb[i].bombCurrentRadius, mBomb[i].bombPaint);
+                mBomb[i].drawTimeBomb(canvas, interpolation);
             }
         }
 
